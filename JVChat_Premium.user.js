@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.1.126
+// @version      0.1.127
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
@@ -906,7 +906,7 @@ function getForumId() {
 }
 
 function getForumPayload() {
-    return JSON.parse(atob(window.jvc.forumsAppPayload));
+    return JSON.parse(atob(unsafeWindow.jvc.forumsAppPayload));
 }
 
 function getTextArea() {
