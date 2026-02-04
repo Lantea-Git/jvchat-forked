@@ -963,8 +963,8 @@ async function postJvcMessage() {
     let formData = new FormData(freshForm);
 
     formData.set("text", textarea.value);
-    formData.set("topicId", forumPayload.topicId);
-    formData.set("forumId", forumPayload.forumId);
+    formData.set("topicId", freshPayload.topicId);
+    formData.set("forumId", freshPayload.forumId);
     formData.set("group", "1");
     formData.set("messageId", "undefined");
 
