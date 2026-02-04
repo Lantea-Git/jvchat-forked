@@ -884,7 +884,7 @@ function closeAlert(event) {
 
 
 function getMessageIdFromUrl(messageUrl) {
-    const urlObj = new URL(messageUrl);
+    const urlObj = new URL(messageUrl, location.origin);
     if (!urlObj?.hash?.length) return;
     const match = urlObj.hash.match(/^#post_(?<messageid>[0-9]{10})/);
     return match?.groups?.messageid;
@@ -957,16 +957,16 @@ async function postJvcMessage() {
     formulaire.classList.add("jvchat-disabled-form");
     textarea.setAttribute("disabled", "true");
 
+    const forumPayload = freshPayload || getForumPayload();
+    const formSessionData = forumPayload.formSession;
+    
     let formData = new FormData(freshForm);
 
     formData.set("text", textarea.value);
-    formData.set("topicId", getTopicId());
-    formData.set("forumId", getForumId());
+    formData.set("topicId", forumPayload.topicId);
+    formData.set("forumId", forumPayload.forumId);
     formData.set("group", "1");
     formData.set("messageId", "undefined");
-
-    const forumPayload = freshPayload || getForumPayload();
-    const formSessionData = forumPayload.formSession;
 
     for (const key in formSessionData) {
         if (Object.hasOwnProperty.call(formSessionData, key)) {
@@ -974,21 +974,7 @@ async function postJvcMessage() {
         }
     }
 
-    let fs_custom_input = Array.from(freshForm.elements).find(e => /^fs_[a-f0-9]{40}$/i.test(e.name));
-    if (fs_custom_input && !formData.has(fs_custom_input.name)) {
-        formData.set(fs_custom_input.name, fs_custom_input.value);
-    }
-    if (!formData.has("ajax_hash")) {
-        let ajax_hash = freshForm.querySelector('input[name="ajax_hash"]')?.value || freshHash;
-        formData.set("ajax_hash", ajax_hash);
-    }
-
-    const boundary = "----geckoformboundary" + Math.random().toString(16).slice(2);
-    let body = "";
-    for (let [key, value] of formData.entries()) {
-        body += `--${boundary}\r\nContent-Disposition: form-data; name="${key}"\r\n\r\n${value}\r\n`;
-    }
-    body += `--${boundary}--\r\n`;
+    formData.set("ajax_hash", forumPayload.ajaxToken);
 
     let timeout = turboActivated ? 5000 : 20000;
     postingMessage = true;
@@ -1002,12 +988,11 @@ async function postJvcMessage() {
                     "Accept": "application/json",
                     "Accept-Language": "fr",
                     "x-requested-with": "XMLHttpRequest",
-                    "Content-Type": `multipart/form-data; boundary=${boundary}`,
                     "Pragma": "no-cache",
                     "Cache-Control": "no-cache"
                 },
                 referrer: document.URL,
-                body: body,
+                body: formData,
                 mode: "cors"
             }),
             new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), timeout))
@@ -1025,8 +1010,8 @@ async function postJvcMessage() {
         if (handleApiResponseError(res, 'l\'envoi du message')) return;
 
         let messageId = res?.messageId || res?.id || null;
-        if (!messageId && response.url) {
-            messageId = getMessageIdFromUrl(response.url);
+        if (!messageId && res.redirectUrl) {
+            messageId = getMessageIdFromUrl(res.redirectUrl);
         }
         if (messageId) {
             const detail = { 'detail': { id: messageId, content: textarea.value, username: currentUser.author } };
@@ -1034,7 +1019,7 @@ async function postJvcMessage() {
             dispatchEvent(event);
         }
 
-        setTimeout(tryCatch(forceUpdate), 1000);
+        setTimeout(tryCatch(forceUpdate), 0);
 
         setTextAreaValue(textarea, '');
 
@@ -1134,9 +1119,10 @@ function renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHa
 }
 
 async function submitEditedMessage(messageBloc, messageId, newText, formSession, ajaxHash) {
-    const topicId = getTopicId();
-    const forumId = getForumId();
+    const topicId = freshPayload.topicId;
+    const forumId = freshPayload.forumId;
     const originalContentDiv = messageBloc.querySelector(".jvchat-content");
+    const originalMsgDiv = messageBloc.querySelector(".jvchat-content .txt-msg");
     const editionDiv = messageBloc.querySelector(".jvchat-edition");
 
     const formData = new FormData();
@@ -1174,7 +1160,7 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
         }
 
         if (data.html) {
-            originalContentDiv.innerHTML = data.html;
+            originalMsgDiv.innerHTML = data.html;
             fixMessage(originalContentDiv);
             detectMosaic(originalContentDiv);
             improveImages(originalContentDiv);
