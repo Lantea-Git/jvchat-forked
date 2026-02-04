@@ -1149,7 +1149,7 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json'
             },
-            body: formData,
+            body: formData
         });
         const data = await response.json();
 
