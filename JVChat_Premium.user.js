@@ -1010,7 +1010,7 @@ async function postJvcMessage() {
         if (handleApiResponseError(res, 'l\'envoi du message')) return;
 
         let messageId = res?.messageId || res?.id || null;
-        if (!messageId && response.url) {
+        if (!messageId && response.redirectUrl) {
             messageId = getMessageIdFromUrl(response.redirectUrl);
         }
         if (messageId) {
@@ -1149,7 +1149,7 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json'
             },
-            body: formData
+            body: formData,
         });
         const data = await response.json();
 
