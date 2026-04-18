@@ -1579,6 +1579,7 @@ function getMessages(document) {
     let blocMessages = document.querySelectorAll(".messageUser.js-hybrid-component, .bloc-message-forum");
     let messages = [];
     for (let bloc of blocMessages) {
+        if (bloc.children.length === 0) continue; //Bloc blacklist No DOM Fellback crash
         messages.push(parseMessage(bloc));
     }
     return messages;
@@ -1592,6 +1593,7 @@ function findDeletedMessages(res, requestTimestamp) {
     let newDates = [];
 
     for (let bloc of blocMessages) {
+        if (bloc.children.length === 0) continue; //Bloc blacklist No DOM Fellback crash
         let id;
         if (bloc.classList.contains("messageUser")) {
             id = parseInt(bloc.id.replace("message-", ""));
