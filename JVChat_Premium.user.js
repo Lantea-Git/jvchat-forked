@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.2.3.5
+// @version      0.2.3.6
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
@@ -648,6 +648,7 @@ function detectMosaic(elem) {
     let regex1 = /^.+\/(?:[0-9]+-)+[0-9]{1,2}-([a-z0-9]+)\.\w+$/i;
     let regex2 = /^.+\/(?:[0-9]+-)+row-[0-9]+-col-[0-9](?:-[0-9]+)?\.\w+$/i;
     for (let image of imagesShack) {
+        if (!image.src) continue; //Fell Back Span
         let match1 = image.src.match(regex1);
         if (match1) {
             let [_, identifier] = match1;
