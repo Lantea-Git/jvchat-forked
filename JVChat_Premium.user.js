@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.2.3.4
+// @version      0.2.3.5
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
@@ -684,7 +684,6 @@ function detectMosaic(elem) {
 function improveImages(elem) {
     let imagesShack = elem.querySelectorAll(".img-shack, .message__urlImg");
     for (let image of imagesShack) {
-        let src = image.src;
         if (!image.src) { //CSS Image Span => transform to image or cancel
             const largeImg = image.dataset.srcBackground;
             if (!largeImg) continue;
