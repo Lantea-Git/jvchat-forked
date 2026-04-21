@@ -685,12 +685,15 @@ function improveImages(elem) {
     let imagesShack = elem.querySelectorAll(".img-shack, .message__urlImg");
     for (let image of imagesShack) {
         let src = image.src;
-        if (!src) { //Large Image in CSS
+        if (!image.src) { //CSS Image Span => transform to image or cancel
             const largeImg = image.dataset.srcBackground;
             if (!largeImg) continue;
-            image.style.backgroundImage = `url('${largeImg}')`;
-            image.style.paddingBottom = '0';
-            continue;
+            const tagImg = document.createElement('img');
+            tagImg.src = largeImg;
+            tagImg.className = image.className;
+            tagImg.style.paddingBottom = '0';
+            image.replaceWith(tagImg);
+            image = tagImg;
         }
         let parent = image.parentNode;
         let extension = parent.href.split(".").pop();
