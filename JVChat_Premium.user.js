@@ -685,6 +685,12 @@ function improveImages(elem) {
     let imagesShack = elem.querySelectorAll(".img-shack, .message__urlImg");
     for (let image of imagesShack) {
         let src = image.src;
+        if (!src) { //Large Image in CSS
+            const largeImg = image.getAttribute('data-src-background');
+            image.style.backgroundImage = `url('${largeImg}')`;
+            image.style.paddingBottom = '0';
+            continue;
+        }
         let parent = image.parentNode;
         let extension = parent.href.split(".").pop();
         let direct = src.replace(/(.*?)\/minis\/(.*)\.\w+/i, "$1/fichiers/$2." + extension);
@@ -2228,7 +2234,7 @@ function hideCloudfareInfo() {
     }
     const observer = new MutationObserver(() => {
         let cfInfo = document.querySelector(".js-captcha-logo");
-        if (cfInfo) hideElement(cfInfo.parentElement);
+        if (cfInfo) hideElement(cfInfo.parentElement.parentElement);
     });
     observer.observe(document.body, {
         childList: true,
