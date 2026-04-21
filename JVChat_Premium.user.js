@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.2.3.1
+// @version      0.2.3.2
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
@@ -686,7 +686,8 @@ function improveImages(elem) {
     for (let image of imagesShack) {
         let src = image.src;
         if (!src) { //Large Image in CSS
-            const largeImg = image.getAttribute('data-src-background');
+            const largeImg = image.dataset.srcBackground;
+            if (!largeImg) continue;
             image.style.backgroundImage = `url('${largeImg}')`;
             image.style.paddingBottom = '0';
             continue;
