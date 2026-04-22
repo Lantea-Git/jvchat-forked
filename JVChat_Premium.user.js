@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         JVChat Premium FORK by Rand0max
-// @description  Outil de discussion instantanée pour les forums de Jeuxvideo.com
+// @description  Outil de discussion (debug les crashs et citations par Shiho Lantea / en attendant le debug de Rando)
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.2.3.6
+// @version      0.2.3.7
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
