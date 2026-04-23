@@ -772,7 +772,7 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .jvchat-content .img-stickers,
-.jvchat-content .message__urlImgSticker
+.jvchat-content .message__urlImgSticker,
 .jvchat-content .message__sticker {
   max-height: 39px;
   min-height: 39px;
