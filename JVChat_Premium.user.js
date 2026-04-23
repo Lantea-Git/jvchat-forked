@@ -303,7 +303,7 @@ function parseSondage(elem) {
             if (surveyData.responses) {
                 for (let answer of surveyData.responses) {
                     results.push({
-                        response: answer.label || "",
+                        response: answer.text || "",
                         pourcent: answer.percentage || 0,
                         sondageId: surveyData.id,
                         responseId: answer.id
