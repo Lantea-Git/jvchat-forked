@@ -220,9 +220,9 @@ function getTopicLocked(elem) {
     }
     // New structure: check payload
     try {
-        let payload = getForumPayload();
+        let payload = freshPayload || getForumPayload();  //FreshPayload for actualize on polling
         if (payload && payload.forum && payload.forum.isForumReadOnly) {
-            let reason = payload.forum.lockReason || "raison inconnue";
+            let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
         }
     } catch { /* ignore */ }
