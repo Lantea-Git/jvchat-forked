@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.2.3.8
+// @version      0.2.3.9
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
