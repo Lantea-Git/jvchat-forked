@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.2.3.7
+// @version      0.2.3.8
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
@@ -294,14 +294,14 @@ function parseSondage(elem) {
 
     // New structure: extract from payload
     try {
-        let payload = getForumPayload();
+        let payload = freshPayload || getForumPayload(); //FreshPayload for actualize on polling
         if (payload && payload.survey && payload.survey.hasSurvey && payload.survey.data) {
             let surveyData = payload.survey.data;
             let intitule = surveyData.title || "";
-            let answered = surveyData.hasVoted || false;
+            let answered = surveyData.hasVoted || surveyData.isClosed || false;
             let results = [];
-            if (surveyData.answers) {
-                for (let answer of surveyData.answers) {
+            if (surveyData.responses) {
+                for (let answer of surveyData.responses) {
                     results.push({
                         response: answer.label || "",
                         pourcent: answer.percentage || 0,
@@ -310,7 +310,7 @@ function parseSondage(elem) {
                     });
                 }
             }
-            let votes = surveyData.totalVotes || 0;
+            let votes = surveyData.totalResponses || 0;
             return { answered: answered, intitule: intitule, results: results, votes: votes };
         }
     } catch { /* ignore */ }
@@ -2070,6 +2070,7 @@ function submitSondageAnswer(event) {
         let reponseNum = parseInt(target.getAttribute("sondage-reponse-num"));
         let sondageId = sondageChoices[reponseNum]["sondageId"];
         let reponseId = sondageChoices[reponseNum]["responseId"];
+        /* Legacy JVC
         let topicId = urlToFetch["ids"].split("-")[2];
         let url = `https://www.jeuxvideo.com/forums/ajax_topic_sondage_vote.php?id_topic=${topicId}&id_sondage_reponse=${reponseId}&id_sondage=${sondageId}&ajax_hash=${freshHash}`;
 
@@ -2101,6 +2102,52 @@ function submitSondageAnswer(event) {
         }
 
         request("POST", url, onSuccess, onError, onTimeout, undefined, true, 5000, false);
+        END LEGACY */
+
+        // New structure
+        let topicId = getTopicId();
+        let payload = freshPayload || getForumPayload();
+        let surveyAjaxHash = payload?.survey?.ajaxToken;
+        let url = `https://www.jeuxvideo.com/forums/survey/vote`;
+        let formData = {};
+        formData.ajax_hash = surveyAjaxHash;
+        formData.id_topic = topicId;
+        formData.id_sondage = sondageId;
+        formData.id_sondage_reponse = reponseId;
+
+
+        function onSuccess(res) {
+            if (handleApiResponseError(res, "vote sondage")) return;
+            
+            let surveyData = res.survey?.data;
+            if (!surveyData) {
+                addAlertbox("warning", "Erreur lors de la récupération du sondage");
+                return;
+            }
+
+            setSondage({
+                answered: surveyData.hasVoted,
+                intitule: surveyData.title,
+                votes: surveyData.totalResponses,
+                results: surveyData.responses.map(r => ({
+                    response: r.text,
+                    pourcent: r.percentage,
+                    sondageId: surveyData.id,
+                    responseId: r.id
+                }))
+            });
+        }
+
+        function onError(err, _) {
+            addAlertbox("danger", err);
+        }
+
+        function onTimeout(err) {
+            addAlertbox("warning", err);
+        }
+
+        //NEW END POINT IN FORM DATA
+        request("POST", url, onSuccess, onError, onTimeout, makeFormData(formData), true, 5000, false);
     }
 }
 
@@ -2181,7 +2228,7 @@ function setUser(document, user) {
     if ((userConnected === undefined && isConnected) || (userConnected !== undefined && isConnected !== userConnected)) {
         document.getElementById("jvchat-profil").classList.toggle("jvchat-hide");
         let isDown = isScrollDown();
-        document.getElementById("bloc-formulaire-forum").classList.toggle("jvchat-hide");
+        document.getElementById("bloc-formulaire-forum")?.classList.toggle("jvchat-hide");
         if (isDown) {
             setScrollDown();
         }
@@ -2911,9 +2958,9 @@ function dontScrollOnExpand(event) {
         if (isDown) {
             setScrollDown();
         }
-    } else if (classes.contains("txt-spoil") || classes.contains("aff-spoil") || classes.contains("masq-spoil")) {
+    } else if (classes.contains("message__spoilLabel") || classes.contains("message__spoilDisplay") || classes.contains("message__spoilMask")) {
         event.preventDefault();
-        let check = target.closest(".message__spoil").getElementsByClassName("open-spoil")[0];
+        let check = target.closest(".message__spoil").getElementsByClassName("message__openSpoil")[0];
         let isDown = isScrollDown();
         check.checked = !check.checked;
         if (isDown) {
