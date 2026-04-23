@@ -29,6 +29,7 @@ header.jv-header-menu,
 .gameHeaderBanner,
 .gameHeaderSubNav,
 .forumAnchorWrapper,
+.lockInfo,
 .bloc-sondage::before,
 .layout__contextTop,
 .layout__breadcrumb,
@@ -718,6 +719,10 @@ hr.jvchat-ruler:first-of-type {
   color: #8b8b8b;
 }
 
+.jvchat-content blockquote.message__blockquote {
+  padding-top: 0 !important;
+}
+
 .message__collapsedQuote::before {
    position: relative;
 }
@@ -767,7 +772,8 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .jvchat-content .img-stickers,
-.jvchat-content .message__urlImgSticker {
+.jvchat-content .message__urlImgSticker
+.jvchat-content .message__sticker {
   max-height: 39px;
   min-height: 39px;
   width: auto;
@@ -1126,7 +1132,7 @@ hr.jvchat-ruler:first-of-type {
   color: #cbcdce !important;
 }
 
-.jvchat-night-mode .bloc-spoil-jv .contenu-spoil {
+.jvchat-night-mode .message__spoil .message__spoilContent {
   background-color: #2d2d2d !important;
   border-color: #202020 !important;
   color: #dcddde !important;
