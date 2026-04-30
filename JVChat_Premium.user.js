@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremium
 // @license      MIT
-// @version      0.2.3.11
+// @version      0.2.3.12
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
@@ -100,7 +100,7 @@ let checkEditedInterval = 30000;
 let postingMessage = false;
 let fetchingMessages = false;
 let leavingTopic = false;
-let storageKey = "jvchat-premium-configuration";
+let storageKey = "jvchat-premium-fork-configuration";
 let ringBell = undefined;
 let configuration = undefined;
 
@@ -1225,26 +1225,10 @@ async function postJvcMessage() {
     const formSessionData = forumPayload.formSession;
 
     for (const key in formSessionData) {
-        if (Object.hasOwnProperty.call(formSessionData, key)) {
-            formData.append(key, formSessionData[key]);
-        }
+        formData.append(key, formSessionData[key]);
     }
 
-    let fs_custom_input = Array.from(freshForm.elements).find(e => /^fs_[a-f0-9]{40}$/i.test(e.name));
-    if (fs_custom_input && !formData.has(fs_custom_input.name)) {
-        formData.set(fs_custom_input.name, fs_custom_input.value);
-    }
-    if (!formData.has("ajax_hash")) {
-        let ajax_hash = freshForm.querySelector('input[name="ajax_hash"]')?.value || freshHash;
-        formData.set("ajax_hash", ajax_hash);
-    }
-
-    const boundary = "----geckoformboundary" + Math.random().toString(16).slice(2);
-    let body = "";
-    for (let [key, value] of formData.entries()) {
-        body += `--${boundary}\r\nContent-Disposition: form-data; name="${key}"\r\n\r\n${value}\r\n`;
-    }
-    body += `--${boundary}--\r\n`;
+    formData.set("ajax_hash", forumPayload.ajaxToken);
 
     let timeout = turboActivated ? 5000 : 20000;
     postingMessage = true;
@@ -1258,12 +1242,11 @@ async function postJvcMessage() {
                     "Accept": "application/json",
                     "Accept-Language": "fr",
                     "x-requested-with": "XMLHttpRequest",
-                    "Content-Type": `multipart/form-data; boundary=${boundary}`,
                     "Pragma": "no-cache",
                     "Cache-Control": "no-cache"
                 },
                 referrer: document.URL,
-                body: body,
+                body: formData,
                 mode: "cors"
             }),
             new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), timeout))
@@ -1290,7 +1273,7 @@ async function postJvcMessage() {
             dispatchEvent(event);
         }
 
-        setTimeout(tryCatch(forceUpdate), 1000);
+        setTimeout(tryCatch(forceUpdate), 300);
 
         setTextAreaValue(textarea, '');
 
@@ -1448,7 +1431,7 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
         }
 
         if (data.html) {
-            originalContentDiv.innerHTML = data.html;
+            originalContentDiv.querySelector(".txt-msg").innerHTML = data.html;
             fixMessage(originalContentDiv);
             detectMosaic(originalContentDiv);
             improveImages(originalContentDiv);
