@@ -112,7 +112,7 @@ body,
 /* #forum-main-col has TWO .container__main children in the new structure:
    - the first wraps #listMessages > #jvchat-main (scrollable messages)
    - the second wraps #bloc-formulaire-forum (input form)
-   Make #forum-main-col itself a CSS Grid with rows `auto 1fr auto` so the
+   Make #forum-main-col itself a CSS Grid with rows auto 1fr auto so the
    messages container grows to fill, and the form stays pinned at the bottom. */
 #forum-main-col {
   display: grid !important;
@@ -128,11 +128,13 @@ body,
   min-height: 0 !important;
   overflow: hidden !important;
   display: block !important;
+  padding: 0; /*Overhide CSS ON MOBILE*/
 }
 #forum-main-col > .container__main:has(#listMessages) > #listMessages {
   height: 100% !important;
   min-height: 0 !important;
   overflow: hidden !important;
+  margin: 0; /*Overhide CSS ON MOBILE*/
 }
 #forum-main-col > .container__main:has(#listMessages) #jvchat-main {
   height: 100% !important;
@@ -145,6 +147,8 @@ body,
   grid-row: 3 !important;
   display: block !important;
   visibility: visible !important;
+  padding-right: 0;  /*Overhide CSS ON MOBILE*/
+  padding-left: 0; /*Overhide CSS ON MOBILE*/
 }
 /* Force everything else inside #forum-main-col (ads, stray divs) to row 1
    so they're either hidden or collapse to 0. */
@@ -368,6 +372,7 @@ label {
   min-width: unset;
   max-height: 8rem;
   height: 4rem;
+  line-height: normal; /*ADD SIZE*/
 }
 
 .messageEditor__containerPreview {
@@ -712,7 +717,7 @@ hr.jvchat-ruler:first-of-type {
   margin-bottom: 0.2rem;
 }
 
-.jvchat-content .text-enrichi-forum blockquote.message__blockquote,
+.jvchat-content .messageUser__msg.txt-msg blockquote.message__blockquote,
 .jvchat-content blockquote.message__blockquote {
   margin: 0.2rem 0;
   padding: 0rem 0.3rem 0 0.3rem;
@@ -727,7 +732,7 @@ hr.jvchat-ruler:first-of-type {
    position: relative;
 }
 
-.jvchat-content .text-enrichi-forum .message__collapsedQuote,
+.jvchat-content .messageUser__msg.txt-msg .message__collapsedQuote,
 .jvchat-content .message__collapsedQuote {
   position: relative !important;
 }
@@ -780,11 +785,6 @@ hr.jvchat-ruler:first-of-type {
   display: inline-block;
   vertical-align: bottom;
   margin-bottom: 0.1rem;
-}
-
-#jvchat-main .bloc-spoil-jv .open-spoil {
-  position: unset;
-  display: none;
 }
 
 .new-stickers {
@@ -1096,6 +1096,11 @@ hr.jvchat-ruler:first-of-type {
 .jvchat-night-mode .conteneur-messages-pagi {
   background-color: #36393f !important;
 }
+.jvchat-night-mode .container__main ,
+.jvchat-night-mode .messageEditor__buttonEdit,
+.jvchat-night-mode .messageEditor__containerEdit {
+    background-color: #36393f !important;
+}
 
 .jvchat-night-mode #message_topic,
 .jvchat-night-mode .btn-group {
@@ -1118,17 +1123,17 @@ hr.jvchat-ruler:first-of-type {
   background: #484c52 !important;
 }
 
-.jvchat-night-mode .text-enrichi-forum blockquote.message__blockquote {
+.jvchat-night-mode .messageUser__msg.txt-msg blockquote.message__blockquote {
   border-left-color: #484c52 !important;
 }
 
-.jvchat-night-mode .text-enrichi-forum .message__collapsedQuote::after {
+.jvchat-night-mode .messageUser__msg.txt-msg .message__collapsedQuote::after {
   background-color: #484c52 !important;
   border-color: #737373 !important;
   color: #737373 !important;
 }
 
-.jvchat-night-mode .text-enrichi-forum .message__collapsedQuote:hover::before {
+.jvchat-night-mode .messageUser__msg.txt-msg .message__collapsedQuote:hover::before {
   color: #cbcdce !important;
 }
 
