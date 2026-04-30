@@ -1,32 +1,7 @@
 # **JVChat Premium** - Fork
 
-### _Outil de discussion instantanée pour les forums de Jeuxvideo.com_
+### FORK du fork 0.2.0 avec quelques correction de bugs compatibilité greasymonkey 
+<a href="../../raw/debug/JVChat_Premium.user.js"><img src="https://img.shields.io/badge/Installer%20Fork%20du%20Fork-Green?style=for-the-badge&color=1E971E" alt="Installer Fork du Fork"></a>
 
-## Aperçu
-
-![Preview1JvChat](img/preview1.png)
-
-![Preview2JvChat](img/preview2.png)
-
-## A propos
-
-### Auteur du script : **Blaff**
-
-### Mainteneur : **Rand0max**
-
-### Dernière version : **0.2.0 - 17/04/2026**
-
-## Changelog
-
-### 0.2.0 — 17/04/2026
-- Support complet de la refonte des forums JVC 2026
-
-## TODO (Blaff)
-
-- Smooth transition on append messages (slide-in plutôt que jump)
-- Détection captcha
-- Bouton actualiser les messages (+ afficher le delai courrant d'actualisation)
-- Notification avec @pseudo
-- Blacklist
-- Pouvoir voir les anciens messages
-- La leftbar ne se rétrécie pas si le titre du topic n'a pas d'espaces
+### Ceci est un fork la version officielle de Rand0max est ici => https://jvscript.fr/script/jvchat-premium
+### Je voulais corriger quelques bugs apporter la compatibilité avec iOS et greasymonkey , Sauf que ça s'éloigne de plus en plus du code de Rand0Max donc je laisse ce fork a part, Il marche mais il devient trop différent pour être merger.
