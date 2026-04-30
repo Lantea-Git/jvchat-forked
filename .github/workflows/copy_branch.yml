@@ -1,0 +1,28 @@
+name: Sync JVChat_Premium to debug
+#.github/workflows/copy_branch.yml
+
+on:
+  push:
+    branches:
+      - fork-of-fork
+    paths:
+      - 'JVChat_Premium.user.js'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push file to debug
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          
+          git checkout debug
+          git checkout fork-of-fork -- JVChat_Premium.user.js
+          git commit -m "sync: JVChat_Premium.user.js from fork-of-fork"
+          git push
