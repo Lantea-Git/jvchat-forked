@@ -1,19 +1,22 @@
 // ==UserScript==
-// @name         JVChat Premium FORK by Rand0max
-// @description  Outil de discussion (debug les crashs et citations par Shiho Lantea / en attendant le debug de Rando)
+// @name         Version non Officielle JVChat Premium FORK by Rand0max
+// @description  Outil de discussion (Version non Officielle Que j'ai finalement laissé en ligne car certains me l'ont demandé.)
 // @author       Blaff & Rand0max
-// @namespace    JVChatPremium
+// @namespace    JVChatPremiumUnOfficial
 // @license      MIT
-// @version      0.2.3.13
+// @version      0.2.3.17
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
 // @match        https://*.jeuxvideo.com/forums/1-*
-// @downloadURL  https://github.com/Lantea-Git/jvchat-forked/raw/debug/JVChat_Premium.user.js
-// @updateURL    https://github.com/Lantea-Git/jvchat-forked/raw/debug/JVChat_Premium.user.js
+// @downloadURL  https://github.com/Lantea-Git/jvchat-forked/raw/fork-of-fork/JVChat_Premium.user.js
+// @updateURL    https://github.com/Lantea-Git/jvchat-forked/raw/fork-of-fork/JVChat_Premium.user.js
 // @run-at       document-end
 // ==/UserScript==
 
+// CECI EST UN FORK NON OFFICIEL AVEC FIX POUR IOS ET GREASYMONKEY ET DIVERS BUG (non mergés)
+// LA VERSION OFFICIEL DE RANDOMAX EST ICI :
+// https://jvscript.fr/script/jvchat-premium 
 
 /*
 API : les développeurs peuvent créer des "plugins" pour JVChat à l'aide d'un système d'évènements.
