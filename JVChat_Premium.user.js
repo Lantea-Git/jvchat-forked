@@ -16,7 +16,7 @@
 
 // CECI EST UN FORK NON OFFICIEL AVEC FIX POUR IOS ET GREASYMONKEY ET DIVERS BUG (non mergés)
 // LA VERSION OFFICIEL DE RANDOMAX EST ICI :
-// https://jvscript.fr/script/jvchat-premium
+// https://jvscript.fr/script/jvchat-premium 
 
 /*
 API : les développeurs peuvent créer des "plugins" pour JVChat à l'aide d'un système d'évènements.
