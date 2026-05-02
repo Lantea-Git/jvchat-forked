@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.22
+// @version        0.2.3.23
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-15.1/color/128px/1f7e9.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2618,6 +2618,7 @@ async function postJvcMessage() {
         textarea.removeAttribute("disabled");
 
         if (handleApiResponseError(res, 'l\'envoi du message')) {
+            setScrollDown();
             freshPayload.formSession = res.formSession; // Nouveau CRPS
             return;
         }
