@@ -1,22 +1,22 @@
 // ==UserScript==
-// @name         Version non Officielle JVChat Premium FORK by Rand0max
-// @description  Outil de discussion (Version non Officielle Que j'ai finalement laissé en ligne car certains me l'ont demandé.)
-// @author       Blaff & Rand0max
-// @namespace    JVChatPremiumUnOfficial
-// @license      MIT
-// @version      0.2.3.20
-// @match        http://*.jeuxvideo.com/forums/42-*
-// @match        https://*.jeuxvideo.com/forums/42-*
-// @match        http://*.jeuxvideo.com/forums/1-*
-// @match        https://*.jeuxvideo.com/forums/1-*
-// @downloadURL  https://github.com/Lantea-Git/jvchat-forked/raw/fork-of-fork/JVChat_Premium.user.js
-// @updateURL    https://github.com/Lantea-Git/jvchat-forked/raw/fork-of-fork/JVChat_Premium.user.js
-// @run-at       document-end
+// @name           JV_Chat_Custsom_Fork
+// @description    Outil de discussion instantanée (Fork et debug)
+// @author         Blaff, Rand0max, Atlantis
+// @namespace      JV_Chat_Custsom_Fork
+// @license        MIT
+// @version        0.2.3.21
+// @icon           https://images.emojiterra.com/google/noto-emoji/unicode-15.1/color/128px/1f7e9.png
+// @match          http://*.jeuxvideo.com/forums/42-*
+// @match          https://*.jeuxvideo.com/forums/42-*
+// @match          http://*.jeuxvideo.com/forums/1-*
+// @match          https://*.jeuxvideo.com/forums/1-*
+// @downloadURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.user.js
+// @updateURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.meta.js
 // ==/UserScript==
 
-// CECI EST UN FORK NON OFFICIEL AVEC FIX POUR IOS ET GREASYMONKEY ET DIVERS BUG (non mergés)
+// CECI EST UN FORK NON OFFICIEL
 // LA VERSION OFFICIEL DE RANDOMAX EST ICI :
-// https://jvscript.fr/script/jvchat-premium
+// https://jvscript.fr/script/jvchat-premium 
 
 /*
 API : les développeurs peuvent créer des "plugins" pour JVChat à l'aide d'un système d'évènements.
@@ -172,7 +172,7 @@ body,
 /* #forum-main-col has TWO .container__main children in the new structure:
    - the first wraps #listMessages > #jvchat-main (scrollable messages)
    - the second wraps #bloc-formulaire-forum (input form)
-   Make #forum-main-col itself a CSS Grid with rows auto 1fr auto so the
+   Make #forum-main-col itself a CSS Grid with rows \`auto 1fr auto\` so the
    messages container grows to fill, and the form stays pinned at the bottom. */
 #forum-main-col {
   display: grid !important;
@@ -183,36 +183,32 @@ body,
   height: 100% !important;
 }
 /* First .container__main: messages (grows, scrolls internally) */
-#forum-main-col > .container__main:has(#listMessages) {
+#forum-main-col > .container__main:nth-last-of-type(2) {
   grid-row: 2 !important;
   min-height: 0 !important;
   overflow: hidden !important;
   display: block !important;
-  padding: 0; /*Overhide CSS ON MOBILE*/
 }
-#forum-main-col > .container__main:has(#listMessages) > #listMessages {
+#forum-main-col > .container__main:nth-last-of-type(2) > #listMessages {
   height: 100% !important;
   min-height: 0 !important;
   overflow: hidden !important;
-  margin: 0; /*Overhide CSS ON MOBILE*/
 }
-#forum-main-col > .container__main:has(#listMessages) #jvchat-main {
+#forum-main-col > .container__main:nth-last-of-type(2) #jvchat-main {
   height: 100% !important;
   max-height: 100% !important;
   overflow-y: auto !important;
   min-height: 0 !important;
 }
 /* Second .container__main: form (natural height, pinned at bottom) */
-#forum-main-col > .container__main:has(#bloc-formulaire-forum) {
+#forum-main-col > .container__main:nth-last-of-type(1) {
   grid-row: 3 !important;
   display: block !important;
   visibility: visible !important;
-  padding-right: 0;  /*Overhide CSS ON MOBILE*/
-  padding-left: 0; /*Overhide CSS ON MOBILE*/
 }
 /* Force everything else inside #forum-main-col (ads, stray divs) to row 1
    so they're either hidden or collapse to 0. */
-#forum-main-col > *:not(.container__main) {
+#forum-main-col > div:not(.container__main) {
   grid-row: 1 !important;
 }
 
@@ -274,11 +270,11 @@ body,
 }
 
 .jvchat-edition-buttons button {
-  padding: 5px 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
   cursor: pointer;
 }
+
 .jvchat-edition-buttons .jvchat-edition-submit {
   background-color: #4caf50;
   color: white;
@@ -338,11 +334,10 @@ body,
 }
 
 #jvchat-leftbar {
-  max-width: 15rem;
-  width: 13rem;
-  flex-grow: 1;
-  flex-shrink: 1;
-  position: relative;
+    max-width: 15rem;
+    flex-grow: 100000;
+    flex-shrink: 100;
+    position: relative;
 }
 
 #jvchat-leftbar-button {
@@ -428,11 +423,41 @@ label {
 
 #message_topic,
 #message_reponse {
-  resize: none;
-  min-width: unset;
-  max-height: 8rem;
-  height: 4rem;
-  line-height: normal; /*ADD SIZE*/
+    resize: none;
+    min-width: unset;
+}
+
+#message_topic,
+#message_reponse {
+    max-height: 130px;
+    height: 130px !important;
+    line-height: normal;
+}
+
+.simpleButton.postMessage {
+    /* border: 2px solid var(--jv-border-color); */
+    border: 1px solid #bebecc;
+    background-color: inherit;
+}
+
+.simpleButton.postMessage:focus,
+.simpleButton.postMessage:hover {
+    background-color: var(--jv-border-color);
+}
+
+#bloc-formulaire-forum {
+    margin-bottom: 5px !important;
+    margin-left: 5px ! important;
+}
+
+
+.container__main { /* Fix Reponsive Mobile*/
+    padding: 0 !important;
+}
+
+.container__messages { /* Fix Reponsive Mobile*/
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .messageEditor__containerPreview {
@@ -465,6 +490,11 @@ label {
   width: 100%;
   max-height: 6.5rem;
   min-height: 3.5rem;
+}
+
+
+.jvchat-edition-textarea {
+  height: 5rem;
 }
 
 .jvchat-reduced #message_topic,
@@ -733,6 +763,10 @@ label {
   background-color: var(--jv-input-bg-color);
 }
 
+.jvchat-edition-textarea {
+    color: inherit !important;
+}
+
 hr.jvchat-ruler:first-of-type {
   margin-top: auto;
 }
@@ -777,22 +811,24 @@ hr.jvchat-ruler:first-of-type {
   margin-bottom: 0.2rem;
 }
 
-.jvchat-content .messageUser__msg.txt-msg blockquote.message__blockquote,
+.jvchat-content .text-enrichi-forum blockquote.message__blockquote,
 .jvchat-content blockquote.message__blockquote {
   margin: 0.2rem 0;
   padding: 0rem 0.3rem 0 0.3rem;
   color: #8b8b8b;
 }
 
+/* [ADD Fix Bloquote] */
 .jvchat-content blockquote.message__blockquote {
   padding-top: 0 !important;
 }
+/* [ADD Fix Bloquote] */
 
 .message__collapsedQuote::before {
    position: relative;
 }
 
-.jvchat-content .messageUser__msg.txt-msg .message__collapsedQuote,
+.jvchat-content .text-enrichi-forum .message__collapsedQuote,
 .jvchat-content .message__collapsedQuote {
   position: relative !important;
 }
@@ -837,7 +873,15 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .jvchat-content .img-stickers,
-.jvchat-content .message__urlImgSticker,
+.jvchat-content .message__urlImgSticker {
+  max-height: 39px;
+  min-height: 39px;
+  width: auto;
+  display: inline-block;
+  vertical-align: bottom;
+  margin-bottom: 0.1rem;
+}
+
 .jvchat-content .message__sticker {
   max-height: 39px;
   min-height: 39px;
@@ -845,6 +889,11 @@ hr.jvchat-ruler:first-of-type {
   display: inline-block;
   vertical-align: bottom;
   margin-bottom: 0.1rem;
+}
+
+#jvchat-main .bloc-spoil-jv .open-spoil {
+  position: unset;
+  display: none;
 }
 
 .new-stickers {
@@ -1136,6 +1185,11 @@ hr.jvchat-ruler:first-of-type {
   cursor: pointer;
 }
 
+#jvchat-citation-checkbox,
+#jvchat-citation-span {
+    cursor: pointer;
+}
+
 .jvchat-night-mode #jvchat-leftbar > .panel {
   background-color: #2f3136 !important;
 }
@@ -1143,6 +1197,14 @@ hr.jvchat-ruler:first-of-type {
 .jvchat-night-mode {
   color: #dcddde !important;
   scrollbar-color: #191a1c #2f3136 !important;
+}
+
+.messageEditor__containerEdit--focus {
+    color : unset;
+}
+#bloc-formulaire-forum {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
 }
 
 .jvchat-night-mode .jvchat-ruler {
@@ -1156,6 +1218,7 @@ hr.jvchat-ruler:first-of-type {
 .jvchat-night-mode .conteneur-messages-pagi {
   background-color: #36393f !important;
 }
+
 .jvchat-night-mode .container__main ,
 .jvchat-night-mode .messageEditor__buttonEdit,
 .jvchat-night-mode .messageEditor__containerEdit {
@@ -1165,6 +1228,10 @@ hr.jvchat-ruler:first-of-type {
 .jvchat-night-mode #message_topic,
 .jvchat-night-mode .btn-group {
   background: #484c52 !important;
+}
+
+.jvchat-night-mode .messageEditor__topInfo {
+  background-color: #484c52 !important;
 }
 
 .jvchat-night-mode .jvchat-bloc-avatar {
@@ -1201,6 +1268,20 @@ hr.jvchat-ruler:first-of-type {
   background-color: #2d2d2d !important;
   border-color: #202020 !important;
   color: #dcddde !important;
+}
+
+.jvchat-night-mode .text-enrichi-forum blockquote.message__blockquote {
+  border-left-color: #484c52 !important;
+}
+
+.jvchat-night-mode .text-enrichi-forum .message__collapsedQuote::after {
+  background-color: #484c52 !important;
+  border-color: #737373 !important;
+  color: #737373 !important;
+}
+
+.jvchat-night-mode .text-enrichi-forum .message__collapsedQuote:hover::before {
+  color: #cbcdce !important;
 }
 
 /* Lavydavant */
@@ -1281,6 +1362,62 @@ hr.jvchat-ruler:first-of-type {
   content: "\uEA88";
   font-family: "jvchat-icons";
 }
+
+/* [ADD Color] */
+.jvchat-author > a:not([class*="messageUser__label--"]),
+.jvchat-author > a:not([class*="messageUser__label--"]):hover {
+    color: inherit;
+    text-decoration: none;
+}
+/* [ADD Color] */
+
+/* [ADD Captcha] */
+.messageEditor__containerEdit ~ div:not([class]),
+.messageEditor__containerEdit ~ div:not(.messageEditForm__buttons) {
+    display : none;
+}
+/* [END Captcha] */
+
+/* [ADD CSS Alerte] */
+.alert {
+    --jv-alert-bg: transparent;
+    --jv-alert-padding-x: 1rem;
+    --jv-alert-padding-y: 1rem;
+    --jv-alert-margin-bottom: 1rem;
+    --jv-alert-color: inherit;
+    --jv-alert-border-color: transparent;
+    --jv-alert-border: 0.0625rem solid var(--jv-alert-border-color);
+    --jv-alert-border-radius: 0.75rem;
+    position: relative;
+    padding: var(--jv-alert-padding-y) var(--jv-alert-padding-x);
+    margin-bottom: var(--jv-alert-margin-bottom);
+    color: var(--jv-alert-color);
+    background-color: var(--jv-alert-bg);
+    border: var(--jv-alert-border);
+    border-radius: var(--jv-alert-border-radius);
+}
+
+.alert-danger {
+    --jv-alert-color: #842029;
+    --jv-alert-bg: #f8d7da;
+    --jv-alert-border-color: #f5c2c7;
+    filter: brightness(var(--jv-alert-brightness));
+}
+.alert-warning {
+    --jv-alert-color: #997404;
+    --jv-alert-bg: #fff3cd;
+    --jv-alert-border-color: #ffecb5;
+    filter: brightness(var(--jv-alert-brightness))
+}
+.alert-success {
+    --jv-alert-color: #0f5132;
+    --jv-alert-bg: #d1e7dd;
+    --jv-alert-border-color: #badbcc;
+    filter: brightness(var(--jv-alert-brightness))
+}
+
+/* [END CSS Alerte] */
+
 </style>`;
 
 let freshHash = undefined;
@@ -1328,6 +1465,9 @@ let leavingTopic = false;
 let storageKey = "jvchat-premium-fork-configuration";
 let ringBell = undefined;
 let configuration = undefined;
+
+
+let show_pseudo;
 
 function defaultConfig() {
     return {
@@ -1445,7 +1585,7 @@ function getTopicLocked(elem) {
     }
     // New structure: check payload
     try {
-        let payload = freshPayload || getForumPayload();  //FreshPayload for actualize on polling
+        let payload = freshPayload || getForumPayload();
         if (payload && payload.forum && payload.forum.isForumReadOnly) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
@@ -1462,34 +1602,10 @@ function getTopicError(elem) {
     return `Le topic présente une erreur: ${error.getAttribute("alt")}`;
 }
 
-function autoHideTurnstileErrorMessages() {
-    const captchaContainers = document.querySelectorAll('.js-captcha');
-    captchaContainers.forEach(container => {
-        const observer = new MutationObserver((mutationsList) => {
-            for (const mutation of mutationsList) {
-                if (mutation.type === 'childList' || mutation.type === 'characterData' || mutation.type === 'subtree') {
-                    const childDivs = Array.from(container.children).filter(el => el.tagName === 'DIV');
-                    if (childDivs.length >= 2) {
-                        const turnstileWidgetDiv = childDivs[childDivs.length - 1];
-                        if (turnstileWidgetDiv && turnstileWidgetDiv.textContent.includes("[Cloudflare Turnstile]")) {
-                            turnstileWidgetDiv.style.display = 'none';
-                        }
-                    }
-                }
-            }
-        });
 
-        observer.observe(container, {
-            childList: true,
-            subtree: true,
-            characterData: true
-        });
-    });
-}
-
-function parseSondage(elem) {
+function parseSondage(elem, jsonRes) {
     // Old structure
-    let blocSondage = elem.getElementsByClassName("bloc-sondage")[0];
+    let blocSondage = elem?.getElementsByClassName("bloc-sondage")[0];
     if (blocSondage) {
         let intitule = blocSondage.getElementsByClassName("intitule-sondage")[0].textContent;
         let answered = !!(blocSondage.getElementsByClassName("result-pourcent")[0]);
@@ -1519,7 +1635,7 @@ function parseSondage(elem) {
 
     // New structure: extract from payload
     try {
-        let payload = freshPayload || getForumPayload(); //FreshPayload for actualize on polling
+        let payload = jsonRes || freshPayload || getForumPayload(); //FreshPayload for actualize on polling
         if (payload && payload.survey && payload.survey.hasSurvey && payload.survey.data) {
             let surveyData = payload.survey.data;
             let intitule = surveyData.title || "";
@@ -1675,6 +1791,8 @@ function parseMessage(elem) {
 
         let blacklisted = false;
 
+        let classUser = elem.querySelector(".messageUser__label")?.classList[3] ?? '';
+
         let avatarElem = elem.querySelector(".avatar__image");
         let avatar = avatarElem ? avatarElem.getAttribute("src") : undefined;
 
@@ -1706,6 +1824,7 @@ function parseMessage(elem) {
         }
 
         return {
+            classUser: classUser,
             author: author,
             dateString: date,
             date: parseDate(date),
@@ -1723,6 +1842,8 @@ function parseMessage(elem) {
     let conteneur = conteneurs[conteneurs.length - 1];
 
     let author = conteneur.getElementsByClassName("bloc-pseudo-msg")[0].textContent.trim();
+
+    let classUser = [...conteneur.getElementsByClassName("bloc-pseudo-msg")[0].classList].pop();
 
     let blacklisted = conteneurs[0].classList.contains("conteneur-message-blacklist");
 
@@ -1757,6 +1878,7 @@ function parseMessage(elem) {
     }
 
     return {
+        classUser: classUser,
         author: author,
         dateString: date,
         date: parseDate(date),
@@ -1922,6 +2044,7 @@ function improveImages(elem) {
         }
         let src = image.src;
         let parent = image.parentNode;
+
         let extension = parent.href.split(".").pop();
         let direct = src.replace(/(.*?)\/minis\/(.*)\.\w+/i, "$1/fichiers/$2." + extension);
         image.setAttribute("data-src-mini", src);
@@ -2012,6 +2135,12 @@ function getPanelHtml() {
                             <span id="jvchat-play-sound-span">Alerte sonore</span>
                         </label>
                         <p>Joue un son de notification lorsqu'un nouveau message est posté et que vous êtes sur un onglet différent.</p>
+                    </div>
+                    <div class="jvchat-config-option" id="jvchat-citation">
+                        <label>
+                            <input id="jvchat-citation-checkbox" type="checkbox">
+                            <span id="jvchat-citation-span">Pseudo en citation</span>
+                        </label>
                     </div>
                     <div class="jvchat-config-option" id="jvchat-night-mode">
                         <label>
@@ -2166,6 +2295,9 @@ function clearPage(document) {
     document.getElementById("jvchat-load-images-checkbox").checked = configuration["load_images"];
     document.getElementById("jvchat-load-images-checkbox").addEventListener("change", tryCatch(toggleLoadImagesOption));
 
+    document.getElementById("jvchat-citation-checkbox").checked = show_pseudo;
+    document.getElementById("jvchat-citation-checkbox").addEventListener("change", tryCatch(toggleCitationOption));
+
     document.getElementById("jvchat-turbo-delay-range").value = configuration["turbo_delay"];
     document.getElementById("jvchat-turbo-delay-span").innerHTML = `${configuration["turbo_delay"]} ms`;
     document.getElementById("jvchat-turbo-delay-range").addEventListener("input", tryCatch(changeTurboDelayOption));
@@ -2308,6 +2440,12 @@ function toggleLoadImagesOption(event) {
     }
 }
 
+function toggleCitationOption(event) {
+    let checked = document.getElementById("jvchat-citation-checkbox").checked;
+    localStorage.setItem("jvchat-mod-show-pseudo", checked ? "true" : "false");
+    show_pseudo = checked;
+}
+
 function changeTurboDelayOption(event) {
     let ms = document.getElementById("jvchat-turbo-delay-range").value;
     document.getElementById("jvchat-turbo-delay-span").innerHTML = `${ms} ms`;
@@ -2344,7 +2482,7 @@ function closeAlert(event) {
 
 
 function getMessageIdFromUrl(messageUrl) {
-    const urlObj = new URL(messageUrl);
+    const urlObj = new URL(messageUrl, location.origin);
     if (!urlObj?.hash?.length) return;
     const match = urlObj.hash.match(/^#post_(?<messageid>[0-9]{10})/);
     return match?.groups?.messageid;
@@ -2434,7 +2572,9 @@ async function postJvcMessage() {
     formData.set("text", textarea.value);
     formData.set("topicId", getTopicId());
     formData.set("forumId", getForumId());
-    formData.set("group", "1");
+    let aliasRang = document.getElementById('form_alias_rang');
+    formData.set("group", aliasRang?.value || "1");
+
     formData.set("messageId", "undefined");
 
     const forumPayload = freshPayload || getForumPayload();
@@ -2477,11 +2617,14 @@ async function postJvcMessage() {
         formulaire.classList.remove("jvchat-disabled-form");
         textarea.removeAttribute("disabled");
 
-        if (handleApiResponseError(res, 'l\'envoi du message')) return;
+        if (handleApiResponseError(res, 'l\'envoi du message')) {
+            freshPayload.formSession = res.formSession; // Nouveau CRPS
+            return;
+        }
 
         let messageId = res?.messageId || res?.id || null;
-        if (!messageId && response.url) {
-            messageId = getMessageIdFromUrl(response.url);
+        if (!messageId && res.redirectUrl) {
+            messageId = getMessageIdFromUrl(res.redirectUrl);
         }
         if (messageId) {
             const detail = { 'detail': { id: messageId, content: textarea.value, username: currentUser.author } };
@@ -2585,11 +2728,15 @@ function renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHa
     cancelButton.textContent = "Annuler";
     cancelButton.className = "jvchat-edition-cancel-btn";
     cancelButton.onclick = () => {
+        let isDown = isScrollDown();
         editionDiv.classList.add("jvchat-hide");
         editionDiv.innerHTML = '';
         originalContentDiv.classList.remove("jvchat-hide");
         if (messageBloc.originalHTML) {
             originalContentDiv.innerHTML = messageBloc.originalHTML;
+        }
+        if (isDown) {
+            setScrollDown();
         }
     };
 
@@ -2599,9 +2746,13 @@ function renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHa
     editionDiv.appendChild(textarea);
     editionDiv.appendChild(buttonsDiv);
 
+    let isDown = isScrollDown();
     originalContentDiv.classList.add("jvchat-hide");
     editionDiv.classList.remove("jvchat-hide");
     textarea.focus();
+    if (isDown) {
+        setScrollDown();
+    }
 }
 
 async function submitEditedMessage(messageBloc, messageId, newText, formSession, ajaxHash) {
@@ -2615,7 +2766,8 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
     formData.append("messageId", messageId);
     formData.append("topicId", topicId);
     formData.append("forumId", forumId);
-    formData.append("group", "1");
+    let aliasRang = document.getElementById('form_alias_rang');
+    formData.append("group", aliasRang?.value || "1");
 
     // Append every fs_* form-session token returned by the GET form-values call
     for (const key in formSession) {
@@ -2653,9 +2805,13 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
             improveImages(originalContentDiv);
         }
 
+        let isDown = isScrollDown();
         editionDiv.classList.add("jvchat-hide");
         editionDiv.innerHTML = '';
         originalContentDiv.classList.remove("jvchat-hide");
+        if (isDown) {
+            setScrollDown();
+        }
 
         if (lastEditionTime && lastEditionTime[messageId]) {
             lastEditionTime[messageId][0] = getTimestamp();
@@ -2935,6 +3091,8 @@ function makeMessage(message) {
     let deletionSpan = '<span class="jvchat-delete jvchat-picto" title="Supprimer"></span>';
     let deletion = (currentUser.author === undefined) || (message.author.toLowerCase() !== currentUser.author.toLowerCase()) ? "" : deletionSpan;
 
+    author = `<a href="/forums/message/${id}" target="_blank" class="${message.classUser}">${author}</a>`;
+
     let html =
         `<div class="jvchat-bloc-message">
             <div class="jvchat-message" jvchat-id=${id}>
@@ -3122,7 +3280,7 @@ function buildQuoteEvent(messageId) {
     const author = message.querySelector('.jvchat-author').textContent.trim();
     const date = message.querySelector('.jvchat-date').getAttribute('to-quote');
     quoteButton.addEventListener('click', () => {
-        let header = `> Le ${date} ${author} a écrit :\n`;
+        let header = `> Le ${date} ${show_pseudo ? `${author} a écrit ` : ''}:\n`;
         let quoted = reverseMessage(message.querySelector(".txt-msg"), true);
         let content = header + quoted + '\n\n';
 
@@ -3130,6 +3288,7 @@ function buildQuoteEvent(messageId) {
         if (isReduced) {
             toggleTextarea();
         }
+
         insertAtCursor(textarea, content);
         textarea.focus();
     });
@@ -3269,7 +3428,8 @@ function submitSondageAnswer(event) {
         let reponseNum = parseInt(target.getAttribute("sondage-reponse-num"));
         let sondageId = sondageChoices[reponseNum]["sondageId"];
         let reponseId = sondageChoices[reponseNum]["responseId"];
-        /* Legacy JVC
+
+        /* Legacy Structure
         let topicId = urlToFetch["ids"].split("-")[2];
         let url = `https://www.jeuxvideo.com/forums/ajax_topic_sondage_vote.php?id_topic=${topicId}&id_sondage_reponse=${reponseId}&id_sondage=${sondageId}&ajax_hash=${freshHash}`;
 
@@ -3301,7 +3461,7 @@ function submitSondageAnswer(event) {
         }
 
         request("POST", url, onSuccess, onError, onTimeout, undefined, true, 5000, false);
-        END LEGACY */
+        */
 
         // New structure
         let topicId = getTopicId();
@@ -3324,17 +3484,9 @@ function submitSondageAnswer(event) {
                 return;
             }
 
-            setSondage({
-                answered: surveyData.hasVoted,
-                intitule: surveyData.title,
-                votes: surveyData.totalResponses,
-                results: surveyData.responses.map(r => ({
-                    response: r.text,
-                    pourcent: r.percentage,
-                    sondageId: surveyData.id,
-                    responseId: r.id
-                }))
-            });
+            let sondage = parseSondage(null, res);
+            setSondage(sondage);
+
         }
 
         function onError(err, _) {
@@ -3479,19 +3631,6 @@ function setTopicNbMessages(document, nbMessages) {
     }
 }
 
-function hideCloudfareInfo() {
-    function hideElement(el) {
-        if (el) el.classList.add("jvchat-hide");
-    }
-    const observer = new MutationObserver(() => {
-        let cfInfo = document.querySelector(".js-captcha-logo");
-        if (cfInfo) hideElement(cfInfo.parentElement.parentElement);
-    });
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-}
 
 function triggerJVChat() {
     // TamperMonkey / Chrome bug: https://github.com/Tampermonkey/tampermonkey/issues/705#issuecomment-493895776
@@ -3518,8 +3657,6 @@ function triggerJVChat() {
     freshForm = getForm(document);
     freshPayload = getPayload(document);
 
-    hideCloudfareInfo();
-
     favicon = makeFavicon();
 
     let topicUrl = document.URL;
@@ -3541,6 +3678,8 @@ function triggerJVChat() {
 
     configuration = defaultConfig();
     loadConfig();
+
+    show_pseudo = localStorage.getItem("jvchat-mod-show-pseudo") !== "false";
 
     ringBell = new Audio(configuration["sound"]);
 
@@ -3571,7 +3710,6 @@ function triggerJVChat() {
     }
 
     manageTextareaSimpleHeight();
-    autoHideTurnstileErrorMessages();
 
     let activationEvent = new CustomEvent('jvchat:activation');
     dispatchEvent(activationEvent);
@@ -4016,6 +4154,19 @@ function addJVChatButton(document) {
 
     .btn-jvchat.buttonsNavbar__button {
         font-weight: bold;
+    }
+
+
+    @media (min-width: 1000px) and (max-width: 1199px) {
+        .buttonsNavbar {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
+        .icon-refresh + .buttonsNavbar__label {
+            display : none;
+        }
+        
     }
     </style>`
     document.head.insertAdjacentHTML("beforeend", css);
