@@ -19,7 +19,7 @@ jobs:
           for branch in fork-of-fork debug; do
             git checkout $branch
 
-            curl -L "https://update.greasyfork.org/scripts/576263.user.js" \
+            curl -L "https://update.greasyfork.org/scripts/471322.user.js" \
                           -o raw.user.js
 
             VERSION=$(grep '// @version' raw.user.js | awk '{print $NF}')
