@@ -5,7 +5,7 @@
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
 // @version        0.2.3.26
-// @icon           https://images.emojiterra.com/google/noto-emoji/unicode-15.1/color/128px/1f7e9.png
+// @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
 // @match          http://*.jeuxvideo.com/forums/1-*
