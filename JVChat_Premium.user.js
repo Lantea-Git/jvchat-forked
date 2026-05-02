@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.23
+// @version        0.2.3.24
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-15.1/color/128px/1f7e9.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2442,7 +2442,7 @@ function toggleLoadImagesOption(event) {
 
 function toggleCitationOption(event) {
     let checked = document.getElementById("jvchat-citation-checkbox").checked;
-    localStorage.setItem("jvchat-mod-show-pseudo", checked ? "true" : "false");
+    localStorage.setItem("jvchat-show-pseudo", checked ? "true" : "false");
     show_pseudo = checked;
 }
 
@@ -3680,7 +3680,7 @@ function triggerJVChat() {
     configuration = defaultConfig();
     loadConfig();
 
-    show_pseudo = localStorage.getItem("jvchat-mod-show-pseudo") !== "false";
+    show_pseudo = localStorage.getItem("jvchat-show-pseudo") !== "false";
 
     ringBell = new Audio(configuration["sound"]);
 
