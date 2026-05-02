@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name           JV_Chat_Custsom_Fork
-// @description    Outil de discussion instantanée (Fork et debug)
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey)
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
