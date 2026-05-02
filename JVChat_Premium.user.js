@@ -4,7 +4,7 @@
 // @author       Blaff & Rand0max
 // @namespace    JVChatPremiumUnOfficial
 // @license      MIT
-// @version      0.2.3.18
+// @version      0.2.3.20
 // @match        http://*.jeuxvideo.com/forums/42-*
 // @match        https://*.jeuxvideo.com/forums/42-*
 // @match        http://*.jeuxvideo.com/forums/1-*
@@ -1770,7 +1770,7 @@ function parseMessage(elem) {
 }
 
 function parseUserInfo(elem) {
-    let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm");
+    let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") ?? undefined;
     if (accountMp === undefined) {
         return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
     }
