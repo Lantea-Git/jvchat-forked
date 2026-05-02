@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.28
+// @version        0.2.3.29
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1815,13 +1815,6 @@ function parseMessage(elem) {
         }
 
         let signalerHTML = "";
-        let signalElem = elem.querySelector('.messageUser__action[title="Faire un signalement"]');
-        if (signalElem) {
-            let jvChatSignalElem = signalElem.cloneNode(true);
-            jvChatSignalElem.classList.toggle("jvchat-picto", true);
-            jvChatSignalElem.classList.add("jvchat-signal");
-            signalerHTML = jvChatSignalElem.outerHTML;
-        }
 
         return {
             classUser: classUser,
@@ -1892,8 +1885,8 @@ function parseMessage(elem) {
 }
 
 function parseUserInfo(elem) {
-    let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") ?? undefined;
-    if (accountMp === undefined) {
+    let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm");
+    if (!accountMp) {
         return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
     }
     let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif");
