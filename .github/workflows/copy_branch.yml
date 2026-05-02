@@ -1,12 +1,7 @@
 name: Sync JVChat_Premium to debug
-#.github/workflows/copy_branch.yml
-
+# .github/workflows/copy_branch.yml
 on:
-  push:
-    branches:
-      - fork-of-fork
-    paths:
-      - 'JVChat_Premium.user.js'
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -17,12 +12,16 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push file to debug
+      - name: Sync to fork-of-fork and debug
         run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
-          
-          git checkout debug
-          git checkout fork-of-fork -- JVChat_Premium.user.js
-          git commit -m "sync: JVChat_Premium.user.js from fork-of-fork"
-          git push
+
+          for branch in fork-of-fork debug; do
+            git checkout $branch
+            curl -L "https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.user.js" \
+              -o JVChat_Premium.user.js
+            git add JVChat_Premium.user.js
+            git commit -m "sync" || echo "Rien à committer sur $branch"
+            git push origin $branch
+          done
