@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.29
+// @version        0.2.3.33
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1422,7 +1422,6 @@ hr.jvchat-ruler:first-of-type {
 
 let freshHash = undefined;
 let freshDeletionHash = undefined;
-let freshForm = undefined;
 let freshPayload = undefined;
 let firstMessageId = undefined;
 let firstMessageDate = undefined;
@@ -1510,10 +1509,6 @@ function escapeHtml(str, isAttribute) {
     return str;
 }
 
-function getForm(doc) {
-    return doc.querySelector('#forums-post-message-editor > form');
-}
-
 function getHash(doc) {
     let hash = doc.querySelector("#ajax_hash_liste_messages")
     if (hash) {
@@ -1521,7 +1516,7 @@ function getHash(doc) {
     }
     // Fallback: extract from payload
     let payload = getPayload(doc);
-    if (payload && payload.ajaxToken) {
+    if (payload?.ajaxToken) {
         return payload.ajaxToken;
     }
     return undefined;
@@ -1534,7 +1529,7 @@ function getDeletionHash(doc) {
     }
     // Fallback: extract from payload
     let payload = getPayload(doc);
-    if (payload && payload.topicActions && payload.topicActions.deleteMessageUrl) {
+    if (payload?.topicActions?.deleteMessageUrl) {
         let match = payload.topicActions.deleteMessageUrl.match(/ajax_hash=([a-f0-9]+)/i);
         if (match) return match[1];
     }
@@ -1586,7 +1581,7 @@ function getTopicLocked(elem) {
     // New structure: check payload
     try {
         let payload = freshPayload || getForumPayload();
-        if (payload && payload.forum && payload.forum.isForumReadOnly) {
+        if (payload?.forum?.isForumReadOnly) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
         }
@@ -1636,7 +1631,7 @@ function parseSondage(elem, jsonRes) {
     // New structure: extract from payload
     try {
         let payload = jsonRes || freshPayload || getForumPayload(); //FreshPayload for actualize on polling
-        if (payload && payload.survey && payload.survey.hasSurvey && payload.survey.data) {
+        if (payload?.survey?.hasSurvey && payload.survey.data) {
             let surveyData = payload.survey.data;
             let intitule = surveyData.title || "";
             let answered = surveyData.hasVoted || surveyData.isClosed || false;
@@ -1932,7 +1927,7 @@ function parseTopicInfo(elem) {
     if (!connected) {
         try {
             let payload = getPayload(elem);
-            let panels = payload && payload.sidebar && payload.sidebar.panels;
+            let panels = payload?.sidebar?.panels;
             if (Array.isArray(panels)) {
                 for (let panel of panels) {
                     if (panel && panel.header && typeof panel.header.btnVal === "number") {
@@ -1941,7 +1936,7 @@ function parseTopicInfo(elem) {
                     }
                 }
             }
-            if (!connected && payload && payload.forumInfo && payload.forumInfo.header) {
+            if (!connected && payload?.forumInfo?.header) {
                 connected = parseInt(payload.forumInfo.header.btnVal) || connected;
             }
         } catch (e) { /* ignore */ }
@@ -2225,35 +2220,10 @@ function clearPage(document) {
 
     document.getElementById("page-messages-forum").classList.add("jvchat-root");
 
-    // Hide the sticky toolbar (Répondre/Nouveau sujet/Liste/Actualiser)
-    let stickyToolbar = document.getElementById("js-list-message-tools-actions");
-    if (stickyToolbar) {
-        stickyToolbar.classList.add("jvchat-hide");
-    }
-
-    // Hide the right sidebar (Sous forums / Infos / Favoris)
-    let contentAside = document.querySelector(".layout__contentAside");
-    if (contentAside) {
-        contentAside.classList.add("jvchat-hide");
-    }
-
-    // Hide ads inside forum-main-col
-    let adsInForum = document.querySelectorAll("#forum-main-col ins[data-ad-position], #forum-main-col .nosticky");
-    for (let ad of adsInForum) {
-        ad.classList.add("jvchat-hide");
-    }
-
-    if (formContainer) {
-        formContainer.classList.add("jvchat-reduced");
-        formContainer.classList.add("jvchat-hide");
-    }
+    formContainer?.classList.add("jvchat-reduced");
+    formContainer?.classList.add("jvchat-hide");
 
     let toolbar = formContainer ? (formContainer.querySelector(".buttonsEditor, .jv-editor-toolbar")) : null;
-    /*
-    if (toolbar) {
-        toolbar.classList.add("jvchat-hide");
-    }
-    */
 
     document.getElementById("jvchat-main").addEventListener("click", tryCatch(dontScrollOnExpand));
 
@@ -2489,7 +2459,7 @@ function getTopicId() {
     }
     // Fallback: extract from payload
     try {
-        let payload = getForumPayload();
+        let payload = freshPayload || getForumPayload();
         if (payload && payload.topicId) return String(payload.topicId);
     } catch { /* ignore */ }
     // Fallback: extract from URL
@@ -2549,8 +2519,8 @@ function handleApiResponseError(response, operation = "[N/A]") {
 
 
 async function postJvcMessage() {
-    if (!freshForm) {
-        addAlertbox("danger", "Impossible de poster le message, aucun formulaire trouvé");
+    if (!freshPayload) {
+        addAlertbox("danger", "Impossible de poster le message, aucun Payload trouvé");
         return;
     }
 
@@ -2560,7 +2530,7 @@ async function postJvcMessage() {
     formulaire.classList.add("jvchat-disabled-form");
     textarea.setAttribute("disabled", "true");
 
-    let formData = new FormData(freshForm);
+    let formData = new FormData();
 
     formData.set("text", textarea.value);
     formData.set("topicId", getTopicId());
@@ -3648,7 +3618,6 @@ function triggerJVChat() {
 
     freshHash = getHash(document);
     freshDeletionHash = getDeletionHash(document);
-    freshForm = getForm(document);
     freshPayload = getPayload(document);
 
     favicon = makeFavicon();
@@ -3969,11 +3938,6 @@ function parsePage(res, requestTimestamp) {
         isError = false;
         updateIntervalIdx = 2;
         removeFixedAlert(undefined, true);
-    }
-
-    let form = getForm(res);
-    if (form) {
-        freshForm = form;
     }
 
     let hash = getHash(res);
