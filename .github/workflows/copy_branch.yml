@@ -1,4 +1,4 @@
-name: Sync JVChat_Premium to debug
+name: Push commit
 # .github/workflows/copy_branch.yml
 on:
   workflow_dispatch:
