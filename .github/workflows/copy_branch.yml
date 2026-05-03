@@ -16,7 +16,7 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
 
-          for branch in test; do
+          for branch in fork-of-fork debug; do
             git checkout $branch
 
             curl -L "https://update.greasyfork.org/scripts/471322.user.js" -o raw.user.js
