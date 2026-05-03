@@ -1,7 +1,5 @@
 name: Push commit
 # .github/workflows/copy_branch.yml
-on:
-  workflow_dispatch:
 
 on:
   workflow_dispatch:
