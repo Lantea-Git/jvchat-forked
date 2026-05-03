@@ -3,6 +3,14 @@ name: Push commit
 on:
   workflow_dispatch:
 
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: 'Nom commit'
+        required: false
+        default: 'push'
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -25,6 +33,6 @@ jobs:
             rm raw.user.js
 
             git add JVChat_Premium.user.js
-            git commit -m "push" || echo "Rien à committer sur $branch"
+            git commit -m "${{ github.event.inputs.commit_message }}" || echo "Rien à committer sur $branch"
             git push origin $branch
           done
