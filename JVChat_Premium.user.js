@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.55
+// @version        0.2.3.60
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1619,7 +1619,6 @@ let storageKey = "jvchat-premium-fork-configuration";
 let ringBell = undefined;
 let configuration = undefined;
 
-let showPseudo;
 
 function defaultConfig() {
     return {
@@ -2560,7 +2559,6 @@ function toggleLoadImagesOption(event) {
 function toggleCitationOption(event) {
     let checked = document.getElementById("jvchat-citation-checkbox").checked;
     configuration["show_pseudo"] = checked;
-    showPseudo = checked;
     saveConfig();
 }
 
@@ -4378,7 +4376,7 @@ function reverseQuote(blocMessage) {
     let author = blocMessage.getElementsByClassName("jvchat-author")[0].textContent.trim();
     let date = blocMessage.getElementsByClassName("jvchat-date")[0].getAttribute("to-quote");
     //let header = `> Le ${date} ${author} a écrit :\n`;
-    let header = `> Le ${date} ${showPseudo ? `${author} a écrit ` : ''}:\n`;
+    let header = `> Le ${date} ${configuration["show_pseudo"] ? `${author} a écrit ` : ''}:\n`;
     let quoted = reverseMessage(blocMessage.getElementsByClassName("txt-msg")[0], true);
     return header + quoted + '\n\n';
 }
