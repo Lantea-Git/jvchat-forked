@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.50
+// @version        0.2.3.55
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -4419,6 +4419,7 @@ function dontScrollOnExpand(event) {
         let bloc = target.closest(".jvchat-message");
         let quote = reverseQuote(bloc);
         let textarea = getTextArea();
+        if (!textarea) return;
         if (isReduced) {
             toggleTextarea();
         }
