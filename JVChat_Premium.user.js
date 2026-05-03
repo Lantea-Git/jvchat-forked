@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.60
+// @version        0.2.3.61
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1380,9 +1380,8 @@ hr.jvchat-ruler:first-of-type {
 /* [ADD Color] */
 
 /* [ADD Captcha] */
-.messageEditor__containerEdit ~ div:not([class]),
-.messageEditor__containerEdit ~ div:not(.messageEditForm__buttons) {
-    display : none;
+.messageEditor__containerEdit ~ div:not([class]):not(:last-of-type) {
+  display: none;
 }
 /* [END Captcha] */
 
