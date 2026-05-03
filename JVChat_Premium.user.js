@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.33
+// @version        0.2.3.35
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1378,7 +1378,7 @@ hr.jvchat-ruler:first-of-type {
 }
 /* [END Captcha] */
 
-/* [ADD CSS Alerte] */
+/* [ADD CSS LEGACY JVC ALERTE] */
 .alert {
     --jv-alert-bg: transparent;
     --jv-alert-padding-x: 1rem;
@@ -1416,7 +1416,153 @@ hr.jvchat-ruler:first-of-type {
     filter: brightness(var(--jv-alert-brightness))
 }
 
-/* [END CSS Alerte] */
+/* [END CSS LEGACY JVC ALERTE] */
+
+/* [ADD CSS LEGACY JVC SONDAGE] */
+.bloc-sondage {
+    position: relative;
+    padding: 1.25rem;
+    background: #46556d;
+    border-radius: 0.25rem
+}
+
+.bloc-sondage .lib-sondage {
+    margin: 0;
+    font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+    font-size: 1.625rem;
+    line-height: 1em;
+    color: #fff;
+    margin-bottom: 0.9375rem
+}
+
+.bloc-sondage .intitule-sondage {
+    font-family: "Roboto",Arial,Helvetica,sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.25rem;
+    color: #fff;
+    margin-bottom: 1.25rem
+}
+
+.bloc-sondage .tab-choix .pourcent {
+    width: 6.25rem;
+    height: 1.25rem;
+    background: #323d4e;
+    color: #fff;
+    text-align: right;
+    padding: 0 0.3125rem;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    font-weight: 700
+}
+
+.bloc-sondage .tab-choix .back-barre {
+    width: 6.25rem;
+    height: 0.375rem;
+    background: #5a6e8c
+}
+
+.bloc-sondage .tab-choix .back-barre span {
+    height: 0.375rem;
+    background: #e4e9f1;
+    display: block;
+    transition: 1s width
+}
+
+.bloc-sondage .tab-choix .result-pourcent {
+    vertical-align: top;
+    padding-top: 0.1875rem;
+    padding-bottom: 0.625rem
+}
+
+.bloc-sondage .tab-choix .reponse {
+    color: #fff;
+    font-size: 0.75rem;
+    padding-left: 0.4375rem;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+    vertical-align: top;
+    line-height: 1rem
+}
+
+.bloc-sondage .tab-choix .reponse a {
+    color: #fff
+}
+
+.bloc-sondage .pied-result {
+    margin-top: 0.625rem;
+    padding: 0.625rem 0;
+    margin-bottom: 2.8125rem;
+    color: #fff;
+    overflow: hidden;
+    font-size: 0.8125rem;
+    line-height: 1em;
+    font-weight: 700
+}
+
+.bloc-sondage .pied-result .lien-jv {
+    color: #fff;
+    float: right
+}
+
+.bloc-sondage .bloc-sondage-prec {
+    width: 12.5rem;
+    height: 1.875rem;
+    font-family: "Roboto",Arial,Helvetica,sans-serif;
+    font-size: 0.8125rem;
+    line-height: 1.875rem;
+    padding: 0 0.625rem 0 0.625rem;
+    text-transform: uppercase;
+    background: #fff
+}
+
+.bloc-sondage .bloc-sondage-prec .lien-jv {
+    display: block
+}
+
+.bloc-sondage .bloc-sondage-prec .lien-jv:hover {
+    text-decoration: none
+}
+
+.bloc-sondage .bloc-sondage-prec .lien-jv span {
+    color: #46556d
+}
+
+.titre-head-bloc-sondage {
+    margin-bottom: 0.9375rem;
+    overflow: hidden;
+    padding-bottom: 0.625rem
+}
+
+.titre-head-bloc-sondage .titre-bloc {
+    font-size: 1.125rem;
+    line-height: 1em;
+    color: #fff
+}
+
+.bloc-options-sondage {
+    position: absolute;
+    right: 1.25rem;
+    top: 0.9375rem
+}
+
+.bloc-options-sondage span {
+    color: #fff;
+    font-weight: 700
+}
+
+.bloc-sondage.sondage-fofo {
+    margin-bottom: 1.25rem
+}
+
+.bloc-sondage.sondage-fofo:before {
+    border: 0
+}
+
+.bloc-sondage.sondage-fofo .pied-result {
+    margin-bottom: 0;
+    padding-bottom: 0
+}
+/* [END CSS LEGACY JVC SONDAGE] */
 
 </style>`;
 
