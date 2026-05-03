@@ -16,11 +16,12 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
 
+          cp .github/workflows/copy_branch_patch_header.py /tmp/patch_header.py
           for branch in fork-of-fork debug; do
             git checkout $branch
 
             curl -L "https://update.greasyfork.org/scripts/471322.user.js" -o raw.user.js
-            python3 .github/workflows/copy_branch_patch_header.py raw.user.js JVChat_Premium.user.js
+            python3 /tmp/patch_header.py raw.user.js JVChat_Premium.user.js
             rm raw.user.js
 
             git add JVChat_Premium.user.js
