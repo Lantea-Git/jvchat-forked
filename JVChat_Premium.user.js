@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.35
+// @version        0.2.3.36
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1181,14 +1181,12 @@ hr.jvchat-ruler:first-of-type {
 #jvchat-load-images-checkbox,
 #jvchat-load-images-span,
 #jvchat-play-sound-checkbox,
-#jvchat-play-sound-span {
+#jvchat-play-sound-span,
+#jvchat-citation-checkbox,
+#jvchat-citation-span {
   cursor: pointer;
 }
 
-#jvchat-citation-checkbox,
-#jvchat-citation-span {
-    cursor: pointer;
-}
 
 .jvchat-night-mode #jvchat-leftbar > .panel {
   background-color: #2f3136 !important;
@@ -2270,12 +2268,6 @@ function getPanelHtml() {
                         </label>
                         <p>Joue un son de notification lorsqu'un nouveau message est posté et que vous êtes sur un onglet différent.</p>
                     </div>
-                    <div class="jvchat-config-option" id="jvchat-citation">
-                        <label>
-                            <input id="jvchat-citation-checkbox" type="checkbox">
-                            <span id="jvchat-citation-span">Pseudo en citation</span>
-                        </label>
-                    </div>
                     <div class="jvchat-config-option" id="jvchat-night-mode">
                         <label>
                             <input id="jvchat-night-mode-checkbox" type="checkbox">
@@ -2296,6 +2288,12 @@ function getPanelHtml() {
                             <span id="jvchat-hide-mosaic-span">Masquer les mosaïques</span>
                         </label>
                         <p>Cache automatiquement les mosaïques d'images NoelShack pour réduire le flooding.</p>
+                    </div>
+                    <div class="jvchat-config-option" id="jvchat-citation">
+                        <label>
+                            <input id="jvchat-citation-checkbox" type="checkbox">
+                            <span id="jvchat-citation-span">Pseudo en citation</span>
+                        </label>
                     </div>
                     <div class="jvchat-config-option" id="jvchat-turbo-delay">
                         <label>
