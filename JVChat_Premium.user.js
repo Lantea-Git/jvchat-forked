@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JV_Chat_Custsom_Fork
 // @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey)
-// @author         Blaff, Rand0max, Atlantis
+// @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.33
+// @version        0.2.3.34
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
