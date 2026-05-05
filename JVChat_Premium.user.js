@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.70
+// @version        0.2.3.72
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -4105,7 +4105,7 @@ function addJVChatButton(document) {
             padding-left: 0;
             padding-right: 0;
         }
-        
+
         .icon-refresh + .buttonsNavbar__label {
             display : none;
         }
