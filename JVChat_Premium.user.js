@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.72
+// @version        0.2.3.75
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3870,40 +3870,19 @@ function decreaseUpdateInterval() {
 }
 
 function getPayload(doc) {
-    const scripts = doc.getElementsByTagName('script');
-    let rawPayloadString = null;
-
-    for (let i = 0; i < scripts.length; i++) {
-        const scriptContent = scripts[i].textContent || scripts[i].innerText; // textContent est préférable
-
-        if (scriptContent) {
-            const match = scriptContent.match(/window\.jvc\.forumsAppPayload\s*=\s*['"]([^'"]+)['"]/);
-            if (match && match[1]) {
-                rawPayloadString = match[1];
-                break;
-            }
-
-            const jvcVarMatch = scriptContent.match(/jvc\.forumsAppPayload\s*=\s*['"]([^'"]+)['"]/);
-            if (!rawPayloadString && jvcVarMatch && jvcVarMatch[1]) {
-                rawPayloadString = jvcVarMatch[1];
-                break;
-            }
-        }
+  try {
+    const scriptPayLoad = [...doc.scripts].find(s => s.textContent?.includes('Payload'))?.textContent;
+    const rawPayload = scriptPayLoad?.match(/jvc\.\w+Payload\s*=\s*["']?([^"']+)["']?/)?.[1];
+    if (!rawPayload) return null;
+    try {
+        return JSON.parse(atob(rawPayload)); //BASE 64
+    } catch {
+        return JSON.parse(rawPayload); //FALLBACK NATIVE
     }
-
-    if (rawPayloadString) {
-        try {
-            const decodedPayload = JSON.parse(atob(rawPayloadString));
-            return decodedPayload;
-        } catch (e) {
-            console.error("Erreur lors du décodage Base64 ou du parsing JSON du payload:", e);
-            console.error("Payload brut extrait", rawPayloadString); // Pour le débogage
-            return null;
-        }
-    } else {
-        console.warn("La variable window.jvc.forumsAppPayload n'a pas été trouvée dans les balises <script> du DOM fourni.");
-        return null;
-    }
+  } catch (e) {
+      console.error("Erreur extraction du payload:", e);
+      return null;
+  }
 }
 
 function parsePage(res, requestTimestamp) {
