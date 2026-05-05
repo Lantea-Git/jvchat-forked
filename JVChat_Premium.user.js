@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.80
+// @version        0.2.3.86
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3204,7 +3204,7 @@ function makeMessage(message) {
     let deletionSpan = '<span class="jvchat-delete jvchat-picto" title="Supprimer"></span>';
     let deletion = (currentUser.author === undefined) || (message.author.toLowerCase() !== currentUser.author.toLowerCase()) ? "" : deletionSpan;
 
-    author = `<a href="/forums/message/${id}" target="_blank" class="${message.classUser}">${author}</a>`;
+    let msgHref = `<a href="/forums/message/${id}" target="_blank" class="${message.classUser}" title="Ouvrir le Message">${author}</a>`;
 
     let html =
         `<div class="jvchat-bloc-message">
@@ -3216,7 +3216,7 @@ function makeMessage(message) {
                 </div>
                 <div class="jvchat-bloc-author-content">
                     <div class="jvchat-toolbar">
-                        <h5 class="jvchat-author">${author}</h5>
+                        <h5 class="jvchat-author">${msgHref}</h5>
                         <div class="jvchat-tooltip">
                             ${deletion}
                             ${editionButtonHtml}
