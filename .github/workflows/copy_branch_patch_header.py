@@ -30,7 +30,31 @@ new_header = f"""// ==UserScript==
 # Stripper l'ancien header et recoller
 body = re.sub(r'// ==UserScript==.*?// ==/UserScript==\n?', '', content, flags=re.DOTALL)
 
-output = new_header + "\n\n" + body.lstrip()
+# Filtrage ligne par ligne
+lines = body.lstrip().splitlines(keepends=True)
+result = []
+in_remove_block = False
+
+for line in lines:
+    stripped = line.strip()
+
+    # REMOVE
+    if "#OFFALTX:REMOVE-START" in stripped:
+        in_remove_block = True
+        continue
+    if "#OFFALTX:REMOVE-END" in stripped:
+        in_remove_block = False
+        continue
+    if in_remove_block:
+        continue
+
+    # UNCOMMENT
+    if "#ALTX:UNCOMMENT" in stripped:
+        continue
+
+    result.append(line)
+
+output = new_header + "\n\n" + "".join(result)
 
 with open(output_file, 'w', encoding='utf-8') as f:
     f.write(output)
