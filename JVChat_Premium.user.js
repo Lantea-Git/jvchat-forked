@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.77
+// @version        0.2.3.78
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1176,6 +1176,10 @@ hr.jvchat-ruler:first-of-type {
 #jvchat-citation-checkbox,
 #jvchat-citation-span {
   cursor: pointer;
+}
+
+#jvchat-citation.jvchat-config-option {
+    display : none;
 }
 
 
@@ -2410,8 +2414,6 @@ function clearPage(document) {
     document.getElementById("jvchat-load-images-checkbox").checked = configuration["load_images"];
     document.getElementById("jvchat-load-images-checkbox").addEventListener("change", tryCatch(toggleLoadImagesOption));
 
-    document.getElementById("jvchat-citation-checkbox").checked = configuration["hide_pseudo"];
-    document.getElementById("jvchat-citation-checkbox").addEventListener("change", tryCatch(toggleCitationOption));
 
     document.getElementById("jvchat-turbo-delay-range").value = configuration["turbo_delay"];
     document.getElementById("jvchat-turbo-delay-span").innerHTML = `${configuration["turbo_delay"]} ms`;
@@ -2555,11 +2557,6 @@ function toggleLoadImagesOption(event) {
     }
 }
 
-function toggleCitationOption(event) {
-    let checked = document.getElementById("jvchat-citation-checkbox").checked;
-    configuration["hide_pseudo"] = checked;
-    saveConfig();
-}
 
 function changeTurboDelayOption(event) {
     let ms = document.getElementById("jvchat-turbo-delay-range").value;
@@ -4356,8 +4353,7 @@ function reverseMessage(node, isInit, isUl) {
 function reverseQuote(blocMessage) {
     let author = blocMessage.getElementsByClassName("jvchat-author")[0].textContent.trim();
     let date = blocMessage.getElementsByClassName("jvchat-date")[0].getAttribute("to-quote");
-    //let header = `> Le ${date} ${author} a écrit :\n`;
-    let header = `> Le ${date} ${configuration["hide_pseudo"] ?  '' : `${author} a écrit `}:\n`;
+    let header = `> Le ${date} ${author} a écrit :\n`;
     let quoted = reverseMessage(blocMessage.getElementsByClassName("txt-msg")[0], true);
     return header + quoted + '\n\n';
 }
