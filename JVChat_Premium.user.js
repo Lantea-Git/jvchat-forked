@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.87
+// @version        0.2.3.88
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -864,23 +864,17 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .jvchat-content .img-stickers,
-.jvchat-content .message__urlImgSticker {
-  max-height: 39px;
-  min-height: 39px;
-  width: auto;
-  display: inline-block;
-  vertical-align: bottom;
-  margin-bottom: 0.1rem;
+.jvchat-content .message__urlImgSticker,
+.jvchat-content .message__sticker {
+    max-height: 39px;
+    min-height: 39px;
+    min-width: unset; /*Disable Value of JVC*/
+    width: auto;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-bottom: 0.1rem;
 }
 
-.jvchat-content .message__sticker {
-  max-height: 39px;
-  min-height: 39px;
-  width: auto;
-  display: inline-block;
-  vertical-align: bottom;
-  margin-bottom: 0.1rem;
-}
 
 #jvchat-main .bloc-spoil-jv .open-spoil {
   position: unset;
