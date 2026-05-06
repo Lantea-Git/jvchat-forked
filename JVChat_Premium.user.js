@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.86
+// @version        0.2.3.87
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2772,7 +2772,7 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
     const url = `https://www.jeuxvideo.com/forums/message/edit/form-values?id_message=${messageId}&ajax_hash=${ajaxHash}`;
     const originalContentDiv = messageBloc.querySelector(".jvchat-content");
 
-    originalContentDiv.classList.add("jvchat-hide");
+    originalContentDiv.classList.add("disabled-content");
 
     try {
         const response = await fetch(url, {
@@ -2784,6 +2784,8 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
             }
         });
         const data = await response.json();
+
+        originalContentDiv.classList.remove("disabled-content");
 
         if (handleApiResponseError(data, "récupération des données d'édition")) {
             originalContentDiv.classList.remove("jvchat-hide");
