@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.89
+// @version        0.2.3.90
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2125,7 +2125,7 @@ function jvCake(cls) {
 }
 
 function detectMosaic(elem) {
-    let imagesShack = elem.querySelectorAll(".img-shack, .message__urlImg");
+    let imagesShack = elem.querySelectorAll(".img-shack, img.message__urlImg");
     if (imagesShack.length < 4) {
         return;
     }
@@ -2133,7 +2133,6 @@ function detectMosaic(elem) {
     let regex1 = /^.+\/(?:[0-9]+-)+[0-9]{1,2}-([a-z0-9]+)\.\w+$/i;
     let regex2 = /^.+\/(?:[0-9]+-)+row-[0-9]+-col-[0-9](?:-[0-9]+)?\.\w+$/i;
     for (let image of imagesShack) {
-        if (!image.src) continue; //Fell Back Span
         let match1 = image.src.match(regex1);
         if (match1) {
             let [_, identifier] = match1;
