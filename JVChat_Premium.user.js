@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.99
+// @version        0.2.3.100
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2098,7 +2098,7 @@ function parseTopicInfo(elem) {
 }
 
 function fixMessage(elem) {
-    let jvcares = Array.from(elem.getElementsByClassName("JvCare"));
+    let jvcares = [...elem.getElementsByClassName("JvCare")];
     for (let jvcare of jvcares) {
         let a = document.createElement("a");
         a.setAttribute("target", "_blank");
@@ -2415,7 +2415,7 @@ function clearPage(document) {
     document.getElementById("jvchat-max-width-range").addEventListener("input", tryCatch(changeMaxWidthOption));
     adjustMaxWidth(configuration["max_width"]);
 
-    let favs = Array.from(document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']"));
+    let favs = [...document.querySelectorAll("link[rel='icon'], link[rel='shortcut icon']")];
     for (let fav of favs) {
         fav.parentElement.removeChild(fav);
     }
