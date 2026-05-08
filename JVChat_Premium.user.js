@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.106
+// @version        0.2.3.107
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2116,7 +2116,7 @@ function fixMessage(elem) {
     }
 
     let lazyImagesShack = elem.querySelectorAll('.message__urlImg:not(img)');
-    for (let lazyImagesShack of lazyImagesShack) {
+    for (let lazyImageShack of lazyImagesShack) {
         let lazySrcShack = lazyImageShack.dataset.srcBackground; // [data-src-background]
         if (!lazySrcShack) continue;
         lazyImageShack.style.backgroundImage = `url(${lazySrcShack})`;
