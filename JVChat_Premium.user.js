@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.90
+// @version        0.2.3.99
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2107,13 +2107,22 @@ function fixMessage(elem) {
         jvcare.outerHTML = a.outerHTML;
     }
 
-    let togglableQuotes = Array.from(elem.querySelectorAll(".messageUser__msg.txt-msg > blockquote > blockquote"));
+    let togglableQuotes = [...elem.querySelectorAll(".messageUser__msg.txt-msg > blockquote > blockquote")];
     for (let togglableQuote of togglableQuotes) {
         let toggleButton = document.createElement("button");
         toggleButton.classList.add("message__collapsedQuote");
         togglableQuote.insertBefore(toggleButton, togglableQuote.firstChild);
         // The click event is bound in the "dontScrollOnExpand()" function
     }
+
+    let lazyImageImagesShack = elem.querySelectorAll('.message__urlImg:not(img)');
+    for (const lazyImage of lazyImageImagesShack) {
+        let lazySrc = lazyImage.dataset.srcBackground; // [data-src-background]
+        if (!lazySrc) continue;
+        lazyImage.style.backgroundImage = `url(${lazySrc})`;
+        lazyImage.style.paddingBottom = '0'; 
+    }
+
 }
 
 function jvCake(cls) {
@@ -2167,21 +2176,10 @@ function detectMosaic(elem) {
 }
 
 function improveImages(elem) {
-    let imagesShack = elem.querySelectorAll(".img-shack, .message__urlImg");
+    let imagesShack = elem.querySelectorAll(".img-shack, img.message__urlImg");
     for (let image of imagesShack) {
-        if (!image.src) { //CSS Image Span => transform to image or cancel
-            const largeImg = image.dataset.srcBackground;
-            if (!largeImg) continue;
-            const tagImg = document.createElement('img');
-            tagImg.src = largeImg;
-            tagImg.className = image.className;
-            tagImg.style.paddingBottom = '0';
-            image.replaceWith(tagImg);
-            image = tagImg;
-        }
         let src = image.src;
         let parent = image.parentNode;
-
         let extension = parent.href.split(".").pop();
         let direct = src.replace(/(.*?)\/minis\/(.*)\.\w+/i, "$1/fichiers/$2." + extension);
         image.setAttribute("data-src-mini", src);
