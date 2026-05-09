@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.116
+// @version        0.2.3.121
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -875,11 +875,19 @@ hr.jvchat-ruler:first-of-type {
     margin-bottom: 0.1rem;
 }
 
+.jvchat-content .message__urlImgLarge {
+    width: 300px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    padding-bottom: 0 !important;
+}
 
+/*
 #jvchat-main .bloc-spoil-jv .open-spoil {
   position: unset;
   display: none;
 }
+*/
 
 .new-stickers {
   background-color: unset;
