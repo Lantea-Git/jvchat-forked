@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.125
+// @version        0.2.3.131
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2651,7 +2651,7 @@ function displayError(message) {
     }
 }
 
-function handleApiResponseError(response) {
+function handleApiResponseError(response, operation = "[N/A]") {
     let errorMessage = null;
     if (response && Array.isArray(response.erreur) && response.erreur.length > 0) {
         errorMessage = response.erreur.join(', ');
@@ -2660,7 +2660,7 @@ function handleApiResponseError(response) {
     }
 
     if (errorMessage) {
-        displayError(errorMessage);
+        displayError(`Erreur lors de ${operation} : ${errorMessage}`);
         return true;
     }
     return false;
@@ -2729,7 +2729,7 @@ async function postJvcMessage() {
         formulaire.classList.remove("jvchat-disabled-form");
         textarea.removeAttribute("disabled");
 
-        if (handleApiResponseError(res)) {
+        if (handleApiResponseError(res, 'l\'envoi du message')) {
             setScrollDown();
             freshPayload.formSession = res.formSession; // Nouveau CRPS
             return;
@@ -2788,7 +2788,7 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
 
         originalContentDiv.classList.remove("disabled-content");
 
-        if (handleApiResponseError(data)) {
+        if (handleApiResponseError(data, "récupération des données d'édition")) {
             originalContentDiv.classList.remove("jvchat-hide");
             editionDiv?.classList.add("jvchat-hide");
             return;
@@ -2911,7 +2911,7 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
 
         editionDiv.classList.remove("jvchat-disabled-form");
 
-        if (handleApiResponseError(data)) {
+        if (handleApiResponseError(data, "enregistrement de l'édition")) {
             return;
         }
 
@@ -3428,7 +3428,7 @@ function submitSondageAnswer(event) {
 
 
         function onSuccess(res) {
-            if (handleApiResponseError(res)) return;
+            if (handleApiResponseError(res, "la reponse au sondage")) return;
             
             let surveyData = res.survey?.data;
             if (!surveyData) {
