@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.110
+// @version        0.2.3.116
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2762,6 +2762,7 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
     // New JVC endpoint (2026): GET form values as JSON
     const url = `https://www.jeuxvideo.com/forums/message/edit/form-values?id_message=${messageId}&ajax_hash=${ajaxHash}`;
     const originalContentDiv = messageBloc.querySelector(".jvchat-content");
+    const editionDiv = messageBloc.querySelector(".jvchat-edition");
 
     originalContentDiv.classList.add("disabled-content");
 
@@ -2780,6 +2781,7 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
 
         if (handleApiResponseError(data)) {
             originalContentDiv.classList.remove("jvchat-hide");
+            editionDiv?.classList.add("jvchat-hide");
             return;
         }
 
