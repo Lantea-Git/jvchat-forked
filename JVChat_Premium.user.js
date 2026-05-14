@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.138
+// @version        0.2.3.139
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2278,18 +2278,18 @@ function getPanelHtml() {
                 <div id='jvchat-configuration'>
                     <h4 class='titre-info-fofo'>Configuration</h4>
                     <p id='jvchat-configuration-intro'><i>Les paramètres sont automatiquement sauvegardés et mis à jour lorsque vous les modifiez.</i></p>
-                    <div class="jvchat-config-option" id="jvchat-citation">
-                        <label>
-                            <input id="jvchat-citation-checkbox" type="checkbox">
-                            <span id="jvchat-citation-span">Pseudo en citation</span>
-                        </label>
-                    </div>
                     <div class="jvchat-config-option" id="jvchat-play-sound">
                         <label>
                             <input id="jvchat-play-sound-checkbox" type="checkbox">
                             <span id="jvchat-play-sound-span">Alerte sonore</span>
                         </label>
                         <p>Joue un son de notification lorsqu'un nouveau message est posté et que vous êtes sur un onglet différent.</p>
+                    </div>
+                    <div class="jvchat-config-option" id="jvchat-citation">
+                        <label>
+                            <input id="jvchat-citation-checkbox" type="checkbox">
+                            <span id="jvchat-citation-span">Pseudo en citation</span>
+                        </label>
                     </div>
                     <div class="jvchat-config-option" id="jvchat-night-mode">
                         <label>
