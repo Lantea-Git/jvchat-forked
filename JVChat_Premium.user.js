@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.139
+// @version        0.2.3.141
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -120,9 +120,7 @@ header.jv-header-menu,
   display: none !important;
 }
 
-/* Ensure right sidebar and ads are hidden */
-#page-messages-forum > .layout__contentAside,
-.layout__row.layout__contentAside,
+/* ADS */
 #forum-main-col ins[data-ad-position],
 #forum-main-col .nosticky,
 .container__postTitle {
@@ -164,30 +162,26 @@ body,
 .layout-content,
 .layout__row,
 .layout__contentMain {
-  height: 100% !important;
-  max-height: 100vh !important;
-  overflow: hidden !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
 }
 
-/* #forum-main-col has TWO .container__main children in the new structure:
-   - the first wraps #listMessages > #jvchat-main (scrollable messages)
-   - the second wraps #bloc-formulaire-forum (input form)
-   Make #forum-main-col itself a CSS Grid with rows "auto 1fr auto" so the
-   messages container grows to fill, and the form stays pinned at the bottom. */
+
 #forum-main-col {
-  display: grid !important;
-  grid-template-rows: auto 1fr auto !important;
-  grid-template-columns: 1fr !important;
-  overflow: hidden !important;
-  max-height: 100vh !important;
-  height: 100% !important;
+    display: grid !important;
+    grid-template-rows: auto 1fr auto !important;
+    grid-template-columns: 1fr !important;
+    overflow: hidden !important;
+    max-height: 100vh !important;
+    height: 100% !important;
 }
-/* First .container__main: messages (grows, scrolls internally) */
+
 #forum-main-col > .container__main:nth-last-of-type(2) {
-  grid-row: 2 !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-  display: block !important;
+    grid-row: 2 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    display: block !important;
 }
 #forum-main-col > .container__main:nth-last-of-type(2) > #listMessages {
   height: 100% !important;
@@ -226,8 +220,8 @@ body,
 #forum-main-col > #listMessages,
 #forum-main-col > .container__main,
 #forum-main-col > .container__main > #listMessages {
-  height: 100%;
-  width: 100%;
+    height: 100%;
+    width: 100%;
 }
 
 .jvchat-hide {
@@ -883,18 +877,6 @@ hr.jvchat-ruler:first-of-type {
     padding-bottom: 0 !important;
 }
 
-.jvchat-content .player-contenu {
-    max-width : 100%; /*Catch Max for Mobile*/
-    width: 400px;
-}
-
-/*
-#jvchat-main .bloc-spoil-jv .open-spoil {
-  position: unset;
-  display: none;
-}
-*/
-
 .new-stickers {
   background-color: unset;
 }
@@ -1364,6 +1346,32 @@ hr.jvchat-ruler:first-of-type {
   content: "\uEA88";
   font-family: "jvchat-icons";
 }
+
+.jvchat-content .player-contenu {
+    max-width : 100%; /*Catch Max for Mobile*/
+    width: 400px;
+}
+
+/*[ADD FIX CSS SPOIL 2026]*/
+
+.jvchat-content .message__spoilHead {
+    margin-top: 0.3rem;
+    margin-bottom: 0.1125rem;
+    height: 1.3rem;
+    line-height: 1.3rem;
+}
+
+.jvchat-content .message__spoil--inline .message__spoilContent {
+    padding: 0.1rem 0.625rem 0.2rem;
+    margin-left: 0;
+}
+.jvchat-content .message__spoil--inline .message__spoilLabel {
+    padding: 0.1525rem 1.25rem;
+}
+.jvchat-content .message__spoil--inline .message__spoilHead {
+    line-height: 1.6rem;
+}
+/*[END FIX CSS SPOIL 2026]*/
 
 /*[ADD RESPONSIVE MOBILE]*/
 @media (max-width: 612px) {
