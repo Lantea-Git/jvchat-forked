@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.146
+// @version        0.2.3.148
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -796,25 +796,18 @@ hr.jvchat-ruler:first-of-type {
   margin-bottom: 0.2rem;
 }
 
-.jvchat-content .text-enrichi-forum blockquote.message__blockquote,
-.jvchat-content blockquote.message__blockquote {
+.jvchat-content .messageUser__msg blockquote.message__blockquote {
   margin: 0.2rem 0;
   padding: 0rem 0.3rem 0 0.3rem;
   color: #8b8b8b;
 }
 
-/* [ADD Fix Bloquote] */
-.jvchat-content blockquote.message__blockquote {
-  padding-top: 0 !important;
-}
-/* [ADD Fix Bloquote] */
 
 .message__collapsedQuote::before {
     position: relative;
     top: -1px;
 }
 
-.jvchat-content .text-enrichi-forum .message__collapsedQuote,
 .jvchat-content .message__collapsedQuote {
   position: relative !important;
 }
@@ -1251,19 +1244,6 @@ hr.jvchat-ruler:first-of-type {
   color: #dcddde !important;
 }
 
-.jvchat-night-mode .text-enrichi-forum blockquote.message__blockquote {
-  border-left-color: #484c52 !important;
-}
-
-.jvchat-night-mode .text-enrichi-forum .message__collapsedQuote::after {
-  background-color: #484c52 !important;
-  border-color: #737373 !important;
-  color: #737373 !important;
-}
-
-.jvchat-night-mode .text-enrichi-forum .message__collapsedQuote:hover::before {
-  color: #cbcdce !important;
-}
 
 /* Lavydavant */
 
