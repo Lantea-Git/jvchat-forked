@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.149
+// @version        0.2.3.150
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1743,17 +1743,9 @@ function buildURL(dict) {
 }
 
 function getForum(document) {
-    let links = document.querySelectorAll(".spreadContainer nav.breadcrumb > a");
-    let title = "";
-    let forumLink = "";
+    let forumLink = [...document.querySelectorAll('.spreadContainer nav.breadcrumb > a[href*="/forums/0-"]')].pop();
 
-    for (let i = links.length - 1; i >= 0; i--) {
-        forumLink = links[i];
-        title = forumLink.textContent.trim();
-        if (title.startsWith("Forum ")) {
-            break;
-        }
-    }
+    let title = forumLink.textContent.trim();
 
     return { href: forumLink.getAttribute("href"), title: title.replace("Forum ", "") };
 }
