@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.150
+// @version        0.2.3.151
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -455,9 +455,9 @@ label {
 }
 
 #forums-post-message-editor > form:not([class]),
-#forums-post-message-editor > form.messageEditForm {
-  display: flex;
-  align-items: center;
+#forums-post-message-editor form.messageEditForm {
+    display: flex;
+    align-items: center;
 }
 
 .simpleButton.postMessage {
