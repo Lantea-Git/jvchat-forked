@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.151
+// @version        0.2.3.160
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -4131,6 +4131,14 @@ function reverseMessage(node, isInit, isUl) {
                     quote += "<spoil>" + reverseMessage(child) + "</spoil>\n\n"
                 } else if (classList.contains("message__spoilContent")) {
                     quote += reverseMessage(child);
+                } else if (classList.contains("player-contenu")) {
+                    let iframe = child.getElementsByTagName("iframe")[0];
+                    if (iframe) {
+                        let match = iframe.src.match(/youtube\.com\/embed\/([A-Za-z0-9_-]+)/);
+                        if (match) {
+                            quote += "[[youtube:" + match[1] + "]]\n\n";
+                        }
+                    }
                 }
                 break;
             }
