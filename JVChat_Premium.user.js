@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.162
+// @version        0.2.3.165
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1740,7 +1740,8 @@ function buildURL(dict) {
 }
 
 function getForum(document) {
-    let forumLink = [...document.querySelectorAll('.spreadContainer nav.breadcrumb > a[href*="/forums/0-"]')].pop();
+    let links = document.querySelectorAll(".spreadContainer nav.breadcrumb > a");
+    let forumLink = [...links].filter(a => a.textContent.trim().startsWith("Forum ")).pop();
 
     let title = forumLink.textContent.trim();
 
@@ -1985,7 +1986,7 @@ function fixMessage(elem) {
         jvcare.outerHTML = a.outerHTML;
     }
 
-    let togglableQuotes = [...elem.querySelectorAll(".messageUser__msg.txt-msg > blockquote > blockquote")];
+    let togglableQuotes = [...elem.querySelectorAll(":not(blockquote) > blockquote > blockquote")];
     for (let togglableQuote of togglableQuotes) {
         let toggleButton = document.createElement("button");
         toggleButton.classList.add("message__collapsedQuote");
