@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.160
+// @version        0.2.3.161
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -793,23 +793,19 @@ hr.jvchat-ruler:first-of-type {
 
 .jvchat-content > .txt-msg p,
 .jvchat-content > .messageUser__msg p {
-  margin-bottom: 0.2rem;
+    margin-bottom: 0.2rem;
 }
 
 .jvchat-content .messageUser__msg blockquote.message__blockquote {
-  margin: 0.2rem 0;
-  padding: 0rem 0.3rem 0 0.3rem;
-  color: #8b8b8b;
-}
-
-
-.jvchat-content .message__collapsedQuote::before {
-    position: relative;
-    top: -1px;
+    margin: 0.2rem 0;
+    padding: 0rem 0.3rem 0 0.3rem;
+    color: #8b8b8b;
 }
 
 .jvchat-content .message__collapsedQuote {
-  position: relative !important;
+    position: relative !important;
+    width: 100% !important;
+    display: block !important;
 }
 
 .jvchat-rounded {
