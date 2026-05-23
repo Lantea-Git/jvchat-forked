@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.161
+// @version        0.2.3.162
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -806,6 +806,7 @@ hr.jvchat-ruler:first-of-type {
     position: relative !important;
     width: 100% !important;
     display: block !important;
+    color: inherit;
 }
 
 .jvchat-rounded {
