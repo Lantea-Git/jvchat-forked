@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.165
+// @version        0.2.3.171
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1749,16 +1749,8 @@ function getForum(document) {
 }
 
 function getLastPage(document) {
-    // New structure: pagination with .pagination__button--last
-    let lastPageLink = document.querySelector(".pagination__button--last");
-    if (lastPageLink) {
-        let href = lastPageLink.getAttribute("href");
-        if (href) {
-            let match = href.match(/\/forums\/\d+-\d+-\d+-(\d+)-/);
-            if (match) return parseInt(match[1]);
-        }
-    }
-    // Fallback: old structure
+
+    /* Fallback: old structure
     let blocPages = document.getElementsByClassName("bloc-liste-num-page")[0];
     if (blocPages) {
         let spans = blocPages.getElementsByTagName("span");
@@ -1771,38 +1763,21 @@ function getLastPage(document) {
         }
         return lastPage;
     }
+    */
 
-    // New structure fallback: scan every pagination link/item for the highest page number.
-    // This handles cases where .pagination__button--last is absent (e.g. on the last page)
-    // or when JVC omits it on intermediate pages.
-    let maxPage = 1;
-    let paginationEls = document.querySelectorAll(
-        ".pagination__button, .pagination__item, .pagination__dropdownList a, .pagination__dropdownList span"
-    );
-    for (let el of paginationEls) {
-        let href = el.getAttribute && el.getAttribute("href");
-        if (href) {
-            let m = href.match(/\/forums\/\d+-\d+-\d+-(\d+)-/);
-            if (m) {
-                let n = parseInt(m[1]);
-                if (!isNaN(n) && n > maxPage) maxPage = n;
-                continue;
+    // New structure
+    let spans = document.querySelectorAll(".pagination__item, .pagination__button, .pagination__navigation a, .pagination__navigation span");
+    let lastPage = 1;
+    for (let span of spans) {
+        let txt = span.textContent.trim();
+        if (/^\d+$/.test(txt)) {
+            let page = parseInt(txt);
+            if (page > lastPage) {
+                lastPage = page;
             }
         }
-        let txt = (el.textContent || "").trim();
-        if (/^\d+$/.test(txt)) {
-            let n = parseInt(txt);
-            if (!isNaN(n) && n > maxPage) maxPage = n;
-        }
     }
-    if (maxPage > 1) {
-        return maxPage;
-    }
-
-    // Last resort: current page is the last page (topic has only one page)
-    let current = document.querySelector(".pagination__item--current");
-    if (current) return parseInt(current.textContent.trim()) || 1;
-    return 1;
+    return lastPage;
 }
 
 function parseMessage(elem) {
