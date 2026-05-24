@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.171
+// @version        0.2.3.191
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -428,45 +428,9 @@ label {
     line-height: normal;
 }
 
-.simpleButton.postMessage {
-    /* border: 2px solid var(--jv-border-color); */
-    border: 1px solid #bebecc;
-    background-color: inherit;
-}
-
-.simpleButton.postMessage:focus,
-.simpleButton.postMessage:hover {
-    background-color: var(--jv-border-color);
-}
-
-#bloc-formulaire-forum {
-    margin-bottom: 5px !important;
-    margin-left: 5px ! important;
-}
 
 
 .messageEditor__containerPreview {
-  display: none;
-}
-
-.messageEditor__containerEdit {
-  margin-bottom: 0px;
-  width: 100%;
-}
-
-#forums-post-message-editor > form:not([class]),
-#forums-post-message-editor form.messageEditForm {
-    display: flex;
-    align-items: center;
-}
-
-.simpleButton.postMessage {
-  height: 4rem;
-  width: 3rem;
-  margin: 0 0.4rem;
-}
-
-.postMessage__label {
   display: none;
 }
 
@@ -868,6 +832,11 @@ hr.jvchat-ruler:first-of-type {
     padding-bottom: 0 !important;
 }
 
+.jvchat-content .player-contenu {
+    max-width : 100%; /*Catch Max for Mobile*/
+    width: 400px;
+}
+
 .new-stickers {
   background-color: unset;
 }
@@ -956,17 +925,6 @@ hr.jvchat-ruler:first-of-type {
   line-height: normal;
 }
 
-.buttonsEditor__button {
-  font-size: 1.2rem;
-  height: 1.2rem;
-  width: 1.2rem;
-  line-height: 1rem;
-  text-align: center;
-}
-
-.buttonsEditor__group {
-  margin-right: 0.4rem;
-}
 
 .buttonsEditor__groupPreview {
   display: none;
@@ -1172,7 +1130,10 @@ hr.jvchat-ruler:first-of-type {
 .messageEditor__containerEdit--focus {
     color : unset;
 }
+
 #bloc-formulaire-forum {
+    margin-bottom: 5px !important;
+    margin-left: 5px ! important;
     padding-right: 0 !important;
     padding-left: 0 !important;
 }
@@ -1321,11 +1282,6 @@ hr.jvchat-ruler:first-of-type {
   font-family: "jvchat-icons";
 }
 
-.jvchat-content .player-contenu {
-    max-width : 100%; /*Catch Max for Mobile*/
-    width: 400px;
-}
-
 /*[ADD FIX CSS SPOIL 2026]*/
 
 .jvchat-content .message__spoilHead {
@@ -1349,9 +1305,9 @@ hr.jvchat-ruler:first-of-type {
 
 /*[ADD RESPONSIVE MOBILE]*/
 @media (max-width: 612px) {
-  .jvchat-content > .messageUser__msg {
-    overflow: visible;
-  }
+    .jvchat-content .messageUser__msg {
+        overflow: visible;
+    }
 }
 
 .container__main { /* Fix Reponsive Respawn 2 */
@@ -1363,7 +1319,60 @@ hr.jvchat-ruler:first-of-type {
     margin-right: 0;
 }
 
-/*[ADD RESPONSIVE MOBILE]*/
+/*[END RESPONSIVE MOBILE]*/
+
+/* PATCH 2025 [LITTLE BTN] */
+
+.buttonsEditor__button {
+    font-size: 1.2rem;
+    height: 1.2rem;
+    width: 1.2rem;
+    line-height: 1.0rem;
+    text-align: center;
+}
+.buttonsEditor__group {
+    margin-right: 0.4rem
+}
+
+/* END PATCH 2025 [LITTLE BTN] */
+
+/* PATCH 2025 RANDOMAX UI*/
+
+.messageEditor__containerEdit {
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+#forums-post-message-editor > form:not([class]),
+#forums-post-message-editor form.messageEditForm  {
+    display: flex;
+    align-items: center;
+}
+
+.simpleButton.postMessage {
+    height: 4rem;
+    width: 3rem;
+    margin: 0 0.4rem;
+}
+
+.simpleButton.postMessage {
+    border: 1px solid #bebecc;
+    background-color: inherit;
+}
+
+.simpleButton.postMessage:focus,
+.simpleButton.postMessage:hover {
+    background-color: var(--jv-border-color);
+}
+
+.postMessage__label {
+    display: none;
+}
+#jvchat-buttons-main {
+    display : none;
+}
+
+/* END 2025 RANDOMAX UI*/
 
 /* [ADD Color] */
 .jvchat-author > a:not([class*="messageUser__label--"]),
@@ -1379,7 +1388,7 @@ hr.jvchat-ruler:first-of-type {
 }
 /* [END Captcha] */
 
-/* [ADD CSS LEGACY JVC ALERTE] */
+/* [ADD CSS LEGACY JVC ALERTE SONDAGE] */
 .alert-danger {
     --jv-alert-color: #842029;
     --jv-alert-bg: #f8d7da;
@@ -1409,9 +1418,7 @@ hr.jvchat-ruler:first-of-type {
     border-radius: 0.75rem;
     filter: brightness(var(--jv-alert-brightness));
 }
-/* [END CSS LEGACY JVC ALERTE] */
 
-/* [ADD CSS LEGACY JVC SONDAGE] */
 .bloc-sondage {
     position: relative;
     color: #fff;
@@ -1453,7 +1460,7 @@ hr.jvchat-ruler:first-of-type {
     font-size: 0.75rem;
     line-height: 1rem;
 }
-/* [END CSS LEGACY JVC SONDAGE] */
+/* [END CSS LEGACY JVC ALERTE SONDAGE] */
 
 </style>`;
 
