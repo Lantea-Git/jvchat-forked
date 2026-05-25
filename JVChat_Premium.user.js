@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.191
+// @version        0.2.3.195
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1579,24 +1579,6 @@ function getDeletionHash(doc) {
     return undefined;
 }
 
-function getJvcHash(type = "liste_messages") {
-    if (type === "liste_messages" && typeof freshHash !== 'undefined') {
-        return freshHash;
-    }
-    if (type === "moderation_forum" && typeof freshDeletionHash !== 'undefined') {
-        return freshDeletionHash;
-    }
-    const hashElement = document.querySelector(`#ajax_hash_${type}`);
-    if (hashElement) return hashElement.value;
-    // Fallback: extract from payload
-    if (type === "liste_messages") {
-        return getHash(document);
-    } else if (type === "moderation_forum") {
-        return getDeletionHash(document);
-    }
-    return undefined;
-}
-
 function manageTextareaSimpleHeight() {
     const textarea = getTextArea();
     const postButton = document.querySelector('.postMessage');
@@ -2608,9 +2590,9 @@ async function postJvcMessage() {
 }
 
 async function requestMessageDataForEdit(messageId, messageBloc) {
-    const ajaxHash = getJvcHash("liste_messages");
+    let ajaxHash = freshHash || getHash(document);
     if (!ajaxHash) {
-        displayError("Hash AJAX (liste_messages) introuvable pour l'édition.");
+        displayError("Hash AJAX introuvable pour l'édition.");
         return;
     }
 
