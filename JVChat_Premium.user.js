@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.196
+// @version        0.2.3.198
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -68,8 +68,6 @@ header.jv-header-menu,
 .sideWootbox,
 .titre-head-bloc,
 .bloc-pre-pagi-forum,
-.bloc-message-forum,
-.bloc-message-forum-anchor,
 .bloc-pagi-default,
 .bloc-outils-top,
 .bloc-outils-bottom,
@@ -117,7 +115,7 @@ header.jv-header-menu,
 .sideCardForum,
 .js-side-module-forum-info,
 .js-side-module-forum-favorite {
-  display: none !important;
+    display: none !important;
 }
 
 /* ADS */
@@ -435,10 +433,11 @@ label {
 }
 
 .jvchat-edition-textarea {
-  resize: none;
-  width: 100%;
-  max-height: 6.5rem;
-  min-height: 3.5rem;
+    resize: none;
+    width: 100%;
+    line-height: normal;
+    max-height: 6.5rem;
+    min-height: 3.5rem;
 }
 
 
