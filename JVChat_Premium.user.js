@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.195
+// @version        0.2.3.196
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1919,18 +1919,9 @@ function parseTopicInfo(elem) {
     // New structure fallback: read from payload (forumInfo.header.btnVal)
     if (!connected) {
         try {
-            let payload = getPayload(elem);
-            let panels = payload?.sidebar?.panels;
-            if (Array.isArray(panels)) {
-                for (let panel of panels) {
-                    if (panel && panel.header && typeof panel.header.btnVal === "number") {
-                        connected = panel.header.btnVal;
-                        break;
-                    }
-                }
-            }
-            if (!connected && payload?.forumInfo?.header) {
-                connected = parseInt(payload.forumInfo.header.btnVal) || connected;
+            let payload = freshPayload || getPayload(elem);
+            if (payload?.forumInfo?.header) {
+                connected = parseInt(payload.forumInfo.header.btnVal) || connected || 0;
             }
         } catch (e) { /* ignore */ }
     }
