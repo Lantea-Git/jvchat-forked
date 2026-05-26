@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.201
+// @version        0.2.3.202
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1872,11 +1872,11 @@ function parseMessage(elem) {
 }
 
 function parseUserInfo(elem) {
-    let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm");
+    let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") || elem.querySelector(".headerAccount__pm");
     if (!accountMp) {
         return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
     }
-    let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif");
+    let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif") || elem.querySelector(".headerAccount__notif");
     let avatarBox = elem.getElementsByClassName("headerAccount__avatar")[0];
     let authorBox = elem.getElementsByClassName("headerAccount__pseudo")[0];
     let mp = parseInt(accountMp.getAttribute("data-val"));
