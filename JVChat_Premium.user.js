@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.199
+// @version        0.2.3.201
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1493,7 +1493,6 @@ let turboDateSessions = [];
 let refreshDegraded = false;
 let refreshDegradedTimeoutId = -1;
 let timeoutedDates = [];
-let sondageChoices = undefined;
 let urlToFetch = undefined;
 let urlToRefreshInfos = undefined;
 let urlToCheckEdited = undefined;
@@ -1662,12 +1661,11 @@ function parseSondage(elem, jsonRes) {
             let results = [];
             if (surveyData.responses) {
                 for (let answer of surveyData.responses) {
-                    results.push({
-                        response: answer.text || "",
-                        pourcent: answer.percentage || 0,
-                        sondageId: surveyData.id,
-                        responseId: answer.id
-                    });
+                    let response = answer.text || "";
+                    let pourcent = answer.percentage || 0;
+                    let sondageId = surveyData.id;
+                    let responseId = answer.id;
+                    results.push({ response: response, pourcent: pourcent, sondageId: sondageId, responseId: responseId });
                 }
             }
             let votes = surveyData.totalResponses || 0;
@@ -1730,6 +1728,8 @@ function buildURL(dict) {
 function getForum(document) {
     let links = document.querySelectorAll(".spreadContainer nav.breadcrumb > a");
     let forumLink = [...links].filter(a => a.textContent.trim().startsWith("Forum ")).pop();
+    //Il faut filtrer avec "Forum " car ce node peut inclure la 1er page.
+    //POP() IMPORTANT => SI 2 elements contiennent "Forum " => il prend le dernier (sous-forum).
 
     let title = forumLink.textContent.trim();
 
@@ -3194,45 +3194,9 @@ function submitSondageAnswer(event) {
         return;
     }
     if (target.classList.contains("click-sondage")) {
-        let reponseNum = parseInt(target.getAttribute("sondage-reponse-num"));
-        let sondageId = sondageChoices[reponseNum]["sondageId"];
-        let reponseId = sondageChoices[reponseNum]["responseId"];
+        let sondageId = target.dataset.sondageId;
+        let reponseId = target.dataset.responseId;
 
-        /* Legacy Structure
-        let topicId = urlToFetch["ids"].split("-")[2];
-        let url = `https://www.jeuxvideo.com/forums/ajax_topic_sondage_vote.php?id_topic=${topicId}&id_sondage_reponse=${reponseId}&id_sondage=${sondageId}&ajax_hash=${freshHash}`;
-
-        function onSuccess(res) {
-            if (res.erreur.length > 0) {
-                for (let err of res.erreur) {
-                    addAlertbox("danger", err);
-                }
-                return;
-            }
-            let dom = document.createElement("html");
-            dom.innerHTML = res["html"];
-
-            let sondage = parseSondage(dom);
-            if (!sondage) {
-                addAlertbox("warning", "Erreur lors de la récupération du sondage");
-                return;
-            }
-
-            setSondage(sondage);
-        }
-
-        function onError(err, _) {
-            addAlertbox("danger", err);
-        }
-
-        function onTimeout(err) {
-            addAlertbox("warning", err);
-        }
-
-        request("POST", url, onSuccess, onError, onTimeout, undefined, true, 5000, false);
-        */
-
-        // New structure
         let topicId = getTopicId();
         let payload = freshPayload || getForumPayload();
         let surveyAjaxHash = payload?.survey?.ajaxToken;
@@ -3278,25 +3242,33 @@ function setSondage(sondage) {
         choix.removeEventListener("click", submitSondageAnswer);
         choix.classList.remove("notanswered");
     } else {
-        if (!sondageChoices) {
-            sondageChoices = sondage["results"];
-        }
         choix.addEventListener("click", submitSondageAnswer);
         choix.classList.add("notanswered");
     }
 
     if (!choix.firstChild) {
+        // Première construction des reponses
         document.getElementById("jvchat-sondage-intitule").innerHTML = escapeHtml(sondage["intitule"]);
         let results = sondage["results"];
         for (let i = 0; i < results.length; i++) {
             let res = results[i];
-            let tr = `<tr><td class="result-pourcent"><div class="pourcent">${res["pourcent"]} %</div><div class="back-barre"><span style="width: ${res["pourcent"]}%;"></span></div></td><td class="reponse"><div class="click-sondage" sondage-reponse-num="${i}">${escapeHtml(res["response"])}</div></td></tr>`;
+            let tr = `<tr>
+                        <td class="result-pourcent">
+                          <div class="pourcent">${res["pourcent"]} %</div>
+                          <div class="back-barre"><span style="width: ${res["pourcent"]}%;"></span></div>
+                        </td>
+                        <td class="reponse">
+                            <div class="click-sondage" data-sondage-id="${res["sondageId"]}" data-response-id="${res["responseId"]}">${escapeHtml(res["response"])}</div>
+                        </td>
+                      </tr>`;
             choix.insertAdjacentHTML("beforeend", tr);
         }
     } else {
+        // Hydratation des reponses
         let trs = choix.getElementsByClassName("result-pourcent");
+        let results = sondage["results"];
         for (let i = 0; i < trs.length; i++) {
-            let res = sondage["results"][i];
+            let res = results[i];
             let tr = trs[i];
             tr.getElementsByClassName("pourcent")[0].innerHTML = `${res["pourcent"]} %`;
             tr.getElementsByTagName("span")[0].style["width"] = `${res["pourcent"]}%`;
