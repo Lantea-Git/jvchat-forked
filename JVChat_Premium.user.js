@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.198
+// @version        0.2.3.199
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2759,9 +2759,8 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
         const customEvent = new CustomEvent('jvchat:newmessage', eventDetail);
         dispatchEvent(customEvent);
 
-        if (typeof forceUpdate === 'function') {
-            setTimeout(forceUpdate, 250);
-        }
+        setTimeout(tryCatch(forceUpdate), 250);
+
     } catch (error) {
         displayError(`Fetch error : ${error.message}`);
         editionDiv.classList.remove("jvchat-disabled-form");
