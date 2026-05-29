@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.206
+// @version        0.2.3.210
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1603,7 +1603,7 @@ function getTopicLocked(elem) {
     }
     // New structure: check payload
     try {
-        let payload = freshPayload || getForumPayload();
+        let payload = freshPayload || getPayload(document);
         if (payload?.forum?.isForumReadOnly) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
@@ -1653,7 +1653,7 @@ function parseSondage(elem, jsonRes) {
 
     // New structure: extract from payload
     try {
-        let payload = jsonRes || freshPayload || getForumPayload(); //FreshPayload for actualize on polling
+        let payload = jsonRes || freshPayload || getPayload(document); //FreshPayload for actualize on polling
         if (payload?.survey?.hasSurvey && payload.survey.data) {
             let surveyData = payload.survey.data;
             let intitule = surveyData.title || "";
@@ -2415,37 +2415,6 @@ function getMessageIdFromUrl(messageUrl) {
     return match?.groups?.messageid;
 }
 
-function getTopicId() {
-    const blocFormulaireElem = document.querySelector('#bloc-formulaire-forum');
-    if (blocFormulaireElem) {
-        let topicId = blocFormulaireElem.getAttribute('data-topic-id');
-        if (topicId) return topicId;
-    }
-    // Fallback: extract from payload
-    try {
-        let payload = freshPayload || getForumPayload();
-        if (payload && payload.topicId) return String(payload.topicId);
-    } catch { /* ignore */ }
-    // Fallback: extract from URL
-    const urlRegex = /\/forums\/\d+-\d+-(\d+)-/;
-    const match = window.location.pathname.match(urlRegex);
-    if (match) return match[1];
-    return undefined;
-}
-
-function getForumId() {
-    const forumRegex = /^\/forums\/(?:0|1|42)-(?<forumid>[0-9]+)-[0-9]+-[0-9]+-0-[0-9]+-0-.*\.htm$/i;
-    const currentUrl = window.location.pathname;
-    const matches = forumRegex.exec(currentUrl);
-    if (!matches) return null;
-    const forumId = parseInt(matches.groups.forumid.trim());
-    return forumId;
-}
-
-function getForumPayload() {
-    return JSON.parse(atob(unsafeWindow.jvc.forumsAppPayload));
-}
-
 function getTextArea() {
     return document.getElementById("message_reponse") || document.getElementById("message_topic");
 }
@@ -2494,24 +2463,25 @@ async function postJvcMessage() {
     formulaire.classList.add("jvchat-disabled-form");
     textarea.setAttribute("disabled", "true");
 
+    const forumPayload = freshPayload || getPayload(document);
+
     let formData = new FormData();
 
-    formData.set("text", textarea.value);
-    formData.set("topicId", getTopicId());
-    formData.set("forumId", getForumId());
+    formData.append("text", textarea.value);
+    formData.append("topicId", forumPayload.topicId);
+    formData.append("forumId", forumPayload.forumId);
     let aliasRang = document.getElementById('form_alias_rang');
-    formData.set("group", aliasRang?.value || "1");
+    formData.append("group", aliasRang?.value || "1");
 
-    formData.set("messageId", "undefined");
+    formData.append("messageId", "undefined");
 
-    const forumPayload = freshPayload || getForumPayload();
-    const formSessionData = forumPayload.formSession;
+    const formSession = forumPayload.formSession;
 
-    for (const key in formSessionData) {
-        formData.append(key, formSessionData[key]);
+    for (const key in formSession) {
+        formData.append(key, formSession[key]);
     }
 
-    formData.set("ajax_hash", forumPayload.ajaxToken);
+    formData.append("ajax_hash", forumPayload.ajaxToken);
 
     let timeout = turboActivated ? 5000 : 20000;
     postingMessage = true;
@@ -2613,16 +2583,14 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
             messageBloc.originalHTML = originalContentDiv.innerHTML;
         }
 
-        // The new endpoint returns all fields at the top level. Extract the
         // JVCode (message body) and every `fs_*` field (form-session anti-CSRF
         // tokens) which must be re-sent verbatim in the POST body.
         const jvcode = data.jvcode || data.text || data.message || "";
         const formSession = {};
-        for (const key in data) {
-            if (key.startsWith("fs_")) {
-                formSession[key] = data[key];
-            }
+        for (const key in data.formSession) {
+             formSession[key] = data.formSession[key];
         }
+
         // Legacy fallback: some responses nest them under `edit_form_session`
         if (data.edit_form_session && typeof data.edit_form_session === "object") {
             Object.assign(formSession, data.edit_form_session);
@@ -2656,8 +2624,9 @@ function renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHa
 }
 
 async function submitEditedMessage(messageBloc, messageId, newText, formSession, ajaxHash) {
-    const topicId = getTopicId();
-    const forumId = getForumId();
+    let payload = freshPayload || getPayload(document);
+    let topicId = payload?.topicId;
+    let forumId = payload?.forumId;
     const originalContentDiv = messageBloc.querySelector(".jvchat-content");
     const editionDiv = messageBloc.querySelector(".jvchat-edition");
 
@@ -2671,10 +2640,9 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
 
     // Append every fs_* form-session token returned by the GET form-values call
     for (const key in formSession) {
-        if (Object.hasOwnProperty.call(formSession, key)) {
-            formData.append(key, formSession[key]);
-        }
+        formData.append(key, formSession[key]);
     }
+
     formData.append("ajax_hash", ajaxHash);
     formData.append("resetFormAfterSuccess", "false");
 
@@ -2984,11 +2952,13 @@ function makeMessage(message) {
     let authorAvatarHidden = exists ? "" : "class='jvchat-hide-visibility'";
 
     let editionButtonHtml = "";
-    if (currentUser && currentUser.author && message.author.toLowerCase() === currentUser.author.toLowerCase()) {
+    if (currentUser?.author?.toLowerCase() === message.author.toLowerCase()) {
         editionButtonHtml = `<span class="jvchat-edit jvchat-picto" title="Modifier" data-message-id="${id}"></span>`;
     }
-    let deletionSpan = '<span class="jvchat-delete jvchat-picto" title="Supprimer"></span>';
-    let deletion = (currentUser.author === undefined) || (message.author.toLowerCase() !== currentUser.author.toLowerCase()) ? "" : deletionSpan;
+    let deletion = "";
+    if (currentUser?.author?.toLowerCase() === message.author.toLowerCase()) {
+        deletion = '<span class="jvchat-delete jvchat-picto" title="Supprimer"></span>';
+    }
 
     let msgHref = `<a href="/forums/message/${id}" target="_blank" class="${message.classUser}" title="Ouvrir le Message">${author}</a>`;
 
@@ -3167,10 +3137,11 @@ function submitSondageAnswer(event) {
         let sondageId = target.dataset.sondageId;
         let reponseId = target.dataset.responseId;
 
-        let topicId = getTopicId();
-        let payload = freshPayload || getForumPayload();
+        let payload = freshPayload || getPayload(document);
+
+        let topicId = payload?.topicId;
         let surveyAjaxHash = payload?.survey?.ajaxToken;
-        let url = `https://www.jeuxvideo.com/forums/survey/vote`;
+        let url = 'https://www.jeuxvideo.com/forums/survey/vote';
         let formData = {};
         formData.ajax_hash = surveyAjaxHash;
         formData.id_topic = topicId;
