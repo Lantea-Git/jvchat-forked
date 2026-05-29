@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.210
+// @version        0.2.3.211
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2638,7 +2638,6 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
     let aliasRang = document.getElementById('form_alias_rang');
     formData.append("group", aliasRang?.value || "1");
 
-    // Append every fs_* form-session token returned by the GET form-values call
     for (const key in formSession) {
         formData.append(key, formSession[key]);
     }
