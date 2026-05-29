@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.202
+// @version        0.2.3.206
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1877,12 +1877,12 @@ function parseUserInfo(elem) {
         return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
     }
     let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif") || elem.querySelector(".headerAccount__notif");
-    let avatarBox = elem.getElementsByClassName("headerAccount__avatar")[0];
-    let authorBox = elem.getElementsByClassName("headerAccount__pseudo")[0];
+
     let mp = parseInt(accountMp.getAttribute("data-val"));
     let notif = parseInt(accountNotif.getAttribute("data-val"));
-    let avatar = avatarBox.style["background-image"].slice(5, -2).replace("/avatar-md/", "/avatar/");
-    let author = authorBox.textContent.trim();
+
+    let avatar = elem.getElementsByClassName("headerAccount__avatar")[0].style["background-image"].slice(5, -2).replace("/avatar-md/", "/avatar/");
+    let author = elem.getElementsByClassName("headerAccount__pseudo")[0].textContent.trim();
     return { author: author, avatar: avatar, mp: mp, notif: notif };
 }
 
@@ -2033,13 +2033,12 @@ function improveImages(elem) {
 function replacePostButton(clickEvent) {
     const oldElement = document.querySelector('.postMessage');
     const newElement = oldElement.cloneNode(true);
-    oldElement.parentNode.replaceChild(newElement, oldElement);
+    oldElement.replaceWith(newElement);
     newElement.onclick = clickEvent;
     newElement.type = "button";
 }
 
-function getPanelHtml() {
-    const panelHtml = `
+let PANEL = `
 <div id='jvchat-leftbar'>
     <div class='panel panel-jv-forum'>
         <div id="jvchat-leftbar-button">
@@ -2151,8 +2150,6 @@ function getPanelHtml() {
     </div>
 </div>
 `;
-    return panelHtml;
-}
 
 function clearPage(document) {
     document.head.insertAdjacentHTML("beforeend", CSS);
@@ -2189,7 +2186,7 @@ function clearPage(document) {
     }
     document.getElementById("forum-main-col").insertAdjacentHTML("afterbegin", "<div id='jvchat-alerts'><div id='jvchat-fixed-alert' class='jvchat-hide'><div class='alert-row'></div></div><div id='jvchat-turbo-warning' class='jvchat-hide'><button class='close jvchat-alert-hide' aria-hidden='true' data-dismiss='alert' type='button'>×</button><div class='alert-row'></div></div><div id='jvchat-degraded-refresh-warning' class='jvchat-hide'><div class='alert-row'></div></div></div>");
 
-    document.getElementsByClassName("layout__contentMain")[0].insertAdjacentHTML("afterbegin", getPanelHtml());
+    document.getElementsByClassName("layout__contentMain")[0].insertAdjacentHTML("afterbegin", PANEL);
     document.getElementsByClassName("layout__contentMain")[0].insertAdjacentHTML("beforeend", "<div id='jvchat-right-padding'></div>");
 
     document.getElementById("page-messages-forum").classList.add("jvchat-root");
@@ -2642,48 +2639,16 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
 function renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHashPourPost) {
     const originalContentDiv = messageBloc.querySelector(".jvchat-content");
     const editionDiv = messageBloc.querySelector(".jvchat-edition");
+    const textarea = editionDiv.querySelector(".jvchat-edition-textarea");
+    const checkButton = editionDiv.querySelector(".jvchat-edition-submit");
 
-    editionDiv.innerHTML = '';
-
-    const textarea = document.createElement("textarea");
-    textarea.className = "jvchat-edition-textarea";
     textarea.value = jvcode;
-
-    const buttonsDiv = document.createElement("div");
-    buttonsDiv.className = "jvchat-edition-buttons";
-
-    const submitButton = document.createElement("button");
-    submitButton.type = "button";
-    submitButton.textContent = "Valider";
-    submitButton.className = "jvchat-edition-submit";
-    submitButton.onclick = () => submitEditedMessage(messageBloc, messageId, textarea.value, formSession, ajaxHashPourPost);
-
-    const cancelButton = document.createElement("button");
-    cancelButton.type = "button";
-    cancelButton.textContent = "Annuler";
-    cancelButton.className = "jvchat-edition-cancel-btn";
-    cancelButton.onclick = () => {
-        let isDown = isScrollDown();
-        editionDiv.classList.add("jvchat-hide");
-        editionDiv.innerHTML = '';
-        originalContentDiv.classList.remove("jvchat-hide");
-        if (messageBloc.originalHTML) {
-            originalContentDiv.innerHTML = messageBloc.originalHTML;
-        }
-        if (isDown) {
-            setScrollDown();
-        }
-    };
-
-    buttonsDiv.appendChild(submitButton);
-    buttonsDiv.appendChild(cancelButton);
-
-    editionDiv.appendChild(textarea);
-    editionDiv.appendChild(buttonsDiv);
+    checkButton.onclick = () => submitEditedMessage(messageBloc, messageId, textarea.value, formSession, ajaxHashPourPost);
 
     let isDown = isScrollDown();
     originalContentDiv.classList.add("jvchat-hide");
     editionDiv.classList.remove("jvchat-hide");
+    textarea.selectionStart = textarea.value.length;
     textarea.focus();
     if (isDown) {
         setScrollDown();
@@ -3048,6 +3013,11 @@ function makeMessage(message) {
                     </div>
                     <div class="jvchat-content">${content.outerHTML}</div>
                     <div class="jvchat-edition jvchat-hide">
+                        <textarea class="jvchat-edition-textarea"></textarea>
+                        <div class="jvchat-edition-buttons">
+                            <button type="button" class="jvchat-edition-submit">Valider</button>
+                            <button type="button" class="jvchat-edition-cancel-btn">Annuler</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -4211,7 +4181,7 @@ function dontScrollOnExpand(event) {
         let bloc = target.closest(".jvchat-message");
         event.stopPropagation();
         requestDelete(bloc);
-    } else if (classes.contains("jvchat-edition-cancel")) {
+    } else if (classes.contains("jvchat-edition-cancel-btn")) {
         let bloc = target.closest(".jvchat-message");
         let isDown = isScrollDown();
         bloc.getElementsByClassName("jvchat-content")[0].classList.remove("jvchat-hide");
