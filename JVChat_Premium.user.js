@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.211
+// @version        0.2.3.212
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2546,12 +2546,14 @@ async function postJvcMessage() {
     }
 }
 
-async function requestMessageDataForEdit(messageId, messageBloc) {
+async function requestMessageDataForEdit(messageBloc) {
     let ajaxHash = freshHash || getHash(document);
     if (!ajaxHash) {
         displayError("Hash AJAX introuvable pour l'édition.");
         return;
     }
+
+    let messageId = messageBloc.getAttribute("jvchat-id");
 
     // New JVC endpoint (2026): GET form values as JSON
     const url = `https://www.jeuxvideo.com/forums/message/edit/form-values?id_message=${messageId}&ajax_hash=${ajaxHash}`;
@@ -2583,18 +2585,9 @@ async function requestMessageDataForEdit(messageId, messageBloc) {
             messageBloc.originalHTML = originalContentDiv.innerHTML;
         }
 
-        // JVCode (message body) and every `fs_*` field (form-session anti-CSRF
-        // tokens) which must be re-sent verbatim in the POST body.
-        const jvcode = data.jvcode || data.text || data.message || "";
-        const formSession = {};
-        for (const key in data.formSession) {
-             formSession[key] = data.formSession[key];
-        }
-
-        // Legacy fallback: some responses nest them under `edit_form_session`
-        if (data.edit_form_session && typeof data.edit_form_session === "object") {
-            Object.assign(formSession, data.edit_form_session);
-        }
+        // JVCode (message body) and every `fs_*`
+        const jvcode = data.text || data.jvcode || data.message || "";
+        const formSession = data.formSession || data.edit_form_session || {};
 
         renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHash);
 
@@ -2950,14 +2943,10 @@ function makeMessage(message) {
     let authorTitle = exists ? `title="Ouvrir le profil de ${author}"` : "";
     let authorAvatarHidden = exists ? "" : "class='jvchat-hide-visibility'";
 
-    let editionButtonHtml = "";
-    if (currentUser?.author?.toLowerCase() === message.author.toLowerCase()) {
-        editionButtonHtml = `<span class="jvchat-edit jvchat-picto" title="Modifier" data-message-id="${id}"></span>`;
-    }
-    let deletion = "";
-    if (currentUser?.author?.toLowerCase() === message.author.toLowerCase()) {
-        deletion = '<span class="jvchat-delete jvchat-picto" title="Supprimer"></span>';
-    }
+    let editionSpan = `<span class="jvchat-edit jvchat-picto" title="Modifier" data-message-id="${id}"></span>`;
+    let deletionSpan = '<span class="jvchat-delete jvchat-picto" title="Supprimer"></span>';
+    let deletion = (currentUser.author === undefined) || (message.author.toLowerCase() !== currentUser.author.toLowerCase()) ? "" : deletionSpan;
+    let edition = (currentUser.author === undefined) || (message.author.toLowerCase() !== currentUser.author.toLowerCase()) ? "" : editionSpan;
 
     let msgHref = `<a href="/forums/message/${id}" target="_blank" class="${message.classUser}" title="Ouvrir le Message">${author}</a>`;
 
@@ -2974,7 +2963,7 @@ function makeMessage(message) {
                         <h5 class="jvchat-author">${msgHref}</h5>
                         <div class="jvchat-tooltip">
                             ${deletion}
-                            ${editionButtonHtml}
+                            ${edition}
                             <span class="jvchat-picto jvchat-quote" title="Citer"></span>
                             ${message.signaler}
                             <small class="jvchat-date" to-quote="${toQuoteDate}" title="${titleDate}">${textDate}</small>
@@ -4143,10 +4132,7 @@ function dontScrollOnExpand(event) {
         textarea.focus();
     } else if (classes.contains("jvchat-edit")) {
         let bloc = target.closest(".jvchat-message");
-        let messageId = target.dataset.messageId || bloc.getAttribute("jvchat-id");
-        if (messageId) {
-            requestMessageDataForEdit(messageId, bloc);
-        }
+        requestMessageDataForEdit(bloc);
     } else if (classes.contains("jvchat-delete")) {
         let bloc = target.closest(".jvchat-message");
         event.stopPropagation();
