@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.212
+// @version        0.2.3.221
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -600,13 +600,13 @@ label {
 }
 
 .jvchat-message-deleted:after {
-  content: "Message supprim\u{0000e9}";
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  color: gray;
-  font-weight: bold;
-  opacity: 0.7;
+    content: "Message supprimé";
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    color: gray;
+    font-weight: bold;
+    opacity: 0.7;
 }
 
 .jvchat-message-deleted .jvchat-delete,
@@ -1082,15 +1082,15 @@ hr.jvchat-ruler:first-of-type {
 }
 
 #jvchat-main.jvchat-hide-mosaics .jvchat-mosaic-root::before {
-  content: "Mosa\u{0000ef}que Cach\u{0000e9}e \u{0000af}\\\\_(\u{0030c4})_/\u{0000af}";
-  color: black;
-  text-align: center;
-  font-size: 10px;
-  display: block;
-  height: 55px;
-  width: 55px;
-  background: white;
-  border: solid #f00;
+    content: "Mosaïque Cachée ¯\\\\_(ツ)_/¯";
+    color: black;
+    text-align: center;
+    font-size: 10px;
+    display: block;
+    height: 55px;
+    width: 55px;
+    background: white;
+    border: solid #f00;
 }
 
 #jvchat-main.jvchat-hide-mosaics .jvchat-mosaic-root {
@@ -1532,7 +1532,7 @@ function saveConfig() {
 function loadConfig() {
     let config = JSON.parse(localStorage.getItem(storageKey) || "{}");
     for (let key in config) {
-        if (Object.prototype.hasOwnProperty.call(config, key) && Object.prototype.hasOwnProperty.call(configuration, key)) {
+        if (config.hasOwnProperty(key) && configuration.hasOwnProperty(key)) {
             configuration[key] = config[key];
         }
     }
@@ -1978,7 +1978,7 @@ function detectMosaic(elem) {
         let match1 = image.src.match(regex1);
         if (match1) {
             let [_, identifier] = match1;
-            if (Object.prototype.hasOwnProperty.call(mosaics, identifier)) {
+            if (mosaics.hasOwnProperty(identifier)) {
                 mosaics[identifier].push(image);
             } else {
                 mosaics[identifier] = [image];
@@ -1987,7 +1987,7 @@ function detectMosaic(elem) {
         }
         let match2 = image.src.match(regex2);
         if (match2) {
-            if (Object.prototype.hasOwnProperty.call(mosaics, "@rowcol")) {
+            if (mosaics.hasOwnProperty("@rowcol")) {
                 mosaics["@rowcol"].push(image);
             } else {
                 mosaics["@rowcol"] = [image];
@@ -2191,8 +2191,8 @@ function clearPage(document) {
 
     document.getElementById("page-messages-forum").classList.add("jvchat-root");
 
-    formContainer?.classList.add("jvchat-reduced");
-    formContainer?.classList.add("jvchat-hide");
+    formContainer?.classList.add("jvchat-reduced"); //Par defaut pas de user => toogle dans function setUser
+    formContainer?.classList.add("jvchat-hide");    //Par defaut pas de user => toogle dans function setUser
 
     let toolbar = formContainer ? (formContainer.querySelector(".buttonsEditor, .jv-editor-toolbar")) : null;
 
@@ -2409,6 +2409,7 @@ function closeAlert(event) {
 
 
 function getMessageIdFromUrl(messageUrl) {
+    if (!messageUrl) return;
     const urlObj = new URL(messageUrl, location.origin);
     if (!urlObj?.hash?.length) return;
     const match = urlObj.hash.match(/^#post_(?<messageid>[0-9]{10})/);
@@ -2426,25 +2427,13 @@ function setTextAreaValue(textarea, value) {
     textarea.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
-function displayError(message) {
-    console.error("JVChat error : ", message);
-    if (typeof addAlertbox === 'function') {
-        addAlertbox("danger", message);
-    } else {
-        alert(`JVChat error : ${message}`);
-    }
-}
-
-function handleApiResponseError(response, operation = "[N/A]") {
+function handleApiResponseError(response) {
     let errorMessage = null;
-    if (response && Array.isArray(response.erreur) && response.erreur.length > 0) {
-        errorMessage = response.erreur.join(', ');
-    } else if (response && response.errors && (Array.isArray(response.errors) ? response.errors.length > 0 : Object.keys(response.errors).length > 0)) {
+    if (response?.errors && (Array.isArray(response.errors) ? response.errors.length > 0 : Object.keys(response.errors).length > 0)) {
         errorMessage = Array.isArray(response.errors) ? response.errors.join(', ') : Object.values(response.errors).join(', ');
     }
-
     if (errorMessage) {
-        displayError(`Erreur lors de ${operation} : ${errorMessage}`);
+        addAlertbox("danger", errorMessage);
         return true;
     }
     return false;
@@ -2510,29 +2499,22 @@ async function postJvcMessage() {
         }
 
         const res = await response.json();
-
-        formulaire.classList.remove("jvchat-disabled-form");
-        textarea.removeAttribute("disabled");
-
-        if (handleApiResponseError(res, 'l\'envoi du message')) {
-            setScrollDown();
-            freshPayload.formSession = res.formSession; // Nouveau CRPS
-            return;
-        }
-
-        let messageId = res?.messageId || res?.id || null;
-        if (!messageId && res.redirectUrl) {
-            messageId = getMessageIdFromUrl(res.redirectUrl);
-        }
-        if (messageId) {
+        const messageId = getMessageIdFromUrl(res.redirectUrl);
+        if (messageId?.length) {
             const detail = { 'detail': { id: messageId, content: textarea.value, username: currentUser.author } };
             const event = new CustomEvent('jvchat:postmessage', detail);
             dispatchEvent(event);
         }
 
-        setTimeout(tryCatch(forceUpdate), 300);
+        formulaire.classList.remove("jvchat-disabled-form");
+        textarea.removeAttribute("disabled");
 
-        setTextAreaValue(textarea, '');
+        if (handleApiResponseError(res)) {
+            freshPayload.formSession = res.formSession; // Nouveau CRPS
+        } else {
+            setTextAreaValue(textarea, '');
+            setTimeout(tryCatch(forceUpdate), 300);
+        }
 
         setTextareaHeight();
         setScrollDown();
@@ -2549,7 +2531,7 @@ async function postJvcMessage() {
 async function requestMessageDataForEdit(messageBloc) {
     let ajaxHash = freshHash || getHash(document);
     if (!ajaxHash) {
-        displayError("Hash AJAX introuvable pour l'édition.");
+        addAlertbox("danger", "Hash AJAX introuvable pour l'édition.");
         return;
     }
 
@@ -2575,7 +2557,7 @@ async function requestMessageDataForEdit(messageBloc) {
 
         originalContentDiv.classList.remove("disabled-content");
 
-        if (handleApiResponseError(data, "récupération des données d'édition")) {
+        if (handleApiResponseError(data)) {
             originalContentDiv.classList.remove("jvchat-hide");
             editionDiv?.classList.add("jvchat-hide");
             return;
@@ -2592,7 +2574,7 @@ async function requestMessageDataForEdit(messageBloc) {
         renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHash);
 
     } catch (error) {
-        displayError(`Fetch error : ${error.message}`);
+        addAlertbox("danger", `Fetch error : ${error.message}`);
         originalContentDiv.classList.remove("jvchat-hide");
     }
 }
@@ -2654,7 +2636,7 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
 
         editionDiv.classList.remove("jvchat-disabled-form");
 
-        if (handleApiResponseError(data, "enregistrement de l'édition")) {
+        if (handleApiResponseError(data)) {
             return;
         }
 
@@ -2687,7 +2669,7 @@ async function submitEditedMessage(messageBloc, messageId, newText, formSession,
         setTimeout(tryCatch(forceUpdate), 250);
 
     } catch (error) {
-        displayError(`Fetch error : ${error.message}`);
+        addAlertbox("danger", `Fetch error : ${error.message}`);
         editionDiv.classList.remove("jvchat-disabled-form");
     }
 }
@@ -2700,8 +2682,8 @@ function requestDelete(bloc) {
 
     function onSuccess(res) {
         contentClasses.remove("disabled-content");
-        // Legacy response: { erreur: [...] } / New response: { success: true } or { errors: [...] }
-        const errors = (res && (res.erreur || res.errors)) || [];
+        // New response: { success: true } or { errors: [...] }
+        const errors = (res?.errors) || [];
         if (Array.isArray(errors) && errors.length > 0) {
             for (let err of errors) {
                 addAlertbox("danger", typeof err === "string" ? err : (err.message || JSON.stringify(err)));
@@ -2831,7 +2813,7 @@ function findDeletedMessages(res, requestTimestamp) {
         newDates.push(date);
     }
 
-    if (!Object.prototype.hasOwnProperty.call(messagesByPage, page)) {
+    if (!messagesByPage.hasOwnProperty(page)) {
         messagesByPage[page] = [newIds, newDates];
         return;
     }
@@ -2846,7 +2828,7 @@ function findDeletedMessages(res, requestTimestamp) {
     for (let i = 0; i < newLength; i++) {
         let id = newIds[i];
 
-        if (!Object.prototype.hasOwnProperty.call(lastEditionTime, id)) {
+        if (!lastEditionTime.hasOwnProperty(id)) {
             continue;
         }
 
@@ -2881,7 +2863,7 @@ function findDeletedMessages(res, requestTimestamp) {
         }
 
         // Pas enregistré => blacklist
-        if (!Object.prototype.hasOwnProperty.call(lastEditionTime, id)) {
+        if (!lastEditionTime.hasOwnProperty(id)) {
             continue;
         }
 
@@ -3028,7 +3010,7 @@ function addMessages(messages, editing, requestTimestamp) {
             continue;
         }
 
-        let referenced = Object.prototype.hasOwnProperty.call(lastEditionTime, id);
+        let referenced = lastEditionTime.hasOwnProperty(id);
         let edited = message.edited;
 
         if (referenced) {
@@ -3138,8 +3120,8 @@ function submitSondageAnswer(event) {
 
 
         function onSuccess(res) {
-            if (handleApiResponseError(res, "la reponse au sondage")) return;
-            
+            if (handleApiResponseError(res)) return;
+
             let surveyData = res.survey?.data;
             if (!surveyData) {
                 addAlertbox("warning", "Erreur lors de la récupération du sondage");
@@ -3212,17 +3194,13 @@ function setUser(document, user) {
 
     if (isConnected) {
         if (user.author !== currentUser.author) {
-            let pseudo = document.getElementById("jvchat-user-pseudo");
-            pseudo.innerHTML = user.author;
-            let avatarLink = document.getElementById("jvchat-user-avatar-link");
-            let notifLink = document.getElementById("jvchat-user-notif-link");
-            avatarLink.setAttribute("href", `https://www.jeuxvideo.com/profil/${user.author.toLowerCase()}?mode=infos`);
-            notifLink.setAttribute("href", `https://www.jeuxvideo.com/profil/${user.author.toLowerCase()}?mode=abonnements`);
+            document.getElementById("jvchat-user-pseudo").innerHTML = user.author;
+            document.getElementById("jvchat-user-avatar-link").setAttribute("href", `https://www.jeuxvideo.com/profil/${user.author.toLowerCase()}?mode=infos`);
+            document.getElementById("jvchat-user-notif-link").setAttribute("href", `https://www.jeuxvideo.com/profil/${user.author.toLowerCase()}?mode=abonnements`);
         }
 
         if (user.avatar !== currentUser.avatar) {
-            let avatar = document.getElementById("jvchat-user-avatar");
-            avatar.style["background-image"] = `url("${user.avatar}")`;
+            document.getElementById("jvchat-user-avatar").style["background-image"] = `url("${user.avatar}")`;
         }
 
         if (user.mp !== currentUser.mp) {
@@ -3246,6 +3224,7 @@ function setUser(document, user) {
         }
     }
 
+    // 1er appel undefined => isConnected : toogle Btn On || Appels suivants : Toggle à chaque changement
     if ((userConnected === undefined && isConnected) || (userConnected !== undefined && isConnected !== userConnected)) {
         document.getElementById("jvchat-profil").classList.toggle("jvchat-hide");
         let isDown = isScrollDown();
@@ -3807,7 +3786,7 @@ function addJVChatButton(document) {
         .icon-refresh + .buttonsNavbar__label {
             display : none;
         }
-        
+
     }
     </style>`
     document.head.insertAdjacentHTML("beforeend", css);
