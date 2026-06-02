@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.3.221
+// @version        0.2.4.030
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -122,87 +122,26 @@ header.jv-header-menu,
 #forum-main-col ins[data-ad-position],
 #forum-main-col .nosticky,
 .container__postTitle {
-  display: none !important;
+    display: none !important;
 }
 
-/* Override JVC grid layout with flex so JVChat panel + messages align horizontally */
-#page-messages-forum {
-  display: flex !important;
-  margin: 0;
-  padding: 0;
-}
-#page-messages-forum > .layout__contentMain {
-  display: flex !important;
-  padding: 0 !important;
-  height: 100%;
-  max-width: unset !important;
-  width: 100% !important;
-  margin: 0 !important;
-}
-
-/* Flex column so #jvchat-main fills #forum-main-col inside .container__main.
-   NOTE: the real layout grid is applied on #forum-main-col itself (see below)
-   because there are TWO .container__main siblings (messages + form). */
-#forum-main-col > .container__main {
-  min-width: 0;
-}
-#forum-main-col > .container__main > #listMessages {
-  display: block;
-  min-height: 0;
-}
-
-/* Force the full outer layout chain to viewport height with no scroll so only
-   #jvchat-main scrolls internally and the input stays pinned at the bottom. */
-html,
-body,
-.layout,
-.layout-main,
-.layout-content,
-.layout__row,
-.layout__contentMain {
-    height: 100% !important;
-    max-height: 100vh !important;
-    overflow: hidden !important;
-}
-
-
-#forum-main-col {
-    display: grid !important;
-    grid-template-rows: auto 1fr auto !important;
-    grid-template-columns: 1fr !important;
-    overflow: hidden !important;
-    max-height: 100vh !important;
-    height: 100% !important;
-}
+/* [NEW LAYOUT RESPAWN 2 MSG ]*/
 
 #forum-main-col > .container__main:nth-last-of-type(2) {
-    grid-row: 2 !important;
+    height: 100% !important;
     min-height: 0 !important;
-    overflow: hidden !important;
-    display: block !important;
+    display :block !important;
+    overflow: hidden !important; 
 }
-#forum-main-col > .container__main:nth-last-of-type(2) > #listMessages {
-  height: 100% !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
-#forum-main-col > .container__main:nth-last-of-type(2) #jvchat-main {
-  height: 100% !important;
-  max-height: 100% !important;
-  overflow-y: auto !important;
-  min-height: 0 !important;
-}
-/* Second .container__main: form (natural height, pinned at bottom) */
+
 #forum-main-col > .container__main:nth-last-of-type(1) {
-  grid-row: 3 !important;
-  display: block !important;
-  visibility: visible !important;
+    height: auto !important;
 }
-/* Force everything else inside #forum-main-col (ads, stray divs) to row 1
-   so they're either hidden or collapse to 0. */
-#forum-main-col > div:not(.container__main) {
-  grid-row: 1 !important;
+
+body {
+    overflow-y: unset;
 }
+/* [END LAYOUT RESPAWN 2 MSG]*/
 
 @font-face {
   font-family: "jvchat-icons";
@@ -215,9 +154,9 @@ body,
 #page-messages-forum,
 #forum-main-col,
 #forum-main-col > .conteneur-messages-pagi,
-#forum-main-col > #listMessages,
-#forum-main-col > .container__main,
-#forum-main-col > .container__main > #listMessages {
+#forum-main-col > #listMessages,                      /* [RESPAWN 2] */
+#forum-main-col > .container__main,                   /* [RESPAWN 2] */
+#forum-main-col > .container__main > #listMessages {  /* [RESPAWN 2] */
     height: 100%;
     width: 100%;
 }
@@ -232,67 +171,6 @@ body,
 
 .messageEditor__topInfo {
   display: none;
-}
-
-/* Edition */
-.jvchat-edition {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.jvchat-edition-textarea {
-  resize: vertical;
-  width: 100%;
-  min-height: 60px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box;
-}
-.jvchat-night-mode .jvchat-edition-textarea {
-  background-color: #484c52;
-  color: #dcddde;
-  border-color: #2d2d2d;
-}
-
-.jvchat-edition-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.jvchat-edition-buttons button {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.jvchat-edition-buttons .jvchat-edition-submit {
-  background-color: #4caf50;
-  color: white;
-}
-.jvchat-edition-buttons .jvchat-edition-cancel-btn {
-  background-color: #f44336;
-  color: white;
-}
-.jvchat-night-mode .jvchat-edition-buttons button {
-  border-color: #2d2d2d;
-}
-.jvchat-night-mode .jvchat-edition-buttons .jvchat-edition-submit {
-  background-color: #5cb85c;
-}
-.jvchat-night-mode .jvchat-edition-buttons .jvchat-edition-cancel-btn {
-  background-color: #d9534f;
-}
-
-.jvchat-textarea-focus {
-  height: 8rem !important;
-}
-
-.jvchat-disabled-form {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 #jvchat-leftbar h4 {
@@ -361,11 +239,11 @@ body,
 }
 
 #page-messages-forum > .layout__contentMain {
-  display: flex !important;
-  padding: 0 !important;
-  height: 100%;
-  max-width: unset !important;
-  width: 100% !important;
+    display: flex;
+    padding: 0;
+    height: 100%;
+    max-width: unset;
+    width: 100% !important; /* [RESPAWN 2] */
 }
 
 label {
@@ -376,11 +254,12 @@ label {
 }
 
 #forum-main-col {
-  flex-basis: 35rem;
-  flex-grow: 100;
-  overflow-x: auto;
-  position: relative;
-  min-width: 13rem;
+    flex-basis: 35rem;
+    flex-grow: 100;
+    overflow-x: auto;
+    overflow-y: hidden; /* [RESPAWN 2] */
+    position: relative;
+    min-width: 13rem;
 }
 
 #jvchat-right-padding {
@@ -389,16 +268,16 @@ label {
 }
 
 #forum-main-col > .conteneur-messages-pagi,
-#forum-main-col > #listMessages,
-#forum-main-col > .container__main > #listMessages {
-  display: flex;
-  flex-direction: column;
+#forum-main-col > #listMessages,                      /* [RESPAWN 2] */
+#forum-main-col > .container__main > #listMessages {  /* [RESPAWN 2] */
+    display: flex;
+    flex-direction: column;
 }
 
-#forum-main-col > .container__main {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+#forum-main-col,
+#forum-main-col > .container__main { /* [RESPAWN 2] */
+    display: flex;
+    flex-direction: column;
 }
 
 #page-messages-forum > .container-content {
@@ -427,7 +306,6 @@ label {
 }
 
 
-
 .messageEditor__containerPreview {
   display: none;
 }
@@ -438,29 +316,12 @@ label {
     line-height: normal;
     max-height: 6.5rem;
     min-height: 3.5rem;
-}
-
-
-.jvchat-edition-textarea {
-  height: 5rem;
-}
-
-.jvchat-reduced #message_topic,
-.jvchat-reduced #message_reponse {
-  padding: 0.3rem;
-  height: 1.7rem;
-  max-height: 6.5rem;
-  overflow: auto;
-}
-
-.jvchat-reduced .jv-editor .conteneur-editor > * {
-  display: none;
+    height: 8rem !important;
 }
 
 #jvchat-buttons-main button {
-  padding: 0;
-  width: 3rem;
-  height: auto;
+    padding: 0;
+    width: 2rem;
 }
 
 #jvchat-post::before {
@@ -482,16 +343,17 @@ label {
 }
 
 .jvchat-buttons {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: column;
 }
 
 .jvchat-buttons button {
-  border: 0.0625rem solid #bebecc;
-  border-left-width: 0;
-  height: 100%;
-  background: white;
-  color: gray;
+    border: 0.0625rem solid #BEBECC;
+    border-left-width: 0;
+    height: 100%;
+    background: var(--jv-input-bg-color);
+    /* background: white; */
+    color: gray;
 }
 
 .jvchat-buttons .jvchat-button-solo {
@@ -515,19 +377,18 @@ label {
 }
 
 .jvchat-buttons button:hover {
-  background: lightgray;
-  color: black;
+    background: lightgray;
+    color: black;
 }
 
 .jvchat-buttons button:focus {
-  outline: none;
-  border: dotted 1px !important;
-  color: black;
-  border: blue;
+    outline: none;
+    border: dotted 1px !important;
+    color: black;
+    border: blue;
 }
 
 #forum-main-col {
-  display: block;
   padding: 0;
   max-width: unset;
 }
@@ -680,29 +541,21 @@ label {
 }
 
 .jvchat-edition-check {
-  color: darkgreen !important;
-}
-
-.jvchat-night-mode .jvchat-edition-check {
-  color: green !important;
+    color: #039d03 !important;
 }
 
 .jvchat-edition-check::before {
-  font-family: "jvchat-icons";
-  content: "\uEA0E";
+    font-family: "jvchat-icons";
+    content: "\uEA0E";
 }
 
 .jvchat-edition-cancel {
-  color: darkred !important;
-}
-
-.jvchat-night-mode .jvchat-edition-cancel {
-  color: red !important;
+    color: #cb2121 !important;
 }
 
 .jvchat-edition-cancel::before {
-  font-family: "jvchat-icons";
-  content: "\uEA77";
+    font-family: "jvchat-icons";
+    content: "\uEA77";
 }
 
 .jvchat-edition-textarea {
@@ -964,9 +817,15 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .disabled-content {
-  opacity: 0.3;
-  cursor: not-allowed;
-  pointer-events: none;
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.jvchat-disabled-form {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 #jvchat-sondage-bloc {
@@ -1111,9 +970,10 @@ hr.jvchat-ruler:first-of-type {
 #jvchat-load-images-span,
 #jvchat-play-sound-checkbox,
 #jvchat-play-sound-span,
+
 #jvchat-citation-checkbox,
 #jvchat-citation-span {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 
@@ -1146,7 +1006,7 @@ hr.jvchat-ruler:first-of-type {
 .jvchat-night-mode .bloc-editor-forum,
 .jvchat-night-mode .jvchat-bloc-message,
 .jvchat-night-mode .conteneur-messages-pagi {
-  background-color: #36393f !important;
+    background-color: #36393f !important;
 }
 
 .jvchat-night-mode .container__main ,
@@ -1158,47 +1018,47 @@ hr.jvchat-ruler:first-of-type {
 .jvchat-night-mode #message_topic,
 .jvchat-night-mode #message_reponse,
 .jvchat-night-mode .btn-group {
-  background: #484c52 !important;
+    background: #484c52 !important;
 }
 
 .jvchat-night-mode .messageEditor__topInfo {
-  background-color: #484c52 !important;
+    background-color: #484c52 !important;
 }
 
 .jvchat-night-mode .jvchat-bloc-avatar {
-  box-shadow: -3px 3px 7px black !important;
+    box-shadow: -3px 3px 7px black !important;
 }
 
 .jvchat-night-mode #jvchat-leftbar > .panel {
-  background-color: #2f3136 !important;
+    background-color: #2f3136 !important;
 }
 
 .jvchat-night-mode .jvchat-edition-textarea {
-  background: #484c52 !important;
+    background: #484c52 !important;
 }
 
 .jvchat-night-mode .jvchat-buttons button {
-  background: #484c52 !important;
+    background: #484c52 !important;
 }
 
 .jvchat-night-mode .messageUser__msg.txt-msg blockquote.message__blockquote {
-  border-left-color: #484c52 !important;
+    border-left-color: #484c52 !important;
 }
 
 .jvchat-night-mode .messageUser__msg.txt-msg .message__collapsedQuote::after {
-  background-color: #484c52 !important;
-  border-color: #737373 !important;
-  color: #737373 !important;
+    background-color: #484c52 !important;
+    border-color: #737373 !important;
+    color: #737373 !important;
 }
 
 .jvchat-night-mode .messageUser__msg.txt-msg .message__collapsedQuote:hover::before {
-  color: #cbcdce !important;
+    color: #cbcdce !important;
 }
 
 .jvchat-night-mode .message__spoil .message__spoilContent {
-  background-color: #2d2d2d !important;
-  border-color: #202020 !important;
-  color: #dcddde !important;
+    background-color: #2d2d2d !important;
+    border-color: #202020 !important;
+    color: #dcddde !important;
 }
 
 
@@ -1302,23 +1162,23 @@ hr.jvchat-ruler:first-of-type {
 }
 /*[END FIX CSS SPOIL 2026]*/
 
-/*[ADD RESPONSIVE MOBILE]*/
+/*[ADD FIX RESPONSIVE RESPAWN 2]*/
 @media (max-width: 612px) {
     .jvchat-content .messageUser__msg {
         overflow: visible;
     }
 }
 
-.container__main { /* Fix Reponsive Respawn 2 */
+.container__main {
     padding: 0 !important;
 }
 
-.container__messages { /* Fix Reponsive Respawn 2 */
+.container__messages {
     margin-left: 0;
     margin-right: 0;
 }
 
-/*[END RESPONSIVE MOBILE]*/
+/*[END FIX RESPONSIVE RESPAWN 2]*/
 
 /* PATCH 2025 [LITTLE BTN] */
 
@@ -1398,7 +1258,6 @@ hr.jvchat-ruler:first-of-type {
     --jv-alert-color: #997404;
     --jv-alert-bg: #fff3cd;
     --jv-alert-border-color: #ffecb5;
-    
 }
 
 .alert-success {
@@ -1953,7 +1812,7 @@ function fixMessage(elem) {
         let lazySrcShack = lazyImageShack.dataset.srcBackground; // [data-src-background]
         if (!lazySrcShack) continue;
         lazyImageShack.style.backgroundImage = `url(${lazySrcShack})`;
-        lazyImageShack.style.paddingBottom = '0'; 
+        lazyImageShack.style.paddingBottom = '0';
     }
 
 }
@@ -2028,14 +1887,6 @@ function improveImages(elem) {
         src = image.src;
         image.setAttribute("onerror", `this.onerror=null;this.src=this.getAttribute("data-src-direct");this.classList.remove("jvchat-loadable-image");`);
     }
-}
-
-function replacePostButton(clickEvent) {
-    const oldElement = document.querySelector('.postMessage');
-    const newElement = oldElement.cloneNode(true);
-    oldElement.replaceWith(newElement);
-    newElement.onclick = clickEvent;
-    newElement.type = "button";
 }
 
 let PANEL = `
@@ -2151,16 +2002,21 @@ let PANEL = `
 </div>
 `;
 
+function replacePostButton(clickEvent) {
+    const oldElement = document.querySelector('.postMessage');
+    const newElement = oldElement.cloneNode(true);
+    oldElement.replaceWith(newElement);
+    newElement.onclick = clickEvent;
+    newElement.type = "button";
+}
+
 function clearPage(document) {
     document.head.insertAdjacentHTML("beforeend", CSS);
 
     // Assign id="bloc-formulaire-forum" to .container__post if new structure
-    let formContainer = document.getElementById("bloc-formulaire-forum");
-    if (!formContainer) {
-        formContainer = document.querySelector(".container__post");
-        if (formContainer) {
-            formContainer.id = "bloc-formulaire-forum";
-        }
+    let formContainer = document.querySelector(".container__post");
+    if (formContainer) {
+        formContainer.id = "bloc-formulaire-forum";
     }
 
     if (formContainer) {
@@ -2179,8 +2035,7 @@ function clearPage(document) {
     }
 
     // New structure: #listMessages or .container__messages; old: .conteneur-messages-pagi
-    let messagesContainer = document.getElementById("listMessages")
-        || document.getElementsByClassName("conteneur-messages-pagi")[0];
+    let messagesContainer = document.getElementById("listMessages") || document.getElementsByClassName("conteneur-messages-pagi")[0];
     if (messagesContainer) {
         messagesContainer.insertAdjacentHTML("afterbegin", "<div id='jvchat-main'><hr class='jvchat-ruler'></div>");
     }
@@ -2528,151 +2383,146 @@ async function postJvcMessage() {
     }
 }
 
-async function requestMessageDataForEdit(messageBloc) {
-    let ajaxHash = freshHash || getHash(document);
-    if (!ajaxHash) {
-        addAlertbox("danger", "Hash AJAX introuvable pour l'édition.");
-        return;
-    }
+function submitEditmessage(bloc) {
+    let textarea = bloc.querySelector(".jvchat-edition-textarea");
 
-    let messageId = messageBloc.getAttribute("jvchat-id");
+    let blocEdition = bloc.querySelector(".jvchat-edition");
+    let blocContent = bloc.querySelector(".jvchat-content");
+    let contentTxt = blocContent.querySelector(".txt-msg");
+    let blocDate = bloc.querySelector(".jvchat-date");
 
-    // New JVC endpoint (2026): GET form values as JSON
-    const url = `https://www.jeuxvideo.com/forums/message/edit/form-values?id_message=${messageId}&ajax_hash=${ajaxHash}`;
-    const originalContentDiv = messageBloc.querySelector(".jvchat-content");
-    const editionDiv = messageBloc.querySelector(".jvchat-edition");
+    let formSession = JSON.parse(blocEdition.getAttribute("data-form"));
 
-    originalContentDiv.classList.add("disabled-content");
+    let messageId = bloc.getAttribute("jvchat-id");
 
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        });
-        const data = await response.json();
-
-        originalContentDiv.classList.remove("disabled-content");
-
-        if (handleApiResponseError(data)) {
-            originalContentDiv.classList.remove("jvchat-hide");
-            editionDiv?.classList.add("jvchat-hide");
-            return;
-        }
-
-        if (!messageBloc.originalHTML) {
-            messageBloc.originalHTML = originalContentDiv.innerHTML;
-        }
-
-        // JVCode (message body) and every `fs_*`
-        const jvcode = data.text || data.jvcode || data.message || "";
-        const formSession = data.formSession || data.edit_form_session || {};
-
-        renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHash);
-
-    } catch (error) {
-        addAlertbox("danger", `Fetch error : ${error.message}`);
-        originalContentDiv.classList.remove("jvchat-hide");
-    }
-}
-
-function renderEditInterface(messageBloc, messageId, jvcode, formSession, ajaxHashPourPost) {
-    const originalContentDiv = messageBloc.querySelector(".jvchat-content");
-    const editionDiv = messageBloc.querySelector(".jvchat-edition");
-    const textarea = editionDiv.querySelector(".jvchat-edition-textarea");
-    const checkButton = editionDiv.querySelector(".jvchat-edition-submit");
-
-    textarea.value = jvcode;
-    checkButton.onclick = () => submitEditedMessage(messageBloc, messageId, textarea.value, formSession, ajaxHashPourPost);
-
-    let isDown = isScrollDown();
-    originalContentDiv.classList.add("jvchat-hide");
-    editionDiv.classList.remove("jvchat-hide");
-    textarea.selectionStart = textarea.value.length;
-    textarea.focus();
-    if (isDown) {
-        setScrollDown();
-    }
-}
-
-async function submitEditedMessage(messageBloc, messageId, newText, formSession, ajaxHash) {
     let payload = freshPayload || getPayload(document);
-    let topicId = payload?.topicId;
-    let forumId = payload?.forumId;
-    const originalContentDiv = messageBloc.querySelector(".jvchat-content");
-    const editionDiv = messageBloc.querySelector(".jvchat-edition");
 
-    const formData = new FormData();
-    formData.append("text", newText);
-    formData.append("messageId", messageId);
-    formData.append("topicId", topicId);
-    formData.append("forumId", forumId);
+    //let formData = normalizeKeysForPost(payload, freshSession);
+
+    let formData = {};
+    formData["text"] = textarea.value;
+    formData["messageId"] = messageId;
+    formData["topicId"] = payload["topicId"];
+    formData["forumId"] = payload["forumId"];
+
     let aliasRang = document.getElementById('form_alias_rang');
-    formData.append("group", aliasRang?.value || "1");
+    formData["group"] = aliasRang?.value || "1";
 
     for (const key in formSession) {
-        formData.append(key, formSession[key]);
+        formData[key] = formSession[key];
     }
 
-    formData.append("ajax_hash", ajaxHash);
-    formData.append("resetFormAfterSuccess", "false");
+    formData["ajax_hash"] = payload["ajaxToken"];
+    formData["resetFormAfterSuccess"] = "false";
 
-    editionDiv.classList.add("jvchat-disabled-form");
+    blocEdition.classList.add("jvchat-disabled-form");
+    textarea.setAttribute("disabled", "true");
 
-    try {
-        const response = await fetch("https://www.jeuxvideo.com/forums/message/edit", {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            },
-            body: formData
-        });
-        const data = await response.json();
+    let timestamp = getTimestamp();
 
-        editionDiv.classList.remove("jvchat-disabled-form");
+    function onSuccess(res) {
+        blocEdition.classList.remove("jvchat-disabled-form");
+        if (res['formSession']) {
+            let resetSession = res["formSession"];
+            blocEdition.setAttribute("data-form", JSON.stringify(resetSession));
+        }
 
-        if (handleApiResponseError(data)) {
+        textarea.removeAttribute("disabled");
+        if (handleApiResponseError(res)) {
             return;
         }
 
-        if (data.html) {
-            originalContentDiv.querySelector(".txt-msg").innerHTML = data.html;
-            fixMessage(originalContentDiv);
-            detectMosaic(originalContentDiv);
-            improveImages(originalContentDiv);
+        // UpdateChatMsg_Temp
+        if (res["html"]) {
+            contentTxt.innerHTML = res["html"];
+            fixMessage(contentTxt);
+            detectMosaic(contentTxt);
+            improveImages(contentTxt);
         }
 
+        lastEditionTime[messageId] = [timestamp, "édité", lastEditionTime[messageId]?.[2] ?? false];
+
+        const eventDetail = { 'detail': { id: messageId, isEdit: true } };
+        const customEvent = new CustomEvent('jvchat:newmessage', eventDetail);
+        dispatchEvent(customEvent);
+
+        //Close_edit
         let isDown = isScrollDown();
-        editionDiv.classList.add("jvchat-hide");
-        editionDiv.innerHTML = '';
-        originalContentDiv.classList.remove("jvchat-hide");
+        blocContent.classList.remove("jvchat-hide");
+        blocEdition.classList.add("jvchat-hide");
         if (isDown) {
             setScrollDown();
         }
 
-        if (lastEditionTime && lastEditionTime[messageId]) {
-            lastEditionTime[messageId][0] = getTimestamp();
-            lastEditionTime[messageId][1] = "édité";
-        } else if (lastEditionTime) {
-            lastEditionTime[messageId] = [getTimestamp(), "édité", false];
+        // Force_Update
+        setTimeout(forceUpdate, 250);
+    }
+
+    function onError(err, _) {
+        addAlertbox("danger", err);
+        blocEdition.classList.remove("jvchat-disabled-form");
+        textarea.removeAttribute("disabled");
+    }
+
+    function onTimeout(err) {
+        addAlertbox("warning", err);
+        blocEdition.classList.remove("jvchat-disabled-form");
+        textarea.removeAttribute("disabled");
+    }
+
+    let url = "https://www.jeuxvideo.com/forums/message/edit";
+    request("POST", url, onSuccess, onError, onTimeout, makeFormData(formData), true, 20000, false);
+}
+
+function requestEdit(bloc) {
+    if (!bloc.querySelector(".jvchat-edition").classList.contains("jvchat-hide")) {
+        return;
+    }
+
+    let contentClasses = bloc.querySelector(".jvchat-content").classList;
+    contentClasses.add("disabled-content");
+
+    function onSuccess(res) {
+        contentClasses.remove("disabled-content");
+        if (handleApiResponseError(res)) {
+            return;
         }
 
-        const eventDetail = { 'detail': { id: messageId, isEdit: true, newHtml: data.html } };
-        const customEvent = new CustomEvent('jvchat:newmessage', eventDetail);
-        dispatchEvent(customEvent);
+        let jvcode = res["text"] || res["jvcode"] || "";
+        let blocEdition = bloc.querySelector(".jvchat-edition");
+        let formSession = res["formSession"];
+        blocEdition.setAttribute("data-form", JSON.stringify(formSession));
 
-        setTimeout(tryCatch(forceUpdate), 250);
+        let isDown = isScrollDown();
+        let textarea = bloc.querySelector(".jvchat-edition-textarea");
+        textarea.value = jvcode;
 
-    } catch (error) {
-        addAlertbox("danger", `Fetch error : ${error.message}`);
-        editionDiv.classList.remove("jvchat-disabled-form");
+        bloc.querySelector(".jvchat-content").classList.add("jvchat-hide");
+        blocEdition.classList.remove("jvchat-hide");
+
+        textarea.selectionStart = textarea.value.length;
+        textarea.focus();
+        if (isDown) {
+            setScrollDown();
+        }
     }
+
+    function onError(err, _) {
+        addAlertbox("danger", err);
+        contentClasses.remove("disabled-content");
+    }
+
+    function onTimeout(err) {
+        addAlertbox("warning", err);
+        contentClasses.remove("disabled-content");
+    }
+
+    let id = bloc.getAttribute("jvchat-id");
+    //New endpoint
+    let url = `https://www.jeuxvideo.com/forums/message/edit/form-values?id_message=${id}&ajax_hash=${freshHash}`;
+    request("GET", url, onSuccess, onError, onTimeout, undefined, true, 5000, false);
 }
+
 
 function requestDelete(bloc) {
     let contentClasses = bloc.getElementsByClassName("jvchat-content")[0].classList;
@@ -2737,16 +2587,17 @@ function computeHeight(lines) {
 }
 
 function setTextareaHeight(plusOne) {
-    let textarea = getTextArea();
+    // "--height-reduce-chat" === "height" FORCED
+    let textarea = document.getElementById("message_reponse");
     if (!isReduced) {
-        textarea.style["height"] = "";
+        textarea.style.removeProperty("--height-reduce-chat");
         return;
     }
     plusOne = !!plusOne;
     let lines = countLines(textarea.value);
 
     if (!plusOne && lines === 1) {
-        textarea.style["height"] = "";
+        textarea.style.removeProperty("--height-reduce-chat");
         return;
     }
 
@@ -2755,11 +2606,11 @@ function setTextareaHeight(plusOne) {
     }
 
     let height = computeHeight(lines);
-    textarea.style["height"] = `${height}rem`;
+    textarea.style.setProperty("--height-reduce-chat", `${height}rem`);
 }
 
 function postMessageIfEnter(event) {
-    if (isReduced && (event.which == 13 || event.keyCode == 13)) {
+    if (/*configuration["legacy_mode"] &&*/ isReduced && (event.which == 13 || event.keyCode == 13)) {
         if (event.shiftKey) {
             let isDown = isScrollDown();
             setTextareaHeight(true);
@@ -2953,10 +2804,10 @@ function makeMessage(message) {
                     </div>
                     <div class="jvchat-content">${content.outerHTML}</div>
                     <div class="jvchat-edition jvchat-hide">
-                        <textarea class="jvchat-edition-textarea"></textarea>
-                        <div class="jvchat-edition-buttons">
-                            <button type="button" class="jvchat-edition-submit">Valider</button>
-                            <button type="button" class="jvchat-edition-cancel-btn">Annuler</button>
+                        <textarea class="jvchat-edition-textarea jvchat-textarea"></textarea>
+                        <div class="jvchat-buttons jvchat-edition-buttons">
+                            <button tabindex="0" type="button" class="jvchat-edition-check jvchat-edition-submit jvchat-button-top" title="Valider la modification"></button>
+                            <button tabindex="0" type="button" class="jvchat-edition-cancel jvchat-edition-cancel-btn jvchat-button-bottom" title="Annuler la modification"></button>
                         </div>
                     </div>
                 </div>
@@ -4111,12 +3962,15 @@ function dontScrollOnExpand(event) {
         textarea.focus();
     } else if (classes.contains("jvchat-edit")) {
         let bloc = target.closest(".jvchat-message");
-        requestMessageDataForEdit(bloc);
+        requestEdit(bloc);
     } else if (classes.contains("jvchat-delete")) {
         let bloc = target.closest(".jvchat-message");
         event.stopPropagation();
         requestDelete(bloc);
-    } else if (classes.contains("jvchat-edition-cancel-btn")) {
+    } else if (classes.contains("jvchat-edition-check")) {
+        let bloc = target.closest(".jvchat-message");
+        submitEditmessage(bloc);
+    } else if (classes.contains("jvchat-edition-cancel")) {
         let bloc = target.closest(".jvchat-message");
         let isDown = isScrollDown();
         bloc.getElementsByClassName("jvchat-content")[0].classList.remove("jvchat-hide");
