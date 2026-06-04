@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.160
+// @version        0.2.5.170
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1625,7 +1625,6 @@ function toggleTextarea() {
     saveConfig();
 
     let isDown = isScrollDown();
-    //document.getElementById("bloc-formulaire-forum").getElementsByClassName("messageEditor__buttonEdit")[0]?.classList.toggle("jvchat-hide");
     document.getElementById("jvchat-enlarge")?.classList.toggle("jvchat-hide");
     document.getElementById("jvchat-reduce")?.classList.toggle("jvchat-hide");
     document.getElementById("jvchat-post")?.classList.toggle("jvchat-hide");
