@@ -3,7 +3,7 @@
 ### FORK du fork 0.2.0 avec quelques correction de bugs compatibilité greasymonkey 
 <a href="https://greasyfork.org/fr/scripts/576263-jv-chat-custsom-fork"><img src="https://img.shields.io/badge/Installer%20Fork%20du%20Fork-Green?style=for-the-badge&color=1E971E" alt="Installer Fork du Fork"></a>
 
-**Une grosse mise à jour permettant d'offrir l'interface legacy (option ) sera déployée cette semaine.**   
+**Une grosse mise à jour permettant d'offrir l'interface legacy (option ) a été déployée.**   
 **EN CAS DE SOUCIS, Revenez sur la [0.2.3.221](https://greasyfork.org/fr/scripts/576263-jv-chat-custsom-fork?version=1840213)**    
 
 ### Ceci est un fork la version officielle de Rand0max est ici => https://jvscript.fr/script/jvchat-premium
