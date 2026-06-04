@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.4.030
+// @version        0.2.5.160
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -244,6 +244,7 @@ body,
     height: 100%;
     max-width: unset;
     width: 100% !important; /* [RESPAWN 2] */
+    margin-left: unset !important; /* CONFLIT UNSET JV REDESIGN */
 }
 
 label {
@@ -971,6 +972,8 @@ hr.jvchat-ruler:first-of-type {
 #jvchat-play-sound-checkbox,
 #jvchat-play-sound-span,
 
+#jvchat-legacy-mode-checkbox,
+#jvchat-legacy-mode-span,
 #jvchat-citation-checkbox,
 #jvchat-citation-span {
     cursor: pointer;
@@ -1233,6 +1236,82 @@ hr.jvchat-ruler:first-of-type {
 
 /* END 2025 RANDOMAX UI*/
 
+/* PATCH 2024 BLAFF UI*/
+
+.jvchat-legacy-mode .message__spoilLabel,
+.jvchat-legacy-mode .message__spoilContent {
+    border-radius: 0.2rem;
+}
+
+.jvchat-legacy-mode .messageEditor__containerEdit {
+    background-color: var(--jv-bg-color);
+    border: unset;
+    box-shadow: none;
+}
+
+.jvchat-legacy-mode .messageEditor__buttonEdit {
+    background-color: inherit !important;
+}
+
+.jvchat-legacy-mode .jvchat-reduced #message_reponse {
+    padding: 0.3rem;
+    height: var(--height-reduce-chat, 1.7rem) !important;
+    max-height: 6.4rem;
+    overflow: auto;
+}
+
+.jvchat-legacy-mode .jvchat-reduced .messageEditor__containerEdit > *:not(#message_reponse):not(#jvchat-buttons-main) {
+    display: none;
+}
+
+.jvchat-legacy-mode .messageEditor__containerEdit {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    border-radius : 0 !important;
+    margin: 0.2rem 0.5rem 0.4rem 0.5rem !important;
+    line-height : normal;
+
+}
+.jvchat-legacy-mode .jvchat-textarea {
+    background-color: var(--jv-input-bg-color);
+}
+
+.jvchat-edition-textarea {
+    line-height: normal;
+}
+
+.jvchat-legacy-mode .messageEditor__buttonEdit {
+    order: -1;
+    border-top: none;
+    border-bottom: 0.0625rem solid var(--jv-border-color);
+}
+
+.jvchat-legacy-mode #bloc-formulaire-forum {
+    margin: 0 !important;
+}
+.jvchat-legacy-mode .messageEditor__containerEdit > *:not(#message_reponse):not(#jvchat-buttons-main) {
+    grid-column: 1 / -1;
+}
+.jvchat-legacy-mode #bloc-formulaire-forum #message_reponse {
+    grid-column: 1;
+}
+.jvchat-legacy-mode #bloc-formulaire-forum #jvchat-buttons-main {
+    grid-column: 2;
+    display : flex !important;
+}
+.jvchat-legacy-mode .jvchat-reduced #message_reponse {
+    min-height: 1.9rem;
+}
+.jvchat-legacy-mode .messageEditor__containerEdit--focus {
+    color : unset;
+}
+
+.jvchat-legacy-mode .messageEditForm__buttons {
+    display : none;
+}
+
+/* END PATCH 2024 BLAFF UI*/
+
 /* [ADD Color] */
 .jvchat-author > a:not([class*="messageUser__label--"]),
 .jvchat-author > a:not([class*="messageUser__label--"]):hover {
@@ -1375,6 +1454,7 @@ function defaultConfig() {
         hide_alerts: false,
         play_sound: false,
         night_mode: false,
+        legacy_mode: false,
         load_images: false,
         hide_mosaic: false,
         show_pseudo: true,
@@ -1436,22 +1516,6 @@ function getDeletionHash(doc) {
     return undefined;
 }
 
-function manageTextareaSimpleHeight() {
-    const textarea = getTextArea();
-    const postButton = document.querySelector('.postMessage');
-
-    if (!textarea || !postButton) {
-        return;
-    }
-
-    textarea.addEventListener('focus', function () {
-        textarea.classList.toggle("jvchat-textarea-focus", true);
-    });
-
-    postButton.addEventListener('click', function () {
-        textarea.classList.toggle("jvchat-textarea-focus", false);
-    });
-}
 
 function getTopicLocked(elem) {
     // Old structure
@@ -1889,7 +1953,8 @@ function improveImages(elem) {
     }
 }
 
-let PANEL = `
+function getPanelHtml() {
+    let PANEL = `
 <div id='jvchat-leftbar'>
     <div class='panel panel-jv-forum'>
         <div id="jvchat-leftbar-button">
@@ -1954,6 +2019,13 @@ let PANEL = `
                         </label>
                         <p>Joue un son de notification lorsqu'un nouveau message est posté et que vous êtes sur un onglet différent.</p>
                     </div>
+                    <div class="jvchat-config-option" id="jvchat-legacy-mode">
+                        <label>
+                            <input id="jvchat-legacy-mode-checkbox" type="checkbox">
+                            <span id="jvchat-legacy-mode-span">Interface Legacy</span>
+                        </label>
+                        <p>Retablit le formulaire de 2024 dont la posibilité de reduire la hauteur (Beta).</p>
+                    </div>
                     <div class="jvchat-config-option" id="jvchat-night-mode">
                         <label>
                             <input id="jvchat-night-mode-checkbox" type="checkbox">
@@ -2001,6 +2073,9 @@ let PANEL = `
     </div>
 </div>
 `;
+    return PANEL;
+}
+
 
 function replacePostButton(clickEvent) {
     const oldElement = document.querySelector('.postMessage');
@@ -2010,7 +2085,15 @@ function replacePostButton(clickEvent) {
     newElement.type = "button";
 }
 
+
 function clearPage(document) {
+    let legacyButtons = `
+        <div id="jvchat-buttons-main" class='jvchat-buttons'>
+            <button id='jvchat-post' tabindex="4" type="button" class='jvchat-hide jvchat-button-top' title="Envoyer le message"></button>
+            <button id='jvchat-reduce' tabindex="5" type="button" class='jvchat-hide jvchat-button-bottom' title="Réduire la zone de texte"></button>
+            <button id='jvchat-enlarge' tabindex="4" type="button" class='jvchat-button-solo' title="Agrandir la zone de texte"></button>
+        <div>`;
+
     document.head.insertAdjacentHTML("beforeend", CSS);
 
     // Assign id="bloc-formulaire-forum" to .container__post if new structure
@@ -2031,6 +2114,17 @@ function clearPage(document) {
         messageTopic.classList.add("jvchat-textarea");
         messageTopic.setAttribute("placeholder", "Hop hop hop, le message ne va pas s'écrire tout seul !");
         messageTopic.addEventListener("keydown", tryCatch(postMessageIfEnter));
+
+        messageTopic.insertAdjacentHTML("afterend", legacyButtons);
+        document.getElementById("jvchat-post").addEventListener("click", tryCatch(postJvcMessage));
+        document.getElementById("jvchat-enlarge").addEventListener("click", tryCatch(toggleTextarea));
+        document.getElementById("jvchat-reduce").addEventListener("click", tryCatch(toggleTextarea));
+
+        //FALL_BACK_CSS_CONFLIT_______
+        let cssOrder = getComputedStyle(messageTopic).order;
+        if (cssOrder !== "0") document.getElementById("jvchat-buttons-main").style.order = cssOrder;
+        //FALL_BACK_CSS_CONFLIT_______
+
         replacePostButton(tryCatch(postJvcMessage));
     }
 
@@ -2041,7 +2135,7 @@ function clearPage(document) {
     }
     document.getElementById("forum-main-col").insertAdjacentHTML("afterbegin", "<div id='jvchat-alerts'><div id='jvchat-fixed-alert' class='jvchat-hide'><div class='alert-row'></div></div><div id='jvchat-turbo-warning' class='jvchat-hide'><button class='close jvchat-alert-hide' aria-hidden='true' data-dismiss='alert' type='button'>×</button><div class='alert-row'></div></div><div id='jvchat-degraded-refresh-warning' class='jvchat-hide'><div class='alert-row'></div></div></div>");
 
-    document.getElementsByClassName("layout__contentMain")[0].insertAdjacentHTML("afterbegin", PANEL);
+    document.getElementsByClassName("layout__contentMain")[0].insertAdjacentHTML("afterbegin", getPanelHtml());
     document.getElementsByClassName("layout__contentMain")[0].insertAdjacentHTML("beforeend", "<div id='jvchat-right-padding'></div>");
 
     document.getElementById("page-messages-forum").classList.add("jvchat-root");
@@ -2069,6 +2163,12 @@ function clearPage(document) {
     document.getElementById("jvchat-night-mode-checkbox").addEventListener("change", tryCatch(toggleNightModeOption));
     if (configuration["night_mode"]) {
         document.getElementById("page-messages-forum").classList.add("jvchat-night-mode");
+    }
+
+    document.getElementById("jvchat-legacy-mode-checkbox").checked = configuration["legacy_mode"];
+    document.getElementById("jvchat-legacy-mode-checkbox").addEventListener("change", tryCatch(toggleLegacyModeOption));
+    if (configuration["legacy_mode"]) {
+        document.getElementById("page-messages-forum").classList.add("jvchat-legacy-mode");
     }
 
     document.getElementById("jvchat-hide-mosaic-checkbox").checked = configuration["hide_mosaic"];
@@ -2121,7 +2221,7 @@ function toggleSidebar(event) {
     document.getElementById("jvchat-leftbar-config").classList.toggle("jvchat-hide");
     document.getElementById("jvchat-leftbar").classList.toggle("jvchat-leftbar-reduced");
     if (isDown) {
-        setScrollDown();
+        requestAnimationFrame(setScrollDown);
     }
 }
 
@@ -2205,6 +2305,13 @@ function toggleNightModeOption(event) {
     configuration["night_mode"] = checked;
     saveConfig();
     document.getElementById("page-messages-forum").classList.toggle("jvchat-night-mode");
+}
+
+function toggleLegacyModeOption(event) {
+    let checked = document.getElementById("jvchat-legacy-mode-checkbox").checked;
+    configuration["legacy_mode"] = checked;
+    saveConfig();
+    document.getElementById("page-messages-forum").classList.toggle("jvchat-legacy-mode");
 }
 
 function toggleHideMosaicOption(event) {
@@ -2294,8 +2401,7 @@ function handleApiResponseError(response) {
     return false;
 }
 
-
-async function postJvcMessage() {
+function postJvcMessage() {
     if (!freshPayload) {
         addAlertbox("danger", "Impossible de poster le message, aucun Payload trouvé");
         return;
@@ -2304,57 +2410,35 @@ async function postJvcMessage() {
     let textarea = getTextArea();
     let formulaire = document.getElementById("bloc-formulaire-forum");
 
+    let payload = freshPayload || getPayload(document);
+
+    //let formData = normalizeKeysForPost(payload, freshSession);
+
+    let formData = {};
+    formData["text"] = textarea.value;
+    formData["topicId"] = payload["topicId"];
+    formData["forumId"] = payload["forumId"];
+    let aliasRang = document.getElementById('form_alias_rang');
+    formData["group"] = aliasRang?.value || "1";
+
+    formData["messageId"] = "undefined";
+
+    let formSession = payload["formSession"];
+    for (const key in formSession) {
+        formData[key] = formSession[key];
+    }
+
+    formData["ajax_hash"] = payload["ajaxToken"];
+    //formData["resetFormAfterSuccess"] = "false";
+
     formulaire.classList.add("jvchat-disabled-form");
     textarea.setAttribute("disabled", "true");
 
-    const forumPayload = freshPayload || getPayload(document);
+    let timestamp = getTimestamp();
 
-    let formData = new FormData();
+    function onSuccess(res) {
 
-    formData.append("text", textarea.value);
-    formData.append("topicId", forumPayload.topicId);
-    formData.append("forumId", forumPayload.forumId);
-    let aliasRang = document.getElementById('form_alias_rang');
-    formData.append("group", aliasRang?.value || "1");
-
-    formData.append("messageId", "undefined");
-
-    const formSession = forumPayload.formSession;
-
-    for (const key in formSession) {
-        formData.append(key, formSession[key]);
-    }
-
-    formData.append("ajax_hash", forumPayload.ajaxToken);
-
-    let timeout = turboActivated ? 5000 : 20000;
-    postingMessage = true;
-
-    try {
-        const response = await Promise.race([
-            fetch("https://www.jeuxvideo.com/forums/message/add", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Accept": "application/json",
-                    "Accept-Language": "fr",
-                    "x-requested-with": "XMLHttpRequest",
-                    "Pragma": "no-cache",
-                    "Cache-Control": "no-cache"
-                },
-                referrer: document.URL,
-                body: formData,
-                mode: "cors"
-            }),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), timeout))
-        ]);
-
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP ${response.status}`);
-        }
-
-        const res = await response.json();
-        const messageId = getMessageIdFromUrl(res.redirectUrl);
+        const messageId = getMessageIdFromUrl(res["redirectUrl"]);
         if (messageId?.length) {
             const detail = { 'detail': { id: messageId, content: textarea.value, username: currentUser.author } };
             const event = new CustomEvent('jvchat:postmessage', detail);
@@ -2365,7 +2449,7 @@ async function postJvcMessage() {
         textarea.removeAttribute("disabled");
 
         if (handleApiResponseError(res)) {
-            freshPayload.formSession = res.formSession; // Nouveau CRPS
+            freshPayload["formSession"] = res["formSession"]; // Nouveau CRPS
         } else {
             setTextAreaValue(textarea, '');
             setTimeout(tryCatch(forceUpdate), 300);
@@ -2375,13 +2459,35 @@ async function postJvcMessage() {
         setScrollDown();
         postingMessage = false;
 
-    } catch (err) {
-        addAlertbox("danger", err.message || err);
+    }
+
+    function onError(err, _) {
+        addAlertbox("danger", err);
         formulaire.classList.remove("jvchat-disabled-form");
         textarea.removeAttribute("disabled");
         postingMessage = false;
     }
+
+    function onTimeout(err) {
+        addAlertbox("warning", err);
+        formulaire.classList.remove("jvchat-disabled-form");
+        textarea.removeAttribute("disabled");
+        postingMessage = false;
+    }
+
+
+    let timeout = 20000;
+    if (turboActivated) {
+        timeout = 5000;
+    }
+
+    postingMessage = true;
+
+    let url = "https://www.jeuxvideo.com/forums/message/add"
+
+    request("POST", url, onSuccess, onError, onTimeout, makeFormData(formData), true, timeout, false);
 }
+
 
 function submitEditmessage(bloc) {
     let textarea = bloc.querySelector(".jvchat-edition-textarea");
@@ -2401,12 +2507,13 @@ function submitEditmessage(bloc) {
 
     let formData = {};
     formData["text"] = textarea.value;
-    formData["messageId"] = messageId;
     formData["topicId"] = payload["topicId"];
     formData["forumId"] = payload["forumId"];
 
     let aliasRang = document.getElementById('form_alias_rang');
     formData["group"] = aliasRang?.value || "1";
+
+    formData["messageId"] = messageId;
 
     for (const key in formSession) {
         formData[key] = formSession[key];
@@ -2610,7 +2717,7 @@ function setTextareaHeight(plusOne) {
 }
 
 function postMessageIfEnter(event) {
-    if (/*configuration["legacy_mode"] &&*/ isReduced && (event.which == 13 || event.keyCode == 13)) {
+    if (configuration["legacy_mode"] && isReduced && (event.which == 13 || event.keyCode == 13)) {
         if (event.shiftKey) {
             let isDown = isScrollDown();
             setTextareaHeight(true);
@@ -3206,8 +3313,6 @@ function triggerJVChat() {
         toggleTextarea();
     }
 
-    manageTextareaSimpleHeight();
-
     let activationEvent = new CustomEvent('jvchat:activation');
     dispatchEvent(activationEvent);
 
@@ -3696,13 +3801,15 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         data = null;
     }
 
+    xhr.open(mode, url, true);
+
     if (json) {
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
         xhr.responseType = "json";
     } else {
         xhr.responseType = "document";
     }
-
-    xhr.open(mode, url, true);
 
     if (nocache) {
         xhr.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
