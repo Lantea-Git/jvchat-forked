@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.170
+// @version        0.2.5.175
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -15,6 +15,7 @@
 // ==/UserScript==
 
 // CECI EST UN FORK NON OFFICIEL
+// PENSEZ A DESACTIVER JVCHAT OFFICEL (SI INSTALLÉE) SINON CONFLIT ET CRASH.
 // LA VERSION OFFICIEL DE RANDOMAX EST ICI :
 // https://jvscript.fr/script/jvchat-premium
 
