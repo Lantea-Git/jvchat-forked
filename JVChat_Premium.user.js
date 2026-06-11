@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.240
+// @version        0.2.5.250
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3531,7 +3531,9 @@ function getPayload(doc) {
         if (!rawPayload) return undefined;
         try {
             const bytes = Uint8Array.from(atob(rawPayload), c => c.charCodeAt(0));
-            return JSON.parse(fflate.strFromU8(fflate.gunzipSync(bytes))); // GZIP + BASE 64
+            const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
+            const json = fflate.strFromU8(decompressed); // Bytes => UTF8 string
+            return JSON.parse(json);  // GZIP + BASE 64
         } catch {
             return JSON.parse(atob(rawPayload)); // BASE 64
         }
