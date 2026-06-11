@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.210
+// @version        0.2.5.220
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3533,18 +3533,13 @@ function getPayload(doc) {
         const bytes = Uint8Array.from(atob(rawPayload), c => c.charCodeAt(0));
         return JSON.parse(pako.ungzip(bytes, { to: 'string' })); // GZIP + BASE 64
     } catch {
-        try {
-            return JSON.parse(atob(rawPayload)); // BASE 64
-        } catch {
-            return JSON.parse(rawPayload); // FALLBACK NATIVE
-        }
+        return JSON.parse(atob(rawPayload)); // BASE 64
     }
   } catch (e) {
       console.error("Erreur extraction du payload:", e);
       return undefined;
   }
 }
-
 
 function parsePage(res, requestTimestamp) {
     let error = getTopicError(res);
