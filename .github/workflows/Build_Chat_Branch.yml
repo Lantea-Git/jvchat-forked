@@ -1,5 +1,5 @@
 name: Push commit
-# .github/workflows/copy_branch.yml
+# .github/workflows/Build_Chat_Branch.yml
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
 
-          cp .github/workflows/copy_branch_patch_header.py /tmp/patch_header.py
+          cp .github/workflows/Build_Chat_Compile.py /tmp/patch_header.py
           for branch in fork-of-fork debug; do
             git checkout $branch
 
