@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.250
+// @version        0.2.5.260
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3527,15 +3527,20 @@ function decreaseUpdateInterval() {
 function getPayload(doc) {
     try {
         const scriptPayLoad = [...doc.scripts].find(s => s.textContent?.includes('forumsAppPayload'))?.textContent;
-        const rawPayload = scriptPayLoad?.match(/jvc\.forumsAppPayload\s*=\s*["']?([^"']+)["']?/)?.[1];
-        if (!rawPayload) return undefined;
+        if (!scriptPayLoad) return undefined;
         try {
-            const bytes = Uint8Array.from(atob(rawPayload), c => c.charCodeAt(0));
+            const rawPayload64Gzip = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*["']([^"']+)["']/)?.[1];
+            if (!rawPayload64Gzip) throw new Error("format base64 introuvable");
+            // Depuis le 11 juin 2026, jvc.forumsAppPayload est en base64(gzip(JSON)).
+            // Info : www.jeuxvideo.com/forums/message/1300105844
+            // libs fflate utilisé ici car DecompressionStream natif force async.
+            const bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
             const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
-            const json = fflate.strFromU8(decompressed); // Bytes => UTF8 string
+            const json = fflate.strFromU8(decompressed);
             return JSON.parse(json);  // GZIP + BASE 64
         } catch {
-            return JSON.parse(atob(rawPayload)); // BASE 64
+            const rawPayload = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*(\{[\s\S]*\})\s*;/)?.[1]
+            return rawPayload ? JSON.parse(rawPayload) : undefined; // FallBack NATIF
         }
     } catch (e) {
         console.error("Erreur extraction du payload:", e);
