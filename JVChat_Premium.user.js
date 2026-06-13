@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.260
+// @version        0.2.5.266
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3529,7 +3529,7 @@ function getPayload(doc) {
         const scriptPayLoad = [...doc.scripts].find(s => s.textContent?.includes('forumsAppPayload'))?.textContent;
         if (!scriptPayLoad) return undefined;
         try {
-            const rawPayload64Gzip = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*["']([^"']+)["']/)?.[1];
+            const rawPayload64Gzip = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*["']?([^"']+)["']?/)?.[1];
             if (!rawPayload64Gzip) throw new Error("format base64 introuvable");
             // Depuis le 11 juin 2026, jvc.forumsAppPayload est en base64(gzip(JSON)).
             // Info : www.jeuxvideo.com/forums/message/1300105844
@@ -3539,7 +3539,7 @@ function getPayload(doc) {
             const json = fflate.strFromU8(decompressed);
             return JSON.parse(json);  // GZIP + BASE 64
         } catch {
-            const rawPayload = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*(\{[\s\S]*\})\s*;/)?.[1]
+            const rawPayload = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*(\{[\s\S]*\})\s*;/)?.[1];
             return rawPayload ? JSON.parse(rawPayload) : undefined; // FallBack NATIF
         }
     } catch (e) {
