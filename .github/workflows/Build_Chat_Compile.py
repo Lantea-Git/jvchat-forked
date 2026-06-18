@@ -24,6 +24,7 @@ new_header = f"""// ==UserScript==
 // @match          http://*.jeuxvideo.com/forums/1-*
 // @match          https://*.jeuxvideo.com/forums/1-*
 // @require        https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js
+// @grant          none
 // @downloadURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.user.js
 // @updateURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.meta.js
 // ==/UserScript=="""
