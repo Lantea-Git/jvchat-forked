@@ -4,13 +4,14 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.266
+// @version        0.2.5.276
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
 // @match          http://*.jeuxvideo.com/forums/1-*
 // @match          https://*.jeuxvideo.com/forums/1-*
 // @require        https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js
+// @grant          none
 // @downloadURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.user.js
 // @updateURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.meta.js
 // ==/UserScript==
@@ -2148,6 +2149,8 @@ function clearPage(document) {
 
     document.getElementById("jvchat-main").addEventListener("click", tryCatch(dontScrollOnExpand));
 
+    document.getElementById("jvchat-main").addEventListener("mouseover", tryCatch(mouseOverEvent));
+
     document.getElementById("jvchat-alerts").addEventListener("click", tryCatch(closeAlert));
 
     document.getElementById("jvchat-leftbar-reduce").addEventListener("click", tryCatch(toggleSidebar));
@@ -3465,7 +3468,7 @@ function checkEdited() {
 }
 
 function checkDeleted(id) {
-    let url = `https://www.jeuxvideo.com/jvchat/forums/message/${id}`;
+    let url = `https://www.jeuxvideo.com/forums/message/${id}`;
     let requestTimestamp = getTimestamp();
 
     function onSuccess(_) {
@@ -4097,9 +4100,23 @@ function dontScrollOnExpand(event) {
     }
 }
 
+function mouseOverEvent(event) {
+    let target = event.target;
+    if (!target) {
+        return;
+    }
+    if (target.classList.contains('message__sticker') && target.src.includes('/p/st/')) {
+        target.src = target.src.replace('/p/st/', '/p/'); //Anime old Sticker MouseOver
+    }
+}
+
 function isScrollDown() {
     let element = document.getElementById("jvchat-main");
-    return element.clientHeight + Math.floor(element.scrollTop) >= element.scrollHeight - 1;
+    /* [Legacy]
+    // return element.clientHeight + Math.floor(element.scrollTop) >= element.scrollHeight - 1;
+    */
+    // Marge d'erreur passe à 2 + fin de Math.floor car ça peux perdre le scrolldown sur les ecran 1=/=1px. CREDIT CLARA
+    return element.clientHeight + element.scrollTop >= element.scrollHeight - 2; 
 }
 
 function setScrollDown() {
