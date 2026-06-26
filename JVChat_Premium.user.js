@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.315
+// @version        0.2.5.316
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -625,9 +625,9 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .jvchat-content .message__collapsedQuote {
-    position: relative !important;  /* (le position:relative était déjà là avant) */
-    width: 100% !important;         /* Louverture de citation est passée de DIV a BUTTON */
-    display: block !important;      /* On force block + width:100% pour retrouver le comportement d'une div */
+    position: relative !important;  /* Position RELATIVE ajouté avant la MAJ JVC */
+    width: 100% !important;         /* MAIS Le btn douverture de citation est passée de DIV a BUTTON */
+    display: block !important;      /* On force block et 100% pour retrouver le comportement d'une div RELATIVE */
     color: inherit;
 }
 
