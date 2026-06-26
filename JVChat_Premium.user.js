@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.301
+// @version        0.2.5.311
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -19,7 +19,7 @@
 // CECI EST UN FORK NON OFFICIEL
 // PENSEZ A DESACTIVER JVCHAT OFFICEL (SI INSTALLÉ) SINON CONFLIT ET CRASH.
 // LA VERSION OFFICIEL DE RANDOMAX EST ICI :
-// https://jvscript.fr/script/jvchat-premium (LE PAYLOAD A ÉTÉ PATCH DANS LA VERSION OFFICIEL)
+// https://jvscript.fr/script/jvchat-premium (LE PAYLOAD A ÉTÉ PATCH DANS LA VERSION OFFICIELLE)
 
 /*
 API : les développeurs peuvent créer des "plugins" pour JVChat à l'aide d'un système d'évènements.
@@ -2666,7 +2666,6 @@ function requestDelete(bloc) {
 
 
         bloc.closest(".jvchat-message").classList.add("jvchat-message-deleted");
-
         lastEditionTime[id] = [timestamp, edition, true];
 
         if (isDown) {
