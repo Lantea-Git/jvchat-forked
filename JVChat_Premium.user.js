@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.325
+// @version        0.2.5.330
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2480,10 +2480,17 @@ function postJvcMessage() {
     }
 
 
+    let timeout = 25000;
+    if (turboActivated) {
+        timeout = 15000;
+    }
+
+    /* BUG CDM / Longer time abort request
     let timeout = 20000;
     if (turboActivated) {
         timeout = 5000;
     }
+    */
 
     postingMessage = true;
 
@@ -3441,8 +3448,8 @@ function updateMessages(page, goToLast) {
         timeout = 15000;
     }
 
-    /* BUG CDM
-    let timeout = 10000;;
+    /* BUG CDM / Longer time abort request
+    let timeout = 10000;
     if (turboActivated) {
         timeout = 5000;
     }
