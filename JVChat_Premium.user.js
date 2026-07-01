@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.330
+// @version        0.2.5.340
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2479,18 +2479,12 @@ function postJvcMessage() {
         postingMessage = false;
     }
 
-
-    let timeout = 25000;
+    // Allongement TEMPORAIRE du Timeout
+    //Le temps que JVC repare ses serveurs en carton
+    let timeout = 25000; //let timeout = 20000;
     if (turboActivated) {
-        timeout = 15000;
+        timeout = 15000; //timeout = 5000;
     }
-
-    /* BUG CDM / Longer time abort request
-    let timeout = 20000;
-    if (turboActivated) {
-        timeout = 5000;
-    }
-    */
 
     postingMessage = true;
 
@@ -3442,18 +3436,12 @@ function updateMessages(page, goToLast) {
         scheduleNextUpdate(turboActivated ? configuration["turbo_delay"] : 5000, page, true);
     }
 
-
-    let timeout = 25000;
+    // Allongement TEMPORAIRE du Timeout
+    //Le temps que JVC repare ses serveurs en carton
+    let timeout = 25000; //let timeout = 10000;
     if (turboActivated) {
-        timeout = 15000;
+        timeout = 15000; //timeout = 5000;
     }
-
-    /* BUG CDM / Longer time abort request
-    let timeout = 10000;
-    if (turboActivated) {
-        timeout = 5000;
-    }
-    */
 
     fetchingMessages = true;
     currentFetchedPage = page;
