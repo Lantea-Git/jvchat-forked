@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.340
+// @version        0.2.5.350
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2479,11 +2479,11 @@ function postJvcMessage() {
         postingMessage = false;
     }
 
-    // Allongement TEMPORAIRE du Timeout
-    //Le temps que JVC repare ses serveurs en carton
-    let timeout = 25000; //let timeout = 20000;
+    // Allongement du Timeout . Les serveurs eco + de JVC , Peuvent mettent 15 sec à repondre en 2k26 .
+    // Permet de laisser la requette en pending plus longtemps (20/15secondes) et bloque le retry suivant (Clara).
+    let timeout = 20000;
     if (turboActivated) {
-        timeout = 15000; //timeout = 5000;
+        timeout = 15000; // (Ancien delais turbo) timeout = 5000; 
     }
 
     postingMessage = true;
@@ -2565,7 +2565,7 @@ function submitEditmessage(bloc) {
         }
 
         // Force_Update
-        setTimeout(forceUpdate, 250);
+        setTimeout(tryCatch(forceUpdate), 250);
     }
 
     function onError(err, _) {
@@ -2687,7 +2687,7 @@ function requestDelete(bloc) {
 
     let url = `https://www.jeuxvideo.com/forums/message/delete?ids=${id}&type=delete&ajax_hash=${encodeURIComponent(freshDeletionHash)}`;
 
-    request("POST", url, onSuccess, onError, onTimeout, null, true, 5000, false);
+    request("POST", url, onSuccess, onError, onTimeout, undefined, true, 5000, false);
 }
 
 function countLines(text) {
@@ -3436,11 +3436,11 @@ function updateMessages(page, goToLast) {
         scheduleNextUpdate(turboActivated ? configuration["turbo_delay"] : 5000, page, true);
     }
 
-    // Allongement TEMPORAIRE du Timeout
-    //Le temps que JVC repare ses serveurs en carton
-    let timeout = 25000; //let timeout = 10000;
+    // Allongement du Timeout . Les serveurs eco + de JVC , Peuvent mettent 15 sec à repondre en 2k26 .
+    // Permet de laisser la requette en pending plus longtemps (20/15secondes) et bloque le retry suivant (Clara).
+    let timeout = 20000; // (Ancien delais classique) let timeout = 10000;
     if (turboActivated) {
-        timeout = 15000; //timeout = 5000;
+        timeout = 15000; // (Ancien delais turbo) timeout = 5000;
     }
 
     fetchingMessages = true;
