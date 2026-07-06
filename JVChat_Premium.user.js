@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.350
+// @version        0.2.5.351
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2479,8 +2479,8 @@ function postJvcMessage() {
         postingMessage = false;
     }
 
-    // Allongement du Timeout . Les serveurs eco + de JVC , Peuvent mettent 15 sec à repondre en 2k26 .
-    // Permet de laisser la requette en pending plus longtemps (20/15secondes) et bloque le retry suivant (Clara).
+    // Allongement du Timeout. Les serveurs eco + de JVC . Peuvent mettre 15 secondes à repondre en 2k26 .
+    // Permet de laisser la requete en pending plus longtemps (20/15secondes) et bloque le retry suivant (Clara).
     let timeout = 20000;
     if (turboActivated) {
         timeout = 15000; // (Ancien delais turbo) timeout = 5000; 
@@ -3436,8 +3436,8 @@ function updateMessages(page, goToLast) {
         scheduleNextUpdate(turboActivated ? configuration["turbo_delay"] : 5000, page, true);
     }
 
-    // Allongement du Timeout . Les serveurs eco + de JVC , Peuvent mettent 15 sec à repondre en 2k26 .
-    // Permet de laisser la requette en pending plus longtemps (20/15secondes) et bloque le retry suivant (Clara).
+    // Allongement du Timeout. Les serveurs eco + de JVC . Peuvent mettre 15 secondes à repondre en 2k26 .
+    // Permet de laisser la requete en pending plus longtemps (20/15secondes) et bloque le retry suivant (Clara).
     let timeout = 20000; // (Ancien delais classique) let timeout = 10000;
     if (turboActivated) {
         timeout = 15000; // (Ancien delais turbo) timeout = 5000;
