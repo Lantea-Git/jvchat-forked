@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.351
+// @version        0.2.5.360
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1494,13 +1494,37 @@ function escapeHtml(str, isAttribute) {
     return str;
 }
 
+function getPayload(doc) {
+    try {
+        const scriptPayLoad = [...doc.scripts].find(s => s.textContent?.includes('forumsAppPayload'))?.textContent;
+        if (!scriptPayLoad) return undefined;
+        try {
+            const rawPayload64Gzip = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*["']?([^"']+)["']?/)?.[1];
+            if (!rawPayload64Gzip) throw new Error("format base64 introuvable");
+            // Depuis le 11 juin 2026, jvc.forumsAppPayload est en base64(gzip(JSON)).
+            // Info : www.jeuxvideo.com/forums/message/1300105844
+            // libs fflate utilisé ici car DecompressionStream natif force async.
+            const bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
+            const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
+            const json = fflate.strFromU8(decompressed);
+            return JSON.parse(json);  // GZIP + BASE 64
+        } catch {
+            const rawPayload = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*(\{[\s\S]*\})\s*;/)?.[1];
+            return rawPayload ? JSON.parse(rawPayload) : undefined; // FallBack NATIF
+        }
+    } catch (e) {
+        console.error("Erreur extraction du payload:", e);
+        return undefined;
+    }
+}
+
 function getHash(doc) {
     let hash = doc.querySelector("#ajax_hash_liste_messages")
     if (hash) {
         return hash.getAttribute("value");
     }
     // Fallback: extract from payload
-    let payload = getPayload(doc);
+    let payload = freshPayload;
     if (payload?.ajaxToken) {
         return payload.ajaxToken;
     }
@@ -1513,7 +1537,7 @@ function getDeletionHash(doc) {
         return hash.getAttribute("value");
     }
     // Fallback: extract from payload
-    let payload = getPayload(doc);
+    let payload = freshPayload;
     if (payload?.topicActions?.deleteMessageUrl) {
         let match = payload.topicActions.deleteMessageUrl.match(/ajax_hash=([a-f0-9]+)/i);
         if (match) return match[1];
@@ -1531,7 +1555,7 @@ function getTopicLocked(elem) {
     }
     // New structure: check payload
     try {
-        let payload = freshPayload || getPayload(document);
+        let payload = freshPayload;
         if (payload?.forum?.isForumReadOnly) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
@@ -1581,7 +1605,7 @@ function parseSondage(elem, jsonRes) {
 
     // New structure: extract from payload
     try {
-        let payload = jsonRes || freshPayload || getPayload(document); //FreshPayload for actualize on polling
+        let payload = jsonRes || freshPayload; //FreshPayload for actualize on polling
         if (payload?.survey?.hasSurvey && payload.survey.data) {
             let surveyData = payload.survey.data;
             let intitule = surveyData.title || "";
@@ -1845,7 +1869,7 @@ function parseTopicInfo(elem) {
     // New structure fallback: read from payload (forumInfo.header.btnVal)
     if (!connected) {
         try {
-            let payload = freshPayload || getPayload(elem);
+            let payload = freshPayload;
             if (payload?.forumInfo?.header) {
                 connected = parseInt(payload.forumInfo.header.btnVal) || connected || 0;
             }
@@ -2416,7 +2440,7 @@ function postJvcMessage() {
     let textarea = getTextArea();
     let formulaire = document.getElementById("bloc-formulaire-forum");
 
-    let payload = freshPayload || getPayload(document);
+    let payload = freshPayload;
 
     let formData = {};
     formData["text"] = textarea.value;
@@ -2506,7 +2530,7 @@ function submitEditmessage(bloc) {
 
     let messageId = bloc.getAttribute("jvchat-id");
 
-    let payload = freshPayload || getPayload(document);
+    let payload = freshPayload;
 
     let formData = {};
     formData["text"] = textarea.value;
@@ -3078,7 +3102,7 @@ function submitSondageAnswer(event) {
         let sondageId = target.dataset.sondageId;
         let reponseId = target.dataset.responseId;
 
-        let payload = freshPayload || getPayload(document);
+        let payload = freshPayload;
 
         let topicId = payload?.topicId;
         let surveyAjaxHash = payload?.survey?.ajaxToken;
@@ -3272,9 +3296,10 @@ function triggerJVChat() {
         }
     }
 
+    freshPayload = getPayload(document);
     freshHash = getHash(document);
     freshDeletionHash = getDeletionHash(document);
-    freshPayload = getPayload(document);
+
 
     favicon = makeFavicon();
 
@@ -3538,30 +3563,6 @@ function decreaseUpdateInterval() {
     updateIntervalIdx = transisitions[updateIntervalIdx];
 }
 
-function getPayload(doc) {
-    try {
-        const scriptPayLoad = [...doc.scripts].find(s => s.textContent?.includes('forumsAppPayload'))?.textContent;
-        if (!scriptPayLoad) return undefined;
-        try {
-            const rawPayload64Gzip = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*["']?([^"']+)["']?/)?.[1];
-            if (!rawPayload64Gzip) throw new Error("format base64 introuvable");
-            // Depuis le 11 juin 2026, jvc.forumsAppPayload est en base64(gzip(JSON)).
-            // Info : www.jeuxvideo.com/forums/message/1300105844
-            // libs fflate utilisé ici car DecompressionStream natif force async.
-            const bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
-            const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
-            const json = fflate.strFromU8(decompressed);
-            return JSON.parse(json);  // GZIP + BASE 64
-        } catch {
-            const rawPayload = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*(\{[\s\S]*\})\s*;/)?.[1];
-            return rawPayload ? JSON.parse(rawPayload) : undefined; // FallBack NATIF
-        }
-    } catch (e) {
-        console.error("Erreur extraction du payload:", e);
-        return undefined;
-    }
-}
-
 function parsePage(res, requestTimestamp) {
     let error = getTopicError(res);
     if (error !== undefined) {
@@ -3581,6 +3582,11 @@ function parsePage(res, requestTimestamp) {
         removeFixedAlert(undefined, true);
     }
 
+    let payload = getPayload(res);
+    if (payload !== undefined) {
+        freshPayload = payload;
+    }
+
     let hash = getHash(res);
     if (hash !== undefined) {
         freshHash = hash;
@@ -3589,11 +3595,6 @@ function parsePage(res, requestTimestamp) {
     let deletionHash = getDeletionHash(res);
     if (deletionHash !== undefined) {
         freshDeletionHash = deletionHash;
-    }
-
-    let payload = getPayload(res);
-    if (payload !== undefined) {
-        freshPayload = payload;
     }
 
     let messages = getMessages(res);
