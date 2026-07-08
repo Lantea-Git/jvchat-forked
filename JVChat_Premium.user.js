@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.360
+// @version        0.2.5.367
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -608,11 +608,17 @@ hr.jvchat-ruler:first-of-type {
   line-height: 1.1rem;
 }
 
+
 .jvchat-content > .txt-msg > p:last-of-type,
-.jvchat-content > .messageUser__msg > p:last-of-type {
+.jvchat-content > .messageUser__msg > p:last-of-type,
+.jvchat-content > .messageUser__msg > .message__noBlankline:last-of-type {
   margin-bottom: 0;
 }
 
+/* A DECOMMENTER SI JVC CHANGE LES BALISES P
+.jvchat-content > .messageUser__msg .message__p,
+.jvchat-content > .messageUser__msg .message__noBlankline,
+*/
 .jvchat-content > .txt-msg p,
 .jvchat-content > .messageUser__msg p {
     margin-bottom: 0.2rem;
