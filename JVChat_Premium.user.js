@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.000
+// @version        0.2.6.010
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1565,10 +1565,10 @@ function getTopicLocked(elem) {
     // New structure: check payload
     try {
         let payload = freshPayload;
-        if (payload?.forum?.isForumReadOnly) {
+        if (payload?.forum?.lockReason?.post?.prefix) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
-        } else if (payload?.forum?.lockReason?.post) { //Exclusion par exemple
+        } else if (payload?.forum?.lockReason?.post) { //Exclusion Forum fermé par exemple
             let reason = (payload.forum.lockReason?.post?.message || "raison inconnue").toString();
             return reason;
         }
@@ -3040,7 +3040,6 @@ function addMessages(messages, editing, requestTimestamp) {
         let newBloc = makeMessage(message);
 
         lastEditionTime[id] = [requestTimestamp, edited, false];
-
 
         if (referenced) {
             let selector = `.jvchat-message[jvchat-id="${id}"]`;
