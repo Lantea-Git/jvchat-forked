@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.5.367
+// @version        0.2.6.000
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -451,8 +451,11 @@ label {
 }
 
 .jvchat-bloc-message {
-  animation-duration: 0.5s;
-  animation-name: slidein;
+    animation-duration: 0.5s;
+    animation-name: slidein;
+}
+.jvchat-bloc-message.frezze-animation {
+    animation-duration:0s;
 }
 
 .jvchat-message-deleted > div {
@@ -1565,6 +1568,9 @@ function getTopicLocked(elem) {
         if (payload?.forum?.isForumReadOnly) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
+        } else if (payload?.forum?.lockReason?.post) { //Exclusion par exemple
+            let reason = (payload.forum.lockReason?.post?.message || "raison inconnue").toString();
+            return reason;
         }
     } catch { /* ignore */ }
     return undefined;
@@ -2580,6 +2586,7 @@ function submitEditmessage(bloc) {
             improveImages(contentTxt);
         }
 
+        // "édité" sert de flag dans la fonction addMessages() pour eviter une double saute.
         lastEditionTime[messageId] = [timestamp, "édité", lastEditionTime[messageId]?.[2] ?? false];
 
         const eventDetail = { 'detail': { id: messageId, isEdit: true } };
@@ -2594,7 +2601,7 @@ function submitEditmessage(bloc) {
             setScrollDown();
         }
 
-        // Force_Update
+        // Force_Update_car_JVC_ne_renvoie_pas_lheure_impossible_de_"verouiller"_le_msg_dans_le_pool_sans_heure
         setTimeout(tryCatch(forceUpdate), 250);
     }
 
@@ -3024,15 +3031,27 @@ function addMessages(messages, editing, requestTimestamp) {
             }
         }
 
+        let alreadyEditByUser = lastEditionTime[id]?.[1] === "édité";
+        // Purement cosmetique . En cas d'edition par le user.
+        // Le DOM de JVChat est modifié dans la fonction submitEditmessage().
+        // Mais JVC ne renvoie pas lheure le message va donc être ecrasé au prochain pool => l'animation va repop.
+        // Pour eviter une double saute on utilise la string "edited" comme flag pour eviter une animation en plus.
+
         let newBloc = makeMessage(message);
 
         lastEditionTime[id] = [requestTimestamp, edited, false];
+
 
         if (referenced) {
             let selector = `.jvchat-message[jvchat-id="${id}"]`;
             let oldBloc = main.querySelector(selector).closest(".jvchat-bloc-message");
             let isDown = isScrollDown();
             oldBloc.outerHTML = newBloc;
+            if (alreadyEditByUser) { // Message DEJA edité on freeze l'anim pour eviter une double saute.
+                let newBlocNode = main.querySelector(selector).closest(".jvchat-bloc-message")
+                newBlocNode.classList.add("frezze-animation");
+                setTimeout(() => newBlocNode.classList.remove("frezze-animation"), 2000);
+            }
             if (isDown) {
                 setScrollDown();
             }
