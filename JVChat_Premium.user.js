@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.010
+// @version        0.2.6.020
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3651,7 +3651,8 @@ function parsePage(res, requestTimestamp) {
         isAlert = false;
     } else if (!isLocked_ && isLocked) {
         updateIntervalIdx = 0;
-        removeFixedAlert("Le topic a été dévérouillé", true);
+        //removeFixedAlert("Le topic a été dévérouillé", true);
+        removeFixedAlert("Le topic est de nouveau accessible", true);
     }
     isLocked = isLocked_;
 
