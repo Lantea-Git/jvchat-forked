@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.100
+// @version        0.2.6.151
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3108,13 +3108,13 @@ function addMessages(messages, editing, requestTimestamp) {
                 ringBell.play();
             }
         }
+        let isDown = isScrollDown(); // Keep etat scrool down si un plugin externe modifie le dom
         for (let newMessageId of newMessagesIds) {
             let event = new CustomEvent('jvchat:newmessage', { 'detail': { id: newMessageId, isEdit: false } });
-            let isDown = isScrollDown();
             dispatchEvent(event);
-            if (isDown) {
-                setScrollDown(); //Force un scrool down si un plugin externe modifie le dom
-            }
+        }
+        if (isDown) { //Force un scrool down si un plugin externe modifie le dom
+            setScrollDown();
         }
     } else {
         if (!turboActivated && !refreshDegraded) {
