@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.160
+// @version        0.2.6.170
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1743,7 +1743,8 @@ function parseMessage(elem) {
 
         let blacklisted = false;
 
-        let classUser = elem.querySelector(".messageUser__label")?.classList[3] ?? '';
+        let classPseudo = elem.querySelector(".messageUser__label")?.classList ?? [];
+        let classUser = [...classPseudo].find(c => c.startsWith('messageUser__label--')) || "";
 
         let avatarElem = elem.querySelector(".avatar__image");
         let avatar = avatarElem ? avatarElem.getAttribute("src") : undefined;
@@ -3472,8 +3473,7 @@ function updateMessages(page, goToLast) {
     }
 
     function onError(err, code) {
-        //if (code === 0) {
-        if (code === 0 || code === 500 || code === 503 ) { //Erreur 500/3 intenpestives CDM TEMP.
+        if (code === 0) {
             scheduleDegradedRefreshWarning();
             scheduleNextUpdate(turboActivated ? configuration["turbo_delay"] : 10000, page, true);
             return
