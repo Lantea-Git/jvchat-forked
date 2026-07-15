@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.171
+// @version        0.2.6.180
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1517,7 +1517,7 @@ function getPayload(doc) {
             const bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
             const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
             const json = fflate.strFromU8(decompressed);
-            return JSON.parse(json);  // GZIP + BASE 64
+            return JSON.parse(json); // GZIP + BASE 64
         } catch {
             const rawPayload = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*(\{[\s\S]*\})\s*;/)?.[1];
             return rawPayload ? JSON.parse(rawPayload) : undefined; // FallBack NATIF
@@ -1528,6 +1528,9 @@ function getPayload(doc) {
     }
 }
 
+// On utilise lobject "freshPayload" Pour éviter de devoir reparser et unZip le payload (10 ms dans certains cas)
+// Ça fonctionne UNIQUEMENT pour les hash, pour le nombre de connectés et le lock CAR CES VALEURS SONT INDÉPENDANTES DU NUM DE LA PAGE.
+// NOTE : Si un jour il est nécessaire d'avoir le payload d'une page précise "freshPayload" nest pas fiable; il faut faire appel à fonction getPayload(numDePageExacteHtml).
 function getHash(doc) {
     let hash = doc.querySelector("#ajax_hash_liste_messages")
     if (hash) {
@@ -3108,12 +3111,12 @@ function addMessages(messages, editing, requestTimestamp) {
                 ringBell.play();
             }
         }
-        let isDown = isScrollDown(); // Keep etat scrool down si un plugin externe modifie le dom
+        let isDown = isScrollDown(); // KEEP LETAT DU SCROOL SI UN PLUGIN EXTERNE MODIFIE LE DOM
         for (let newMessageId of newMessagesIds) {
             let event = new CustomEvent('jvchat:newmessage', { 'detail': { id: newMessageId, isEdit: false } });
             dispatchEvent(event);
         }
-        if (isDown) { //Force un scrool down si un plugin externe modifie le dom
+        if (isDown) { //RE-FORCE UN SCROOL DOWN SI UN PLUGIN TIERS A MODIFIE LA TAILLE DU DOM (DEBOUCLED)
             setScrollDown();
         }
     } else {
@@ -4006,7 +4009,7 @@ function reverseMessage(node, isInit, isUl) {
                 break;
             }
             case "A": {
-                // GUARD PSEUDO LINK
+                // SI UN PSEUDO EST CLIQUABLE (PLUG-IN EXTERNE / DEBOUCLED) ON SKIP
                 if (child.classList.contains("deboucled-highlighted")) {
                     quote += reverseMessage(child);
                 } else if (child.href) {
