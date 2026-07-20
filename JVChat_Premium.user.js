@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.500
+// @version        0.2.6.501
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1455,6 +1455,7 @@ let leavingTopic = false;
 let storageKey = "jvchat-premium-fork-configuration";
 let ringBell = undefined;
 let configuration = undefined;
+
 
 function defaultConfig() {
     return {
