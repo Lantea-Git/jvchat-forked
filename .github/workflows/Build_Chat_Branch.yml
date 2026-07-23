@@ -22,15 +22,31 @@ jobs:
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
 
-          cp .github/workflows/Build_Chat_Compile.py /tmp/patch_header.py
+          cp .github/workflows/Build_Chat_Compile.py /tmp/compile_chat.py
           for branch in fork-of-fork debug; do
             git checkout $branch
 
             curl -L "https://update.greasyfork.org/scripts/471322.user.js" -o raw.user.js
-            python3 /tmp/patch_header.py raw.user.js JVChat_Premium.user.js
+            python3 /tmp/compile_chat.py raw.user.js JVChat_Premium.user.js
             rm raw.user.js
 
             git add JVChat_Premium.user.js
             git commit -m "${{ github.event.inputs.commit_message }}" || echo "Rien à committer sur $branch"
             git push origin $branch
           done
+
+          #BRANCHE VPN
+          [ -f .github/workflows/Build_Chat_Compile_VPN.py ] || exit 0
+
+          vpn_branch=vpn-version
+          cp .github/workflows/Build_Chat_Compile_VPN.py /tmp/compile_chat_vpn.py
+          git show-ref --verify --quiet refs/remotes/origin/$vpn_branch || git checkout -b $vpn_branch fork-of-fork
+          git checkout $vpn_branch
+
+          curl -L "https://update.greasyfork.org/scripts/471322.user.js" -o raw.user.js
+          python3 /tmp/compile_chat_vpn.py raw.user.js JVChat_Premium.user.js
+          rm raw.user.js
+
+          git add JVChat_Premium.user.js
+          git commit -m "${{ github.event.inputs.commit_message }}" || echo "Rien à committer sur $vpn_branch"
+          git push origin $vpn_branch
