@@ -23,6 +23,8 @@ jobs:
           git config user.name "GitHub Action"
 
           cp .github/workflows/Build_Chat_Compile.py /tmp/compile_chat.py
+          cp .github/workflows/Build_Chat_Compile_VPN.py /tmp/compile_chat_vpn.py 2>/dev/null || true
+
           for branch in fork-of-fork debug; do
             git checkout $branch
 
@@ -36,10 +38,10 @@ jobs:
           done
 
           #BRANCHE VPN
-          [ -f .github/workflows/Build_Chat_Compile_VPN.py ] || exit 0
+          [ -f /tmp/compile_chat_vpn.py ] || exit 0
 
           vpn_branch=vpn-version
-          cp .github/workflows/Build_Chat_Compile_VPN.py /tmp/compile_chat_vpn.py
+
           git show-ref --verify --quiet refs/remotes/origin/$vpn_branch || git checkout -b $vpn_branch fork-of-fork
           git checkout $vpn_branch
 
