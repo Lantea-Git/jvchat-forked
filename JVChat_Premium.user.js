@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis/Lantea-Git
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.510
+// @version        0.2.6.520
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1617,9 +1617,9 @@ function parseSondage(elem, jsonRes) {
 
     // New structure: extract from payload
     try {
-        let payload = jsonRes || freshPayload; //FreshPayload for actualize on polling
-        if (payload?.survey?.hasSurvey && payload.survey.data) {
-            let surveyData = payload.survey.data;
+        let survey = jsonRes?.survey || freshPayload?.survey; //FreshPayload or response
+        if (survey?.hasSurvey && survey.data) {
+            let surveyData = survey.data;
             let intitule = surveyData.title || "";
             let answered = surveyData.hasVoted || surveyData.isClosed || false;
             let results = [];
