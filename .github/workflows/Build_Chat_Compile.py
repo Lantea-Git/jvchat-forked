@@ -14,7 +14,7 @@ version = re.search(r'// @version\s+(\S+)', content).group(1)
 new_header = f"""// ==UserScript==
 // @name           JV_Chat_Custsom_Fork
 // @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey)
-// @author         Blaff, Rand0max, Atlantis/Lantea-Git
+// @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
 // @version        {version}
