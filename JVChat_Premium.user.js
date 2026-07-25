@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JV_Chat_Custsom_Fork
 // @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey)
-// @author         Blaff, Rand0max, Atlantis/Lantea-Git
+// @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.530
+// @version        0.2.6.536
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -16,10 +16,9 @@
 // @updateURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.meta.js
 // ==/UserScript==
 
-// CECI EST UN FORK NON OFFICIEL
+// CECI EST UN FORK NON OFFICIEL (90% DU TRAVAIL EST ISSU DU TRAVAIL COLOSSAL DE Rand0max / Sans lui et Blaff ce script ne serait plus là).
 // PENSEZ A DESACTIVER JVCHAT OFFICEL (SI INSTALLÉ) SINON CONFLIT ET CRASH.
-// LA VERSION OFFICIEL DE RANDOMAX EST ICI :
-// https://jvscript.fr/script/jvchat-premium (LE PAYLOAD A ÉTÉ PATCH DANS LA VERSION OFFICIELLE)
+// LA VERSION OFFICIELLE DE RANDOMAX EST ICI : https://jvscript.fr/script/jvchat-premium
 
 /*
 API : les développeurs peuvent créer des "plugins" pour JVChat à l'aide d'un système d'évènements.
@@ -2790,7 +2789,7 @@ function getMessages(document) {
 
     let messages = [];
     for (let bloc of blocMessages) {
-        if (bloc.children.length === 0) continue; //Bloc blacklist No DOM Fellback crash
+        if (bloc.children.length === 0) continue; //Bloc blacklist Ignore No DOM Avoid crash
         messages.push(parseMessage(bloc));
     }
     return messages;
@@ -2806,7 +2805,7 @@ function findDeletedMessages(res, requestTimestamp) {
     let newDates = [];
 
     for (let bloc of blocMessages) {
-        if (bloc.children.length === 0) continue; //Bloc blacklist No DOM Fellback crash
+        if (bloc.children.length === 0) continue; //Bloc blacklist Ignore No DOM Avoid crash
         let id;
         if (bloc.classList.contains("messageUser")) {
             id = parseInt(bloc.id.replace("message-", ""));
