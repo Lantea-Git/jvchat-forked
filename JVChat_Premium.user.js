@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.536
+// @version        0.2.6.540
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1754,7 +1754,7 @@ function parseMessage(elem) {
             content.classList.add("txt-msg");
         }
 
-        let id = parseInt(elem.id.replace("message-", ""));
+        let id = parseInt(elem.id.split("-").pop());
 
         let editedElem = elem.querySelector(".messageUser__dateEdit");
         let edited = undefined;
@@ -2808,7 +2808,7 @@ function findDeletedMessages(res, requestTimestamp) {
         if (bloc.children.length === 0) continue; //Bloc blacklist Ignore No DOM Avoid crash
         let id;
         if (bloc.classList.contains("messageUser")) {
-            id = parseInt(bloc.id.replace("message-", ""));
+            id = parseInt(bloc.id.split("-").pop());
         } else {
             id = parseInt(bloc.getAttribute("data-id"));
         }
