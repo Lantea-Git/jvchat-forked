@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.540
+// @version        0.2.6.600
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1567,7 +1567,7 @@ function getTopicLocked(elem) {
         if (payload?.forum?.lockReason?.post?.prefix) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
-        } else if (payload?.forum?.lockReason?.post) { //Exclusion Forum fermé par exemple
+        } else if (payload?.forum?.lockReason?.post) { //Exclusion Forum fermé par exemple (pas de prefix)
             let reason = (payload.forum.lockReason?.post?.message || "raison inconnue").toString();
             return reason;
         }
@@ -1614,7 +1614,7 @@ function parseSondage(elem, jsonRes) {
         return { answered: answered, intitule: intitule, results: results, votes: votes };
     }
 
-    // New structure: extract from payload
+    // New structure 2026 : extract from payload
     try {
         let surveyJson = jsonRes?.survey || freshPayload?.survey; //FreshPayload or response
         if (surveyJson?.hasSurvey && surveyJson.data) {
@@ -1639,6 +1639,7 @@ function parseSondage(elem, jsonRes) {
     return null;
 }
 
+//Fonction pour intercepter les erreurs
 function tryCatch(func) {
     function wrapped(optArg) {
         try {
@@ -1659,6 +1660,7 @@ function tryCatch(func) {
     return wrapped;
 }
 
+//Legacy interface = change la zone de texte entre reduit (enter et form) et mode complet
 function toggleTextarea() {
     isReduced = !isReduced;
     configuration["default_reduced"] = isReduced;
@@ -1715,7 +1717,7 @@ function getLastPage(document) {
     }
     */
 
-    // New structure
+    // New structure 2026 (On prend le numéro le plus grand )
     let spans = document.querySelectorAll(".pagination__item, .pagination__button, .pagination__navigation a, .pagination__navigation span");
     let lastPage = 1;
     for (let span of spans) {
@@ -1836,8 +1838,8 @@ function parseMessage(elem) {
 
 function parseUserInfo(elem) {
     let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") || elem.querySelector(".headerAccount__pm");
-    if (!accountMp) {
-        return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
+    if (!accountMp) { // Pas d'icone MP === User Deconnecte = on return undefined et on skip
+        return { author: undefined, avatar: undefined, mp: undefined, notif: undefined }; 
     }
     let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif") || elem.querySelector(".headerAccount__notif");
 
@@ -1866,7 +1868,7 @@ function getPage(elem) {
 
 function parseTopicInfo(elem) {
     // New structure
-    let titleElem = elem.querySelector(".titleMessagesUsers__title");
+    let titleElem = elem.querySelector(".titleMessagesUsers__title"); // Titre vient du DOM
     if (!titleElem) {
         titleElem = elem.querySelector("#bloc-title-forum");
     }
@@ -1879,7 +1881,7 @@ function parseTopicInfo(elem) {
     let connected = connectedElem ? parseInt(connectedElem.textContent.trim()) : 0;
 
     // New structure fallback: read from payload (forumInfo.header.btnVal)
-    if (!connected) {
+    if (!connected) { // Nombre de connectés vient du payload.
         try {
             let payload = freshPayload;
             if (payload?.forumInfo?.header) {
@@ -1894,6 +1896,7 @@ function parseTopicInfo(elem) {
 }
 
 function fixMessage(elem) {
+    //Fix JV Care span vers liens balise a, voir jvflux pour plus d'infos
     let jvcares = [...elem.getElementsByClassName("JvCare")];
     for (let jvcare of jvcares) {
         let a = document.createElement("a");
@@ -1903,6 +1906,7 @@ function fixMessage(elem) {
         jvcare.outerHTML = a.outerHTML;
     }
 
+    //Ajout Btn ouverture citations
     let togglableQuotes = [...elem.querySelectorAll(":not(blockquote) > blockquote > blockquote")];
     for (let togglableQuote of togglableQuotes) {
         let toggleButton = document.createElement("button");
@@ -1911,6 +1915,7 @@ function fixMessage(elem) {
         // The click event is bound in the "dontScrollOnExpand()" function
     }
 
+    //Image large on fix le lazyload (les images sont en css jvc utilise du lasyload qu'on à la main)
     let lazyImagesShack = elem.querySelectorAll('.message__urlImg:not(img)');
     for (let lazyImageShack of lazyImagesShack) {
         let lazySrcShack = lazyImageShack.dataset.srcBackground; // [data-src-background]
@@ -2116,7 +2121,7 @@ function getPanelHtml() {
     return PANEL;
 }
 
-
+// Recuperation du bouton original et clone pour detacher les listeners
 function replacePostButton(clickEvent) {
     const oldElement = document.querySelector('.postMessage');
     const newElement = oldElement.cloneNode(true);
@@ -2424,6 +2429,7 @@ function getTextArea() {
     return document.getElementById("message_reponse") || document.getElementById("message_topic");
 }
 
+//Insertion de text en react
 function setTextAreaValue(textarea, value) {
     const prototype = Object.getPrototypeOf(textarea);
     const nativeSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
@@ -2489,7 +2495,7 @@ function postJvcMessage() {
         textarea.removeAttribute("disabled");
 
         if (handleApiResponseError(res)) {
-            freshPayload["formSession"] = res["formSession"]; // Nouveau CRPS
+            freshPayload["formSession"] = res["formSession"]; // Nouveau jeton CRPS
         } else {
             setTextAreaValue(textarea, '');
             setTimeout(tryCatch(forceUpdate), 300);
@@ -2737,6 +2743,7 @@ function computeHeight(lines) {
 
 function setTextareaHeight(plusOne) {
     // "--height-reduce-chat" === "height" FORCED
+    // Le css vient lire cette varible pour bypass le height de react avec important sans conflit
     let textarea = document.getElementById("message_reponse");
     if (!isReduced) {
         textarea.style.removeProperty("--height-reduce-chat");
@@ -2773,6 +2780,7 @@ function postMessageIfEnter(event) {
     }
 }
 
+//Transforme un objet JS pur en formData.
 function makeFormData(dict) {
     var formData = new FormData();
     for (let key in dict) {
@@ -3164,7 +3172,7 @@ function submitSondageAnswer(event) {
             addAlertbox("warning", err);
         }
 
-        //NEW END POINT IN FORM DATA
+        //NEW END POINT FORM DATA // https://www.jeuxvideo.com/forums/survey/vote
         request("POST", url, onSuccess, onError, onTimeout, makeFormData(formData), true, 5000, false);
     }
 }
@@ -3432,6 +3440,7 @@ function scheduleDegradedRefreshWarning() {
     refreshDegradedTimeoutId = setTimeout(tryCatch(refreshNoLongerDegraded), 30000);
 }
 
+// Recuperation des messages
 function updateMessages(page, goToLast) {
 
     if (postingMessage && turboActivated) {
@@ -4087,6 +4096,7 @@ function insertAtCursor(input, textToInsert) {
     input.selectionStart = input.selectionEnd = start + textToInsert.length;
 }
 
+//Delegation d'evenement au click.
 function dontScrollOnExpand(event) {
     let target = event.target;
     if (!target) {
