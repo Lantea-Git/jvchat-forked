@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.620
+// @version        0.2.6.630
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1511,7 +1511,7 @@ function getPayload(doc) {
             // libs fflate utilisé ici car DecompressionStream natif force async.
             const bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
             const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
-            const json = fflate.strFromU8(decompressed);
+            const json = new TextDecoder().decode(decompressed);
             return JSON.parse(json); // GZIP + BASE 64
         } catch {
             const rawPayload = scriptPayLoad.match(/jvc\.forumsAppPayload\s*=\s*(\{[\s\S]*\})\s*;/)?.[1];
