@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.630
+// @version        0.2.6.645
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1567,7 +1567,7 @@ function getTopicLocked(elem) {
         if (payload?.forum?.lockReason?.post?.prefix) {
             let reason = payload.forum.lockReason?.post?.message || "raison inconnue";
             return `Le topic a été verrouillé pour la raison suivante : "${reason}"`;
-        } else if (payload?.forum?.lockReason?.post) { //Exclusion Forum fermé par exemple (pas de prefix)
+        } else if (payload?.forum?.lockReason?.post) { //Exclusion Forum fermé par exemple (Pas de préfix)
             let reason = (payload.forum.lockReason?.post?.message || "raison inconnue").toString();
             return reason;
         }
@@ -1660,7 +1660,7 @@ function tryCatch(func) {
     return wrapped;
 }
 
-//Legacy interface = change la zone de texte entre reduit (enter et form) et mode complet
+//Switch entre la zone de texte réduite (Press enter et textarea seulement) et le mode complet (Legacy interface)
 function toggleTextarea() {
     isReduced = !isReduced;
     configuration["default_reduced"] = isReduced;
@@ -1838,8 +1838,8 @@ function parseMessage(elem) {
 
 function parseUserInfo(elem) {
     let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") || elem.querySelector(".headerAccount__pm");
-    if (!accountMp) { // Pas d'icone MP === User Deconnecte = on return undefined et on skip
-        return { author: undefined, avatar: undefined, mp: undefined, notif: undefined }; 
+    if (!accountMp) { // Pas d'icone MP === User Deconnecté = on return undefined et on skip.
+        return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
     }
     let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif") || elem.querySelector(".headerAccount__notif");
 
@@ -1896,7 +1896,7 @@ function parseTopicInfo(elem) {
 }
 
 function fixMessage(elem) {
-    //Fix JV Care span vers liens balise a, voir jvflux pour plus d'infos
+    //Fix JV Care : transforme span en balise a avec un lien, voir jvflux (Tech) pour plus d'infos
     let jvcares = [...elem.getElementsByClassName("JvCare")];
     for (let jvcare of jvcares) {
         let a = document.createElement("a");
@@ -1906,7 +1906,7 @@ function fixMessage(elem) {
         jvcare.outerHTML = a.outerHTML;
     }
 
-    //Ajout Btn ouverture citations
+    //Ajout Btn ouverture des citations au 2 eme niveau de profondeur comme sur JVC.
     let togglableQuotes = [...elem.querySelectorAll(":not(blockquote) > blockquote > blockquote")];
     for (let togglableQuote of togglableQuotes) {
         let toggleButton = document.createElement("button");
@@ -1915,7 +1915,7 @@ function fixMessage(elem) {
         // The click event is bound in the "dontScrollOnExpand()" function
     }
 
-    //Image large on fix le lazyload (les images sont en css jvc utilise du lasyload qu'on à la main)
+    //Images larges : fix du lazyload (les images larges sont en css => donc lasyload maison jvc => on doit le fix à la main)
     let lazyImagesShack = elem.querySelectorAll('.message__urlImg:not(img)');
     for (let lazyImageShack of lazyImagesShack) {
         let lazySrcShack = lazyImageShack.dataset.srcBackground; // [data-src-background]
@@ -2121,7 +2121,7 @@ function getPanelHtml() {
     return PANEL;
 }
 
-// Recuperation du bouton original et clone pour detacher les listeners
+// Récupération du bouton POST original et clone pour détacher les listeners natifs.
 function replacePostButton(clickEvent) {
     const oldElement = document.querySelector('.postMessage');
     const newElement = oldElement.cloneNode(true);
@@ -2743,7 +2743,7 @@ function computeHeight(lines) {
 
 function setTextareaHeight(plusOne) {
     // "--height-reduce-chat" === "height" FORCED
-    // Le css vient lire cette varible pour bypass le height de react avec important sans conflit
+    // La feuille de style vient lire notre variable CSS pour bypasser le height de React sans conflit d'attributs.
     let textarea = document.getElementById("message_reponse");
     if (!isReduced) {
         textarea.style.removeProperty("--height-reduce-chat");
@@ -2780,7 +2780,7 @@ function postMessageIfEnter(event) {
     }
 }
 
-//Transforme un objet JS pur en formData.
+// Transforme un objet JS pur en formData.
 function makeFormData(dict) {
     var formData = new FormData();
     for (let key in dict) {
@@ -3924,6 +3924,7 @@ function setFavicon(txt) {
     document.head.insertAdjacentHTML("beforeend", icon);
 }
 
+//Transforme le HTML de JVChat en JVCode en cas de click sur le bouton citation.
 function reverseMessage(node, isInit, isUl) {
     let quote = "";
     let prevIsP = false;
@@ -4096,7 +4097,7 @@ function insertAtCursor(input, textToInsert) {
     input.selectionStart = input.selectionEnd = start + textToInsert.length;
 }
 
-//Delegation d'evenement au click.
+// Listerner Global sur #jvchat-main avec delegation d'evenement au click.
 function dontScrollOnExpand(event) {
     let target = event.target;
     if (!target) {
