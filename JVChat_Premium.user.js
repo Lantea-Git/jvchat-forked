@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.010
+// @version        0.2.7.020
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2015,12 +2015,7 @@ function getPanelHtml() {
         <div class='panel-body'>
             <div id='jvchat-info'>
                 <div id='jvchat-profil' class='jvchat-hide'>
-                    <!-- #OFFFORVPN:REMOVE-START -->
                     <h4 class='titre-info-fofo'>Profil</h4>
-                    <!-- #OFFFORVPN:REMOVE-END -->
-                    <!-- #FORVPN:UNCOMMENT
-                    <h4 class='titre-info-fofo'>VPN Build</h4>
-                    #FORVPN:UNCOMMENT -->
                     <h4 id='jvchat-user-pseudo'></h4>
                     <div id='jvchat-user-info'>
                         <a title="Ouvrir le profil" id="jvchat-user-avatar-link" target="_blank"><div id='jvchat-user-avatar' class='jvchat-rounded jvchat-user-avatar'></div></a>
