@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.6.645
+// @version        0.2.7.010
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2015,7 +2015,12 @@ function getPanelHtml() {
         <div class='panel-body'>
             <div id='jvchat-info'>
                 <div id='jvchat-profil' class='jvchat-hide'>
+                    <!-- #OFFFORVPN:REMOVE-START -->
                     <h4 class='titre-info-fofo'>Profil</h4>
+                    <!-- #OFFFORVPN:REMOVE-END -->
+                    <!-- #FORVPN:UNCOMMENT
+                    <h4 class='titre-info-fofo'>VPN Build</h4>
+                    #FORVPN:UNCOMMENT -->
                     <h4 id='jvchat-user-pseudo'></h4>
                     <div id='jvchat-user-info'>
                         <a title="Ouvrir le profil" id="jvchat-user-avatar-link" target="_blank"><div id='jvchat-user-avatar' class='jvchat-rounded jvchat-user-avatar'></div></a>
@@ -2460,22 +2465,22 @@ function postJvcMessage() {
 
     let payload = freshPayload;
 
-    let formData = {};
-    formData["text"] = textarea.value;
-    formData["topicId"] = payload["topicId"];
-    formData["forumId"] = payload["forumId"];
+    let formData = new FormData();
+    formData.append("text", textarea.value);
+    formData.append("topicId", payload["topicId"]);
+    formData.append("forumId", payload["forumId"]);
     let group = document.getElementById('form_alias_rang')?.value || "1";
-    formData["group"] = group;
+    formData.append("group", group);
 
-    formData["messageId"] = "undefined";
+    formData.append("messageId", "undefined");
 
     let formSession = payload["formSession"];
     for (const key in formSession) {
-        formData[key] = formSession[key];
+        formData.append(key, formSession[key]);
     }
 
-    formData["ajax_hash"] = payload["ajaxToken"];
-    //formData["resetFormAfterSuccess"] = "false";
+    formData.append("ajax_hash", payload["ajaxToken"]);
+    //formData.append("resetFormAfterSuccess", "false");
 
     formulaire.classList.add("jvchat-disabled-form");
     textarea.setAttribute("disabled", "true");
@@ -2532,7 +2537,7 @@ function postJvcMessage() {
 
     let url = "https://www.jeuxvideo.com/forums/message/add"
 
-    request("POST", url, onSuccess, onError, onTimeout, makeFormData(formData), true, timeout, false);
+    request("POST", url, onSuccess, onError, onTimeout, formData, true, timeout, false);
 }
 
 
@@ -2550,22 +2555,22 @@ function submitEditmessage(bloc) {
 
     let payload = freshPayload;
 
-    let formData = {};
-    formData["text"] = textarea.value;
-    formData["topicId"] = payload["topicId"];
-    formData["forumId"] = payload["forumId"];
+    let formData = new FormData();
+    formData.append("text", textarea.value);
+    formData.append("topicId", payload["topicId"]);
+    formData.append("forumId", payload["forumId"]);
 
     let group = document.getElementById('form_alias_rang')?.value || "1";
-    formData["group"] = group;
+    formData.append("group", group);
 
-    formData["messageId"] = messageId;
+    formData.append("messageId", messageId);
 
     for (const key in formSession) {
-        formData[key] = formSession[key];
+        formData.append(key, formSession[key]);
     }
 
-    formData["ajax_hash"] = payload["ajaxToken"];
-    formData["resetFormAfterSuccess"] = "false";
+    formData.append("ajax_hash", payload["ajaxToken"]);
+    formData.append("resetFormAfterSuccess", "false");
 
     blocEdition.classList.add("jvchat-disabled-form");
     textarea.setAttribute("disabled", "true");
@@ -2624,7 +2629,7 @@ function submitEditmessage(bloc) {
     }
 
     let url = "https://www.jeuxvideo.com/forums/message/edit";
-    request("POST", url, onSuccess, onError, onTimeout, makeFormData(formData), true, 20000, false);
+    request("POST", url, onSuccess, onError, onTimeout, formData, true, 20000, false);
 }
 
 function requestEdit(bloc) {
@@ -2778,15 +2783,6 @@ function postMessageIfEnter(event) {
             postJvcMessage();
         }
     }
-}
-
-// Transforme un objet JS pur en formData.
-function makeFormData(dict) {
-    var formData = new FormData();
-    for (let key in dict) {
-        formData.append(key, dict[key]);
-    }
-    return formData;
 }
 
 function getMessages(document) {
@@ -3143,11 +3139,12 @@ function submitSondageAnswer(event) {
         let topicId = payload?.topicId;
         let surveyAjaxHash = payload?.survey?.ajaxToken;
         let url = 'https://www.jeuxvideo.com/forums/survey/vote';
-        let formData = {};
-        formData.ajax_hash = surveyAjaxHash;
-        formData.id_topic = topicId;
-        formData.id_sondage = sondageId;
-        formData.id_sondage_reponse = reponseId;
+
+        let formData = new FormData();
+        formData.append("ajax_hash", surveyAjaxHash);
+        formData.append("id_topic", topicId);
+        formData.append("id_sondage", sondageId);
+        formData.append("id_sondage_reponse", reponseId);
 
 
         function onSuccess(res) {
@@ -3173,7 +3170,7 @@ function submitSondageAnswer(event) {
         }
 
         //NEW END POINT FORM DATA // https://www.jeuxvideo.com/forums/survey/vote
-        request("POST", url, onSuccess, onError, onTimeout, makeFormData(formData), true, 5000, false);
+        request("POST", url, onSuccess, onError, onTimeout, formData, true, 5000, false);
     }
 }
 
