@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.055
+// @version        0.2.7.060
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1721,12 +1721,9 @@ function getLastPage(document) {
     let spans = document.querySelectorAll(".pagination__item, .pagination__button, .pagination__navigation a, .pagination__navigation span");
     let lastPage = 1;
     for (let span of spans) {
-        let txt = span.textContent.trim();
-        if (/^\d+$/.test(txt)) {
-            let page = parseInt(txt);
-            if (page > lastPage) {
-                lastPage = page;
-            }
+        let page = parseInt(span.textContent, 10);
+        if (page > lastPage) {
+            lastPage = page;
         }
     }
     return lastPage;
@@ -1855,7 +1852,7 @@ function getPage(elem) {
     // New structure
     let pageActive = elem.querySelector(".pagination__item--current");
     if (pageActive) {
-        return parseInt(pageActive.textContent.trim()) || 1;
+        return parseInt(pageActive.textContent) || 1;
     }
     // Old structure fallback
     let pageActiveOld = elem.getElementsByClassName("page-active")[0];
@@ -4108,6 +4105,8 @@ function dontScrollOnExpand(event) {
             setScrollDown();
         }
     } else if (classes.contains("message__spoilLabel") || classes.contains("message__spoilDisplay") || classes.contains("message__spoilMask")) {
+        // Bypass du toggle natif CSS des SPOILS par un listener JS : ils peuvent exister en double (DOM dorigine + JVchat)
+        // le CSS natif ne cible que la 1ère occurrence, donc cliquer dans JVchat nouvrirait rien en CSS natif en cas de doublon.
         event.preventDefault();
         let check = target.closest(".message__spoil").getElementsByClassName("message__openSpoil")[0];
         let isDown = isScrollDown();
