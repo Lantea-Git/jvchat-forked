@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.050
+// @version        0.2.7.055
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1523,7 +1523,7 @@ function getPayload(doc) {
     }
 }
 
-// On utilise lobject "freshPayload" Pour éviter de devoir reparser et unZip le payload (10 ms dans certains cas)
+// On utilise la variable globale "freshPayload" Pour éviter de devoir reparser et unZip le payload (10 ms dans certains cas)
 // Ça fonctionne UNIQUEMENT pour les hash, pour le nombre de connectés et le lock CAR CES VALEURS SONT INDÉPENDANTES DU NUM DE LA PAGE.
 // NOTE : Si un jour il est nécessaire d'avoir le payload d'une page précise "freshPayload" nest pas fiable; il faut faire appel à fonction getPayload(numDePageExacteHtml).
 function getHash(doc) {
