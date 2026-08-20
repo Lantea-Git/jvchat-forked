@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.020
+// @version        0.2.7.050
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1896,7 +1896,7 @@ function parseTopicInfo(elem) {
 }
 
 function fixMessage(elem) {
-    //Fix JV Care : transforme span en balise a avec un lien, voir jvflux (Tech) pour plus d'infos
+    //Fix JV Care : transforme span en balise a avec un lien, voir jvflux (Tech) pour plus d'infos , spread pour figée la html live collection
     let jvcares = [...elem.getElementsByClassName("JvCare")];
     for (let jvcare of jvcares) {
         let a = document.createElement("a");
@@ -1935,7 +1935,7 @@ function jvCake(cls) {
 }
 
 function detectMosaic(elem) {
-    let imagesShack = elem.querySelectorAll(".img-shack, img.message__urlImg");
+    let imagesShack = elem.querySelectorAll(".img-shack, img.message__urlImg"); // "img.class_img" exclu les spans sans src qui levent un erreur.
     if (imagesShack.length < 4) {
         return;
     }
@@ -1977,7 +1977,7 @@ function detectMosaic(elem) {
 }
 
 function improveImages(elem) {
-    let imagesShack = elem.querySelectorAll(".img-shack, img.message__urlImg");
+    let imagesShack = elem.querySelectorAll(".img-shack, img.message__urlImg"); // "img.class_img" exclu les spans sans src qui levent un erreur.
     for (let image of imagesShack) {
         let src = image.src;
         let parent = image.parentNode;
@@ -2130,7 +2130,8 @@ function replacePostButton(clickEvent) {
     newElement.type = "button";
 }
 
-
+//Nettoyage / Preparation de la page au 1er appel.
+//Insertion de tout les elements visuels lies à jvchat et ajout des listeners.
 function clearPage(document) {
     let legacyButtons = `
         <div id="jvchat-buttons-main" class='jvchat-buttons'>
@@ -2185,13 +2186,12 @@ function clearPage(document) {
 
     document.getElementById("page-messages-forum").classList.add("jvchat-root");
 
-    formContainer?.classList.add("jvchat-reduced"); //Par defaut pas de user => toogle dans function setUser
-    formContainer?.classList.add("jvchat-hide");    //Par defaut pas de user => toogle dans function setUser
+    formContainer?.classList.add("jvchat-reduced"); //Par defaut pas de user => toogle dans function setUser();
+    formContainer?.classList.add("jvchat-hide"); //Par defaut pas de user => toogle dans function setUser();
 
     let toolbar = formContainer ? (formContainer.querySelector(".buttonsEditor, .jv-editor-toolbar")) : null;
 
     document.getElementById("jvchat-main").addEventListener("click", tryCatch(dontScrollOnExpand));
-
     document.getElementById("jvchat-main").addEventListener("mouseover", tryCatch(mouseOverEvent));
 
     document.getElementById("jvchat-alerts").addEventListener("click", tryCatch(closeAlert));
@@ -2429,7 +2429,7 @@ function getTextArea() {
     return document.getElementById("message_reponse") || document.getElementById("message_topic");
 }
 
-//Insertion de text en react
+//Insertion de texte avec framework react
 function setTextAreaValue(textarea, value) {
     const prototype = Object.getPrototypeOf(textarea);
     const nativeSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
@@ -2902,6 +2902,8 @@ function formatDate(date) {
     let day = date.getDate();
     let month = date.getMonth();
     let year = date.getFullYear();
+    // IF : Si la date est d'aujourd'hui : affichage heure (HH:MM:SS)
+    // ELSE : Sinon : affichage de la date complète (JJ/MM/AAAA)
     if (now.getDate() === day && now.getMonth() === month && now.getFullYear() === year) {
         return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
     } else {
