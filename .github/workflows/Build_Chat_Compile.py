@@ -7,6 +7,10 @@ output_file = sys.argv[2]
 with open(input_file, 'r', encoding='utf-8') as f:
     content = f.read()
 
+# Extraire les @require de l'ancien header (0, 1 ou N)
+requires = re.findall(r'^// @require\s+.+$', content, flags=re.MULTILINE)
+requires_block = "\n" + "\n".join(requires) if requires else ""
+
 # Extraire les valeurs à réutiliser depuis le fichier source
 version = re.search(r'// @version\s+(\S+)', content).group(1)
 
@@ -24,7 +28,7 @@ new_header = f"""// ==UserScript==
 // @match          http://*.jeuxvideo.com/forums/1-*
 // @match          https://*.jeuxvideo.com/forums/1-*
 // @require        https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js
-// @grant          none
+// @grant          none{requires_block}
 // @downloadURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.user.js
 // @updateURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.meta.js
 // ==/UserScript=="""
@@ -56,7 +60,9 @@ for line in lines:
 
     result.append(line)
 
-output = new_header + "\n\n" + "".join(result)
+result_text = "".join(result)
+
+output = new_header + "\n\n" + result_text
 
 with open(output_file, 'w', encoding='utf-8') as f:
     f.write(output)
