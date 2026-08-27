@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.140
+// @version        0.2.7.190
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2658,11 +2658,8 @@ function requestEdit(bloc) {
 }
 
 
-
 function requestDelete(bloc) {
-
-    let contentClasses = bloc.getElementsByClassName("jvchat-content")[0].classList;
-
+    let contentClasses = bloc.querySelector(".jvchat-content").classList;
     contentClasses.add("disabled-content");
 
     let id = parseInt(bloc.getAttribute("jvchat-id"));
@@ -2689,7 +2686,6 @@ function requestDelete(bloc) {
             bloc.getElementsByClassName("jvchat-edition")[0].classList.add("jvchat-hide");
         }
 
-
         bloc.closest(".jvchat-message").classList.add("jvchat-message-deleted");
         lastEditionTime[id] = [timestamp, edition, true];
 
@@ -2708,11 +2704,10 @@ function requestDelete(bloc) {
         contentClasses.remove("disabled-content");
     }
 
-
     let url = `https://www.jeuxvideo.com/forums/message/delete?ids=${id}&type=delete&ajax_hash=${encodeURIComponent(freshDeletionHash)}`;
-
     request("POST", url, onSuccess, onError, onTimeout, undefined, true, 5000, false);
 }
+
 
 function countLines(text) {
     return text.split(/\r|\r\n|\n/).length;
