@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.190
+// @version        0.2.7.210
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -101,7 +101,7 @@ header.jv-header-menu,
 .layout__footer,
 .layout__contentTop,
 .header,
-/* New Respawn 2*/
+/* New Respawn HIDE 2*/
 .lockInfo,
 #forums-topic-survey,
 .messageUser,
@@ -1330,11 +1330,12 @@ hr.jvchat-ruler:first-of-type {
 }
 /* [ADD Color] */
 
-/* [ADD Captcha] */
+/* [ADD Hide Captcha] */
 .messageEditor__containerEdit ~ div:not([class]):not(:last-of-type) {
-  display: none;
+    display: none;
 }
-/* [END Captcha] */
+/* [END Hide Captcha] */
+
 
 /* [ADD CSS LEGACY JVC ALERTE SONDAGE] */
 .alert-danger {
@@ -1691,13 +1692,15 @@ function buildURL(dict) {
 
 function getForum(document) {
     let links = document.querySelectorAll(".spreadContainer nav.breadcrumb > a");
+
+    // [... , Forum Principal XXX, (Forum XXX), Topic XXXX Page1]
+    // On filtre avec "Forum " et IMPORTANT s'il y en a 2 (sous forum) on prend le dernier élément avec .pop()
     let forumLink = [...links].filter(a => a.textContent.trim().startsWith("Forum ")).pop();
-    //Il faut filtrer avec "Forum " car ce node peut inclure la 1er page.
-    //POP() IMPORTANT => SI 2 elements contiennent "Forum " => il prend le dernier (sous-forum).
 
-    let title = forumLink.textContent.trim();
+    let title = forumLink.textContent.trim().replace("Forum ", "");
+    let href = forumLink.getAttribute("href");
 
-    return { href: forumLink.getAttribute("href"), title: title.replace("Forum ", "") };
+    return { href: href, title: title };
 }
 
 function getLastPage(document) {
@@ -1717,7 +1720,7 @@ function getLastPage(document) {
     }
     */
 
-    // New structure 2026 (On prend le numéro le plus grand )
+    // New structure 2026 (On recupere tout les numeros dans le bloc pagination et on garde le plus grand)
     let spans = document.querySelectorAll(".pagination__item, .pagination__button, .pagination__navigation a, .pagination__navigation span");
     let lastPage = 1;
     for (let span of spans) {
