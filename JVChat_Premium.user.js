@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.210
+// @version        0.2.7.215
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3014,7 +3014,7 @@ function addMessages(messages, editing, requestTimestamp) {
         // Purement cosmetique . En cas d'edition par le user.
         // Le DOM de JVChat est modifié dans la fonction submitEditmessage().
         // Mais JVC ne renvoie pas lheure le message va donc être ecrasé au prochain pool => l'animation va repop.
-        // Pour eviter une double saute on utilise la string "edited" comme flag pour eviter une animation en plus.
+        // Pour eviter une double saute on utilise la string "édité" comme flag pour eviter une animation en plus.
 
         let newBloc = makeMessage(message);
 
