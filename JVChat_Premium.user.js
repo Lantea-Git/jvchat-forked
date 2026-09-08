@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.670
+// @version        0.2.7.680
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1524,6 +1524,12 @@ function getPayload(doc) {
     }
 }
 
+function getHash(doc, payload) {
+    if (payload?.ajaxToken) {
+        return payload.ajaxToken;
+    }
+    return undefined;
+}
 
 function getDeletionHash(doc, payload) {
     if (payload?.topicActions?.deleteMessageUrl) {
@@ -3245,7 +3251,7 @@ function triggerJVChat() {
     }
 
     freshPayload = getPayload(document);
-    freshHash = freshPayload?.ajaxToken;
+    freshHash = getHash(document, freshPayload);
     freshDeletionHash = getDeletionHash(document, freshPayload);
 
     let topicUrl = document.URL;
@@ -3533,7 +3539,7 @@ function parsePage(res, requestTimestamp) {
         freshPayload = payload;
     }
 
-    let hash = freshPayload?.ajaxToken;
+    let hash = getHash(res, freshPayload);
     if (hash !== undefined) {
         freshHash = hash;
     }
