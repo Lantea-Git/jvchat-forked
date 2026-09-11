@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.680
+// @version        0.2.7.690
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1675,7 +1675,7 @@ function getForum(document) {
     // On filtre avec "Forum " et IMPORTANT s'il y en a 2 (sous forum) on prend le dernier élément avec .pop()
     let forumLink = [...links].filter(a => a.textContent.trim().startsWith("Forum ")).pop();
 
-    let title = forumLink.textContent.trim().replace("Forum ", "");
+    let title = forumLink.textContent.trim().split(" ").slice(1).join(" ");
     let href = forumLink.getAttribute("href");
 
     return { href: href, title: title };
@@ -1863,7 +1863,7 @@ function jvCake(cls) {
 }
 
 function detectMosaic(elem) {
-    let imagesShack = elem.querySelectorAll("img.message__urlImg"); // "img.class_img" exclu les spans sans src qui levent un erreur.
+    let imagesShack = elem.querySelectorAll(".message__urlImg[src]");
     if (imagesShack.length < 4) {
         return;
     }
@@ -1905,7 +1905,7 @@ function detectMosaic(elem) {
 }
 
 function improveImages(elem) {
-    let imagesShack = elem.querySelectorAll("img.message__urlImg"); // "img.class_img" exclu les spans sans src qui levent un erreur.
+    let imagesShack = elem.querySelectorAll(".message__urlImg[src]");
     for (let image of imagesShack) {
         let src = image.src;
         let parent = image.parentNode;
