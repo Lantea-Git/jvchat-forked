@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.910
+// @version        0.2.7.930
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2009,12 +2009,12 @@ function getPanelHtml() {
                         </label>
                         <p>Active un mode nuit pour protéger vos petits yeux fatigués le soir.</p>
                     </div>
-                    <div class="jvchat-config-option" id="jvchat-legacy-mode">
+                    <div class="jvchat-config-option" id="jvchat-risi-reduce">
                         <label>
-                            <input id="jvchat-legacy-mode-checkbox" type="checkbox">
-                            <span id="jvchat-legacy-mode-span">Interface Legacy</span>
+                            <input id="jvchat-risi-reduce-checkbox" type="checkbox">
+                            <span id="jvchat-risi-reduce-span">Limiter le bloc RisiBank</span>
                         </label>
-                        <p>Retablit le formulaire de 2024 dont la posibilité de reduire la hauteur.</p>
+                        <p>Applique l'ancienne hauteur maximale au bloc Risibank dans l'interface JVChat.</p>
                     </div>
                     <div class="jvchat-config-option" id="jvchat-load-imagesc">
                         <label>
@@ -2023,19 +2023,19 @@ function getPanelHtml() {
                         </label>
                         <p>Remplace les miniatures NoelShack avec l'image source complète afin de laisser apparaître la transparence (cela sollicite davantage votre connexion Internet).</p>
                     </div>
+                    <div class="jvchat-config-option" id="jvchat-legacy-mode">
+                        <label>
+                            <input id="jvchat-legacy-mode-checkbox" type="checkbox">
+                            <span id="jvchat-legacy-mode-span">Interface Legacy</span>
+                        </label>
+                        <p>Retablit le formulaire de 2024 dont la posibilité de reduire la hauteur.</p>
+                    </div>
                     <div class="jvchat-config-option" id="jvchat-hide-mosaic">
                         <label>
                             <input id="jvchat-hide-mosaic-checkbox" type="checkbox">
                             <span id="jvchat-hide-mosaic-span">Masquer les mosaïques</span>
                         </label>
                         <p>Cache automatiquement les mosaïques d'images NoelShack pour réduire le flooding.</p>
-                    </div>
-                    <div class="jvchat-config-option" id="jvchat-risi-reduce">
-                        <label>
-                            <input id="jvchat-risi-reduce-checkbox" type="checkbox">
-                            <span id="jvchat-risi-reduce-span">Limiter le bloc RisiBank</span>
-                        </label>
-                        <p>Applique l'ancienne hauteur maximale au bloc Risibank dans l'interface JVChat.</p>
                     </div>
                     <div class="jvchat-config-option" id="jvchat-turbo-delay">
                         <label>
