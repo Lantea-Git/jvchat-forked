@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.950
+// @version        0.2.7.960
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -991,6 +991,9 @@ hr.jvchat-ruler:first-of-type {
     cursor: pointer;
 }
 
+.jvchat-risi-reduce-mode #risibank-container {
+    max-height: 165px;
+}
 
 .jvchat-night-mode #jvchat-leftbar > .panel {
     background-color: #2f3136 !important;
@@ -1331,12 +1334,6 @@ hr.jvchat-ruler:first-of-type {
     text-decoration: none;
 }
 /* [ADD Color] */
-
-/* [Risibank Reduce 2026] */
-.jvchat-risi-reduce-mode #risibank-container {
-    max-height: 165px;
-}
-/* [Risibank Reduce 2026] */
 
 
 /* [ADD Hide Captcha] */
@@ -2166,7 +2163,7 @@ function clearPage(document) {
     document.getElementById("jvchat-risi-reduce-checkbox").checked = configuration["risibank_reduce"];
     document.getElementById("jvchat-risi-reduce-checkbox").addEventListener("change", tryCatch(risibankReduceModeOption));
     if (configuration["risibank_reduce"]) {
-        document.getElementById("page-messages-forum").classList.add("jvchat-risi-reduce-mode");
+        document.getElementById("bloc-formulaire-forum")?.classList.add("jvchat-risi-reduce-mode");
     }
 
     document.getElementById("jvchat-hide-mosaic-checkbox").checked = configuration["hide_mosaic"];
@@ -2320,7 +2317,7 @@ function risibankReduceModeOption(event) {
     let checked = document.getElementById("jvchat-risi-reduce-checkbox").checked;
     configuration["risibank_reduce"] = checked;
     saveConfig();
-    document.getElementById("page-messages-forum").classList.toggle("jvchat-risi-reduce-mode");
+    document.getElementById("bloc-formulaire-forum")?.classList.toggle("jvchat-risi-reduce-mode");
 }
 
 function toggleHideMosaicOption(event) {
