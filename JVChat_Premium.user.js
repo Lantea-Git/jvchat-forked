@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.7.960
+// @version        0.2.7.970
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2162,6 +2162,10 @@ function clearPage(document) {
 
     document.getElementById("jvchat-risi-reduce-checkbox").checked = configuration["risibank_reduce"];
     document.getElementById("jvchat-risi-reduce-checkbox").addEventListener("change", tryCatch(risibankReduceModeOption));
+    const risiBankIsInstalled = document.querySelector(".risibank-toggle");
+    if (!risiBankIsInstalled) {
+        document.getElementById("jvchat-risi-reduce").classList.add("jvchat-hide");
+    }
     if (configuration["risibank_reduce"]) {
         document.getElementById("bloc-formulaire-forum")?.classList.add("jvchat-risi-reduce-mode");
     }
