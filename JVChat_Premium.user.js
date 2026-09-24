@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.000
+// @version        0.2.8.010
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2029,7 +2029,7 @@ function getPanelHtml() {
                     </div>
                     <div class="jvchat-config-option" id="jvchat-risi-reduce">
                         <label>
-                            <span>Hauteur Max Risi</span>
+                            <span>Hauteur Max RisiBank</span>
                         </label>
                         <div class='jvchat-range-option'>
                             <input id="jvchat-risi-reduce-range" type="range" min="165" max="285" step="1">
