@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.020
+// @version        0.2.8.030
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2034,7 +2034,7 @@ function getPanelHtml() {
                             <input id="jvchat-risi-reduce-range" type="range" min="165" max="285" step="1">
                             <span id="jvchat-risi-reduce-span">px</span>
                         </div>
-                        <p>Limite la hauteur maximale du bloc Risibank dans l'interface JVChat. (Min = Ancienne Hauteur).</p>
+                        <p>Cap la hauteur maximale du bloc Risibank (Uniquement dans JVChat.)</p>
                     </div>
                     <div class="jvchat-config-option" id="jvchat-turbo-delay">
                         <label>
