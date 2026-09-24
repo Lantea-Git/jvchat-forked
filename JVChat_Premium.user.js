@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.010
+// @version        0.2.8.020
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -982,10 +982,9 @@ hr.jvchat-ruler:first-of-type {
 #jvchat-play-sound-checkbox,
 #jvchat-play-sound-span,
 
+#jvchat-risi-reduce-range,
 #jvchat-legacy-mode-checkbox,
 #jvchat-legacy-mode-span,
-#jvchat-risi-reduce-range,
-#jvchat-risi-reduce-span,
 #jvchat-citation-checkbox,
 #jvchat-citation-span {
     cursor: pointer;
