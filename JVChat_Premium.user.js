@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.030
+// @version        0.2.8.050
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2875,6 +2875,18 @@ function formatDate(date) {
         return `${day.toString().padStart(2, "0")}/${(month + 1).toString().padStart(2, "0")}/${year}`;
     }
 }
+
+/* VERSION MODERNE LISIBLE (POUR DOCUMENTATION OU REPRISE / MATHEMATIQUEMENT INDENTIQUE MAIS PLUS LENTE).
+function formatDate(date) {
+    let now = new Date(new Date().toLocaleString('en-US', { timeZone: "Europe/Paris" }));
+    // IF : (HH:MM:SS) / ELSE :(JJ/MM/AAAA)
+    if (now.toDateString() === date.toDateString()) {
+        return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    } else {
+        return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+}
+*/
 
 function makeMessage(message) {
     let content = message.content;
