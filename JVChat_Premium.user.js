@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.050
+// @version        0.2.8.080
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1516,7 +1516,7 @@ function getPayload(doc) {
             // Depuis le 11 juin 2026, jvc.forumsAppPayload est en base64(gzip(JSON)).
             // Info : www.jeuxvideo.com/forums/message/1300105844
             // libs fflate utilisé ici car DecompressionStream natif force asynch.
-            const bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
+            const bytes = fflate.strToU8(atob(rawPayload64Gzip), true);
             const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
             const json = new TextDecoder().decode(decompressed);
             return JSON.parse(json); // GZIP + BASE 64
@@ -2857,6 +2857,7 @@ function findDeletedMessages(res, requestTimestamp) {
     }
 }
 
+
 function formatDate(date) {
     let now = new Date();
     try {
@@ -2864,29 +2865,14 @@ function formatDate(date) {
     } catch (e) {
         console.error(e);
     }
-    let day = date.getDate();
-    let month = date.getMonth();
-    let year = date.getFullYear();
     // IF : Si la date est d'aujourd'hui : affichage heure (HH:MM:SS)
     // ELSE : Sinon : affichage de la date complète (JJ/MM/AAAA)
-    if (now.getDate() === day && now.getMonth() === month && now.getFullYear() === year) {
-        return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
-    } else {
-        return `${day.toString().padStart(2, "0")}/${(month + 1).toString().padStart(2, "0")}/${year}`;
-    }
-}
-
-/* VERSION MODERNE LISIBLE (POUR DOCUMENTATION OU REPRISE / MATHEMATIQUEMENT INDENTIQUE MAIS PLUS LENTE).
-function formatDate(date) {
-    let now = new Date(new Date().toLocaleString('en-US', { timeZone: "Europe/Paris" }));
-    // IF : (HH:MM:SS) / ELSE :(JJ/MM/AAAA)
     if (now.toDateString() === date.toDateString()) {
         return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     } else {
         return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 }
-*/
 
 function makeMessage(message) {
     let content = message.content;
