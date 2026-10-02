@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.080
+// @version        0.2.8.100
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -2857,7 +2857,6 @@ function findDeletedMessages(res, requestTimestamp) {
     }
 }
 
-
 function formatDate(date) {
     let now = new Date();
     try {
@@ -2865,12 +2864,15 @@ function formatDate(date) {
     } catch (e) {
         console.error(e);
     }
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
     // IF : Si la date est d'aujourd'hui : affichage heure (HH:MM:SS)
     // ELSE : Sinon : affichage de la date complète (JJ/MM/AAAA)
-    if (now.toDateString() === date.toDateString()) {
-        return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    if (now.getDate() === day && now.getMonth() === month && now.getFullYear() === year) {
+        return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
     } else {
-        return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        return `${day.toString().padStart(2, "0")}/${(month + 1).toString().padStart(2, "0")}/${year}`;
     }
 }
 
