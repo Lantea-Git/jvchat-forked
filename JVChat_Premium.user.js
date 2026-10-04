@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.110
+// @version        0.2.8.120
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -689,7 +689,7 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .jvchat-content .message__urlImgLarge {
-    width: 400px;
+    width: 300px;
     max-width: 100%; /*Catch Max for Mobile*/
     aspect-ratio: 16 / 9;
     height: auto;
@@ -697,8 +697,8 @@ hr.jvchat-ruler:first-of-type {
 }
 
 .jvchat-content .player-contenu {
+    width: 300px;
     max-width : 100%; /*Catch Max for Mobile*/
-    width: 400px;
 }
 
 .new-stickers {
