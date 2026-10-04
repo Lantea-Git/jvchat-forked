@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.120
+// @version        0.2.8.130
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1852,9 +1852,10 @@ function fixMessage(elem) {
     //Images larges : fix du lazyload (les images larges sont en css => donc lasyload maison jvc => on doit le fix à la main)
     let lazyImagesShack = elem.querySelectorAll('.message__urlImg:not(img)');
     for (let lazyImageShack of lazyImagesShack) {
-        let lazySrcShack = lazyImageShack.dataset.srcBackground; // [data-src-background]
+        let lazySrcShack = lazyImageShack.getAttribute('data-src-background');
         if (!lazySrcShack) continue;
         lazyImageShack.style.backgroundImage = `url(${lazySrcShack})`;
+        lazyImageShack.removeAttribute('data-src-background');
         lazyImageShack.style.paddingBottom = '0';
     }
 
