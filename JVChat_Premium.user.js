@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.130
+// @version        0.2.8.150
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1516,7 +1516,12 @@ function getPayload(doc) {
             // Depuis le 11 juin 2026, jvc.forumsAppPayload est en base64(gzip(JSON)).
             // Info : www.jeuxvideo.com/forums/message/1300105844
             // libs fflate utilisé ici car DecompressionStream natif force asynch.
-            const bytes = fflate.strToU8(atob(rawPayload64Gzip), true);
+            let bytes;
+            if (Uint8Array.fromBase64) {
+                bytes = Uint8Array.fromBase64(rawPayload64Gzip);
+            } else {
+                bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
+            }
             const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
             const json = new TextDecoder().decode(decompressed);
             return JSON.parse(json); // GZIP + BASE 64
