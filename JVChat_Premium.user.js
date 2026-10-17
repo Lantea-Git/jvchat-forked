@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.160
+// @version        0.2.8.165
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1835,7 +1835,7 @@ function parseTopicInfo(elem, payload) {
 }
 
 function fixMessage(elem) {
-    //Fix JV Care : transforme span en balise a avec un lien, voir jvflux (Tech) pour plus d'infos , spread pour figée la html live collection
+    //Fix JV Care : transforme span en balise a avec un lien, voir jvflux (Tech) pour plus d'infos ,array.from pour figée la html live collection
     let jvcares = Array.from(elem.getElementsByClassName("JvCare"));
     for (let jvcare of jvcares) {
         let a = document.createElement("a");
