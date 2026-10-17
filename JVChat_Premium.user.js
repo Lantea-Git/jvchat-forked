@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.165
+// @version        0.2.8.170
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1686,7 +1686,7 @@ function getForum(document) {
     // On filtre avec "Forum " et IMPORTANT s'il y en a 2 (sous forum) on prend le dernier élément avec .pop()
     let forumLink = [...links].filter(a => a.textContent.trim().startsWith("Forum ")).pop();
 
-    let title = forumLink.textContent.trim().split(" ").slice(1).join(" ");
+    let title = forumLink.textContent.trim().replace("Forum ", "");
     let href = forumLink.getAttribute("href");
 
     return { href: href, title: title };
@@ -1751,7 +1751,7 @@ function parseMessage(elem) {
 
     let author = conteneur.getElementsByClassName("bloc-pseudo-msg")[0].textContent.trim();
 
-    let classUser = Array.from(conteneur.getElementsByClassName("bloc-pseudo-msg")[0].classList).pop();
+    let classUser = [...conteneur.getElementsByClassName("bloc-pseudo-msg")[0].classList].pop();
 
     let blacklisted = conteneurs[0].classList.contains("conteneur-message-blacklist");
 
@@ -1875,7 +1875,7 @@ function jvCake(cls) {
 }
 
 function detectMosaic(elem) {
-    let imagesShack = elem.querySelectorAll(".message__urlImg[src]");
+    let imagesShack = elem.querySelectorAll("img.message__urlImg");
     if (imagesShack.length < 4) {
         return;
     }
