@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.170
+// @version        0.2.8.200
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1792,7 +1792,11 @@ function parseMessage(elem) {
     */
 }
 
-function parseUserInfo(elem) {
+function parseUserInfo(elem, payload) {
+    let headerUser = elem.querySelector(".header__globalUser");
+    if (!headerUser) { // Pas de Header FallBack Update Site
+        return { author: "JVChat", avatar: "https://image.jeuxvideo.com/avatar-md/default.jpg", mp: 0, notif: 0 };
+    }
     let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") || elem.querySelector(".headerAccount__pm");
     if (!accountMp) { // Pas d'icone MP === User Deconnecté = on return undefined et on skip.
         return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
@@ -3300,7 +3304,7 @@ function triggerJVChat() {
 
     let topicUrl = document.URL;
     let topic = parseTopicInfo(document, freshPayload);
-    let user = parseUserInfo(document);
+    let user = parseUserInfo(document, freshPayload);
     let sondage = parseSondage(document, freshPayload?.survey);
 
     urlToFetch = parseURL(topicUrl);
@@ -3596,7 +3600,7 @@ function parsePage(res, requestTimestamp) {
     let messages = getMessages(res);
     addMessages(messages, false, requestTimestamp, false);
 
-    let user = parseUserInfo(res);
+    let user = parseUserInfo(res, freshPayload);
     setUser(document, user);
 
     let topic = parseTopicInfo(res, freshPayload);
