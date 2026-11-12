@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.200
+// @version        0.2.8.220
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1518,9 +1518,9 @@ function getPayload(doc) {
             // libs fflate utilisé ici car DecompressionStream natif force asynch.
             let bytes;
             if (Uint8Array.fromBase64) {
-                bytes = Uint8Array.fromBase64(rawPayload64Gzip);
+                bytes = Uint8Array.fromBase64(rawPayload64Gzip); //Natif 2024 Browser
             } else {
-                bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0));
+                bytes = Uint8Array.from(atob(rawPayload64Gzip), c => c.charCodeAt(0)); //FallBack 2023 Browser
             }
             const decompressed = fflate.gunzipSync(bytes); // UnGZIP Synch
             const json = new TextDecoder().decode(decompressed);
