@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.970
+// @version        0.2.8.983
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3790,8 +3790,8 @@ function bindJVChatButton(document) {
 
 //#OFFFORVPN:REMOVE-START
 function request(mode, url, callbackSuccess, callbackError, callbackTimeout, data, json, timeout, nocache) {
-    // Utilisation GM.xmlHttpRequest pour header "Sec-Fetch" (forbidden in vanilla JS)
-    // IMMENSE MERCI A SOPHUS-CH POUR CETTE IDEE
+    // Utilisation GM.xmlHttpRequest pour header "Sec-Fetch"
+    // IMMENSE MERCI À SOPHUS-CH !!
     json = !!json;
 
     const headers = {};
