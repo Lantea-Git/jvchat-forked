@@ -4,13 +4,13 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.700
+// @version        0.2.8.900
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
 // @match          http://*.jeuxvideo.com/forums/1-*
 // @match          https://*.jeuxvideo.com/forums/1-*
-// @grant          none
+// @grant          GM.xmlHttpRequest
 // @require        https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js
 // @downloadURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.user.js
 // @updateURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.meta.js
@@ -19,6 +19,8 @@
 // CECI EST UN FORK NON OFFICIEL (90% DU TRAVAIL EST ISSU DU TRAVAIL COLOSSAL DE Rand0max / Sans lui et Blaff ce script ne serait plus là).
 // PENSEZ A DESACTIVER JVCHAT OFFICEL (SI INSTALLÉ) SINON CONFLIT ET CRASH.
 // LA VERSION OFFICIELLE DE RANDOMAX EST ICI : https://jvscript.fr/script/jvchat-premium
+
+// IMMENSE MERCI A SOPHUS-CH POUR SON IDÉE DE LUTILISATION DU MODULE GM POUR LES HEADERS HTTP
 
 /*
 API : les développeurs peuvent créer des "plugins" pour JVChat à l'aide d'un système d'évènements.
@@ -1425,9 +1427,7 @@ let firstMessageDate = undefined;
 let lastEditionTime = {};  // id => [timestamp, edition, deleted]
 let messagesByPage = {};
 let userConnected = undefined;
-// let updateIntervals = [2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30, 60];
-// VPN 429
-let updateIntervals = [10, 12, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 35, 35, 35, 35, 35, 35, 35, 35, 60];
+let updateIntervals = [2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30, 60];
 let transisitions = [0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 19, 19, 19, 19, 19, 19, 19, 19, 31];
 let updateIntervalIdx = 2;
 let updateIntervalMax = updateIntervals.length - 1;
@@ -3417,15 +3417,6 @@ function updateMessages(page, goToLast) {
         return;
     }
 
-    // ##   VPN429 NO REQUET BACKGROUND
-    if (document.hidden) {
-        currentTimeoutId = setTimeout(tryCatch(function () {
-            updateMessages(page, goToLast);
-        }), 5000);
-        return;
-    }
-    // ## VPN429 NO REQUET BACKGROUND
-
     let timestamp = getTimestamp();
 
     function scheduleNextUpdate(interval, p, goLast) {
@@ -3442,9 +3433,7 @@ function updateMessages(page, goToLast) {
         let interval = turboActivated ? configuration["turbo_delay"] : updateIntervals[updateIntervalIdx] * 1000;
 
         if (page < lastPage && goToLast) {
-            // ## VPN429
-            //updateMessages(page + 1, true);
-            scheduleNextUpdate(2000, page + 1, true);
+            updateMessages(page + 1, true);
         } else if (currPage < page || parsed.nbMessagesPage === 0) {  // Bug des messages supprimés
             scheduleNextUpdate(interval, page - 1, false);
         } else if (page > lastPage) {
@@ -3800,6 +3789,72 @@ function bindJVChatButton(document) {
 }
 
 function request(mode, url, callbackSuccess, callbackError, callbackTimeout, data, json, timeout, nocache) {
+    // Utilisation GM.xmlHttpRequest pour header "Sec-Fetch"
+    // IMMENSE MERCI à Sophus-ch https://www.jeuxvideo.com/forums/message/1315105881
+    json = !!json;
+
+    const headers = {};
+
+    if (json) {
+        headers.Accept = "application/json";
+        headers["x-requested-with"] = "XMLHttpRequest";
+    } else {
+        headers.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/jxl,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7";
+        headers["Sec-Fetch-Dest"] = "document";
+        headers["Sec-Fetch-Mode"] = "navigate";
+        headers["Sec-Fetch-Site"] = "same-origin";
+        headers["Sec-Fetch-User"] = "?1";
+        headers["Upgrade-Insecure-Requests"] = "1";
+    }
+
+    if (nocache) {
+        headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    }
+
+    if (data === undefined) {
+        data = null;
+    }
+
+    console.log(`GM.request ${mode} ${url}${json ? ' (json)' : ''}${nocache ? ' (nocache)' : ''}`);
+
+    GM.xmlHttpRequest({
+        method: mode,
+        url: url,
+        headers: headers,
+        data: data,
+        timeout: timeout,
+        responseType: json ? "json" : "document",
+
+        onload: tryCatch(function xhrOnLoad(r) {
+            console.log(`GM.request ${r.status} ${url}`);
+            if (r.status !== 200) {
+                callbackError(`La requête a retourné une erreur (${r.status}) : ${r.statusText}`, r.status);
+                return;
+            }
+            callbackSuccess(r.response, r.finalUrl);
+        }),
+
+        onerror: tryCatch(function xhrOnError(r) {
+            console.warn(`GM.request x error ${r.status} ${url}`);
+            callbackError(`La requête a échoué (${r.status}): ${r.statusText}`, r.status);
+        }),
+
+        ontimeout: tryCatch(function xhrOnTimeout() {
+            console.warn(`GM.request x timeout ${url}`);
+            callbackTimeout(`La délai d'attente de la requête a expiré`);
+        }),
+
+        onabort: tryCatch(function xhrOnAbort() {
+            console.warn(`GM.request x abort ${url}`);
+            if (!leavingTopic) {
+                callbackTimeout(`La requête a été interrompue pour une raison inconnue`);
+            }
+        })
+    });
+};
+
+/*
+function request(mode, url, callbackSuccess, callbackError, callbackTimeout, data, json, timeout, nocache) {
     json = !!json;
     let xhr = new XMLHttpRequest();
     xhr.timeout = timeout;
@@ -3846,6 +3901,7 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
 
     xhr.send(data);
 };
+*/
 
 // On copie/colle le code de TopicLive et on se sent développeur :)
 function makeFavicon() {
