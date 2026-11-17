@@ -1,6 +1,6 @@
 # **JVChat Premium** - Fork
 
-### FORK du fork 0.2.0 avec quelques correction de bugs compatibilité greasymonkey 
+### FORK du fork 0.2.0 avec quelques correction de bugs 
 <a href="https://greasyfork.org/fr/scripts/576263-jv-chat-custsom-fork"><img src="https://img.shields.io/badge/Installer%20Fork%20du%20Fork-Green?style=for-the-badge&color=1E971E" alt="Installer Fork du Fork"></a>
 
 
