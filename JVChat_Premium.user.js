@@ -1,19 +1,17 @@
 // ==UserScript==
-// @name           JV_Chat_Custsom_Fork
-// @description    Outil de discussion instantanée (Fork et debug)
+// @name           VPN_JV_Chat
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (VPN Build 0.2.8.983)
 // @author         Blaff, Rand0max, Atlantis
-// @namespace      JV_Chat_Custsom_Fork
+// @namespace      VPN_JV_Chat
 // @license        MIT
 // @version        0.2.8.983
-// @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
+// @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
 // @match          http://*.jeuxvideo.com/forums/1-*
 // @match          https://*.jeuxvideo.com/forums/1-*
-// @grant          GM.xmlHttpRequest
+// @grant          none
 // @require        https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js
-// @downloadURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.user.js
-// @updateURL https://update.greasyfork.org/scripts/576263/JV_Chat_Custsom_Fork.meta.js
 // ==/UserScript==
 
 // CECI EST UN FORK NON OFFICIEL (90% DU TRAVAIL EST ISSU DU TRAVAIL COLOSSAL DE Rand0max / Sans lui et Blaff ce script ne serait plus là).
@@ -1427,7 +1425,7 @@ let firstMessageDate = undefined;
 let lastEditionTime = {};  // id => [timestamp, edition, deleted]
 let messagesByPage = {};
 let userConnected = undefined;
-let updateIntervals = [2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30, 60];
+let updateIntervals = [10, 12, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 35, 35, 35, 35, 35, 35, 35, 35, 60];
 let transisitions = [0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 19, 19, 19, 19, 19, 19, 19, 19, 31];
 let updateIntervalIdx = 2;
 let updateIntervalMax = updateIntervals.length - 1;
@@ -1961,7 +1959,7 @@ function getPanelHtml() {
         <div class='panel-body'>
             <div id='jvchat-info'>
                 <div id='jvchat-profil' class='jvchat-hide'>
-                    <h4 class='titre-info-fofo'>Profil</h4>
+                    <h4 class='titre-info-fofo'>Low Requetes</h4>
                     <h4 id='jvchat-user-pseudo'></h4>
                     <div id='jvchat-user-info'>
                         <a title="Ouvrir le profil" id="jvchat-user-avatar-link" target="_blank"><div id='jvchat-user-avatar' class='jvchat-rounded jvchat-user-avatar'></div></a>
@@ -3417,6 +3415,15 @@ function updateMessages(page, goToLast) {
         return;
     }
 
+    // ##   VPN429 NO REQUET BACKGROUND
+    if (document.hidden) {
+        currentTimeoutId = setTimeout(tryCatch(function () {
+            updateMessages(page, goToLast);
+        }), 5000);
+        return;
+    }
+    // ## VPN429 NO REQUET BACKGROUND
+
     let timestamp = getTimestamp();
 
     function scheduleNextUpdate(interval, p, goLast) {
@@ -3433,7 +3440,7 @@ function updateMessages(page, goToLast) {
         let interval = turboActivated ? configuration["turbo_delay"] : updateIntervals[updateIntervalIdx] * 1000;
 
         if (page < lastPage && goToLast) {
-            updateMessages(page + 1, true);
+            scheduleNextUpdate(2000, page + 1, true);
         } else if (currPage < page || parsed.nbMessagesPage === 0) {  // Bug des messages supprimés
             scheduleNextUpdate(interval, page - 1, false);
         } else if (page > lastPage) {
@@ -3788,82 +3795,7 @@ function bindJVChatButton(document) {
     }
 }
 
-//#OFFFORVPN:REMOVE-START
-function request(mode, url, callbackSuccess, callbackError, callbackTimeout, data, json, timeout, nocache) {
-    // Utilisation GM.xmlHttpRequest pour header "Sec-Fetch"
-    // IMMENSE MERCI À SOPHUS-CH !!
-    json = !!json;
 
-    const headers = {};
-
-    if (json) {
-        headers.Accept = "application/json";
-        headers["x-requested-with"] = "XMLHttpRequest";
-    } else {
-        headers.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/jxl,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7";
-        headers["Sec-Fetch-Dest"] = "document";
-        headers["Sec-Fetch-Mode"] = "navigate";
-        headers["Sec-Fetch-Site"] = "same-origin";
-        headers["Sec-Fetch-User"] = "?1";
-        headers["Upgrade-Insecure-Requests"] = "1";
-    }
-
-    if (nocache) {
-        headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-    }
-
-    if (data === undefined) {
-        data = null;
-    }
-
-    GM.xmlHttpRequest({
-        method: mode,
-        url: url,
-        headers: headers,
-        data: data,
-        timeout: timeout,
-
-        cookiePartition: {
-            topLevelSite: location.origin
-        },
-
-        onload: tryCatch(function xhrOnLoad(r) {
-            console.log(`GM.request ${r.status} ${url}`);
-            if (r.status !== 200) {
-                callbackError(`La requête a retourné une erreur (${r.status}) : ${r.statusText}`, r.status);
-                return;
-            }
-            let parsed;
-            try {
-                parsed = json ? JSON.parse(r.responseText) : new DOMParser().parseFromString(r.responseText, "text/html");
-            } catch (e) {
-                callbackError(`Réponse invalide du serveur (${e.message})`, r.status);
-                return;
-            }
-            callbackSuccess(parsed, r.finalUrl);
-        }),
-
-        onerror: tryCatch(function xhrOnError(r) {
-            console.warn(`GM.request x error ${r.status} ${url}`);
-            callbackError(`La requête a échoué (${r.status}): ${r.statusText}`, r.status);
-        }),
-
-        ontimeout: tryCatch(function xhrOnTimeout() {
-            console.warn(`GM.request x timeout ${url}`);
-            callbackTimeout(`La délai d'attente de la requête a expiré`);
-        }),
-
-        onabort: tryCatch(function xhrOnAbort() {
-            console.warn(`GM.request x abort ${url}`);
-            if (!leavingTopic) {
-                callbackTimeout(`La requête a été interrompue pour une raison inconnue`);
-            }
-        })
-    });
-};
-// #OFFFORVPN:REMOVE-END
-
-/* #FORVPN:UNCOMMENT
 
 function request(mode, url, callbackSuccess, callbackError, callbackTimeout, data, json, timeout, nocache) {
     json = !!json;
@@ -3913,7 +3845,6 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
     xhr.send(data);
 };
 
-#FORVPN:UNCOMMENT */
 
 // On copie/colle le code de TopicLive et on se sent développeur :)
 function makeFavicon() {
