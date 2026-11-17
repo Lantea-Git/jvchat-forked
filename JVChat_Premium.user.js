@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.910
+// @version        0.2.8.920
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3824,6 +3824,10 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         data: data,
         timeout: timeout,
         responseType: json ? "json" : "document",
+
+        cookiePartition: {
+            topLevelSite: location.origin
+        },
 
         onload: tryCatch(function xhrOnLoad(r) {
             console.log(`GM.request ${r.status} ${url}`);
