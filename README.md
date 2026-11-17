@@ -3,8 +3,7 @@
 ### FORK du fork 0.2.0 avec quelques correction de bugs 
 <a href="https://greasyfork.org/fr/scripts/576263-jv-chat-custsom-fork"><img src="https://img.shields.io/badge/Installer%20Fork-Green?style=for-the-badge&color=1E971E" alt="Installer Fork"></a>
 
-
-<a href="https://greasyfork.org/fr/scripts/581221-jv-chatgreasymonkey-ios-429"><img src="https://img.shields.io/badge/Version%20compatible%20GreasyMonkey%20(Low%20resquet)-blue?style=for-the-badge" alt="Version compatible GreasyMonkey (Low resquet)"></a>
+<a href="https://greasyfork.org/fr/scripts/581221-jv-chatgreasymonkey-ios-429"><img src="https://img.shields.io/badge/Version%20Eco%2B%20requetes%20GreasyMonkey-blue?style=for-the-badge" alt="Version Eco+ requetes GreasyMonkey"></a>
 
 ### Ceci est un fork la version officielle de Rand0max est ici => https://jvscript.fr/script/jvchat-premium
 ### Je voulais corriger quelques bugs apporter la compatibilité avec iOS et greasymonkey , Sauf que ça s'éloigne de plus en plus du code de Rand0Max donc je laisse ce fork a part, Il marche mais il devient trop différent pour être mergé.
