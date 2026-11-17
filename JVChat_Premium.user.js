@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name           VPN_JV_Chat
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (VPN Build 0.2.8.983)
+// @name           JVChat_GreasyMonkey_iOS_429
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Roquete 0.2.8.983)
 // @author         Blaff, Rand0max, Atlantis
-// @namespace      VPN_JV_Chat
+// @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
 // @version        0.2.8.983
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
