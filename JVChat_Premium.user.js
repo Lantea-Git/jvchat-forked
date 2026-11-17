@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.500
+// @version        0.2.8.600
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3444,7 +3444,7 @@ function updateMessages(page, goToLast) {
         if (page < lastPage && goToLast) {
             // ## VPN429
             //updateMessages(page + 1, true);
-            scheduleNextUpdate(3000, page + 1, true);
+            scheduleNextUpdate(1000, page + 1, true);
         } else if (currPage < page || parsed.nbMessagesPage === 0) {  // Bug des messages supprimés
             scheduleNextUpdate(interval, page - 1, false);
         } else if (page > lastPage) {
