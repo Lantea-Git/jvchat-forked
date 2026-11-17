@@ -16,10 +16,10 @@ version = re.search(r'// @version\s+(\S+)', content).group(1)
 
 # Définir le nouveau header
 new_header = f"""// ==UserScript==
-// @name           VPN_JV_Chat
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (VPN Build {version})
+// @name           JVChat_GreasyMonkey_iOS_429
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Roquete {version})
 // @author         Blaff, Rand0max, Atlantis
-// @namespace      VPN_JV_Chat
+// @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
 // @version        {version}
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
