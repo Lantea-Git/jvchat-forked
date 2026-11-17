@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.230
+// @version        0.2.8.500
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1425,7 +1425,9 @@ let firstMessageDate = undefined;
 let lastEditionTime = {};  // id => [timestamp, edition, deleted]
 let messagesByPage = {};
 let userConnected = undefined;
-let updateIntervals = [2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30, 60];
+// let updateIntervals = [2, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 30, 30, 60];
+// VPN 429
+let updateIntervals = [10, 12, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 35, 35, 35, 35, 35, 35, 35, 35, 60];
 let transisitions = [0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 19, 19, 19, 19, 19, 19, 19, 19, 31];
 let updateIntervalIdx = 2;
 let updateIntervalMax = updateIntervals.length - 1;
@@ -3415,6 +3417,15 @@ function updateMessages(page, goToLast) {
         return;
     }
 
+    // ##   VPN429 NO REQUET BACKGROUND
+    if (document.hidden) {
+        currentTimeoutId = setTimeout(tryCatch(function () {
+            updateMessages(page, goToLast);
+        }), 5000);
+        return;
+    }
+    // ## VPN429 NO REQUET BACKGROUND
+
     let timestamp = getTimestamp();
 
     function scheduleNextUpdate(interval, p, goLast) {
@@ -3431,7 +3442,9 @@ function updateMessages(page, goToLast) {
         let interval = turboActivated ? configuration["turbo_delay"] : updateIntervals[updateIntervalIdx] * 1000;
 
         if (page < lastPage && goToLast) {
-            updateMessages(page + 1, true);
+            // ## VPN429
+            //updateMessages(page + 1, true);
+            scheduleNextUpdate(3000, page + 1, true);
         } else if (currPage < page || parsed.nbMessagesPage === 0) {  // Bug des messages supprimés
             scheduleNextUpdate(interval, page - 1, false);
         } else if (page > lastPage) {
