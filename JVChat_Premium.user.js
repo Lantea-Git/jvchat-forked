@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.920
+// @version        0.2.8.960
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3788,6 +3788,7 @@ function bindJVChatButton(document) {
     }
 }
 
+//#OFFFORVPN:REMOVE-START
 function request(mode, url, callbackSuccess, callbackError, callbackTimeout, data, json, timeout, nocache) {
     // Utilisation GM.xmlHttpRequest pour header "Sec-Fetch"
     // IMMENSE MERCI à Sophus-ch https://www.jeuxvideo.com/forums/message/1315105881
@@ -3815,15 +3816,12 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         data = null;
     }
 
-    console.log(`GM.request ${mode} ${url}${json ? ' (json)' : ''}${nocache ? ' (nocache)' : ''}`);
-
     GM.xmlHttpRequest({
         method: mode,
         url: url,
         headers: headers,
         data: data,
         timeout: timeout,
-        responseType: json ? "json" : "document",
 
         cookiePartition: {
             topLevelSite: location.origin
@@ -3835,7 +3833,14 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
                 callbackError(`La requête a retourné une erreur (${r.status}) : ${r.statusText}`, r.status);
                 return;
             }
-            callbackSuccess(r.response, r.finalUrl);
+            let parsed;
+            try {
+                parsed = json ? JSON.parse(r.responseText) : new DOMParser().parseFromString(r.responseText, "text/html");
+            } catch (e) {
+                callbackError(`Réponse invalide du serveur (${e.message})`, r.status);
+                return;
+            }
+            callbackSuccess(parsed, r.finalUrl);
         }),
 
         onerror: tryCatch(function xhrOnError(r) {
@@ -3856,8 +3861,10 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         })
     });
 };
+// #OFFFORVPN:REMOVE-END
 
-/*
+/* #FORVPN:UNCOMMENT
+
 function request(mode, url, callbackSuccess, callbackError, callbackTimeout, data, json, timeout, nocache) {
     json = !!json;
     let xhr = new XMLHttpRequest();
@@ -3905,7 +3912,8 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
 
     xhr.send(data);
 };
-*/
+
+#FORVPN:UNCOMMENT */
 
 // On copie/colle le code de TopicLive et on se sent développeur :)
 function makeFavicon() {
