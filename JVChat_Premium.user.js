@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JVChat_GreasyMonkey_iOS_429
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.8.986)
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.8.987)
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
-// @version        0.2.8.986
+// @version        0.2.8.987
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1959,7 +1959,7 @@ function getPanelHtml() {
         <div class='panel-body'>
             <div id='jvchat-info'>
                 <div id='jvchat-profil' class='jvchat-hide'>
-                    <h4 class='titre-info-fofo'>Low Requetes</h4>
+                    <h4 class='titre-info-fofo'>Profil</h4>
                     <h4 id='jvchat-user-pseudo'></h4>
                     <div id='jvchat-user-info'>
                         <a title="Ouvrir le profil" id="jvchat-user-avatar-link" target="_blank"><div id='jvchat-user-avatar' class='jvchat-rounded jvchat-user-avatar'></div></a>
@@ -3440,7 +3440,7 @@ function updateMessages(page, goToLast) {
         let interval = turboActivated ? configuration["turbo_delay"] : updateIntervals[updateIntervalIdx] * 1000;
 
         if (page < lastPage && goToLast) {
-            scheduleNextUpdate(2000, page + 1, true);
+            updateMessages(page + 1, true);
         } else if (currPage < page || parsed.nbMessagesPage === 0) {  // Bug des messages supprimés
             scheduleNextUpdate(interval, page - 1, false);
         } else if (page > lastPage) {
