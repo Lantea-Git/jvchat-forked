@@ -1959,7 +1959,7 @@ function getPanelHtml() {
         <div class='panel-body'>
             <div id='jvchat-info'>
                 <div id='jvchat-profil' class='jvchat-hide'>
-                    <h4 class='titre-info-fofo'>Profil</h4>
+                    <h4 class='titre-info-fofo'>Low Requetes</h4>
                     <h4 id='jvchat-user-pseudo'></h4>
                     <div id='jvchat-user-info'>
                         <a title="Ouvrir le profil" id="jvchat-user-avatar-link" target="_blank"><div id='jvchat-user-avatar' class='jvchat-rounded jvchat-user-avatar'></div></a>
