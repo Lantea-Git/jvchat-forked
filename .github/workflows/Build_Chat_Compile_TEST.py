@@ -83,10 +83,10 @@ result_text = result_text.replace(
 )
 
 # 2) Titre info-fofo
-#result_text = result_text.replace(
-#    "                    <h4 class='titre-info-fofo'>Profil</h4>",
-#    "                    <h4 class='titre-info-fofo'>Low Requetes</h4>",
-#)
+result_text = result_text.replace(
+    "                    <h4 class='titre-info-fofo'>Profil</h4>",
+    "                    <h4 class='titre-info-fofo'>Low Requetes</h4>",
+)
 
 
 # 3) Insertion du bloc skip-hidden — ancré sur `let timestamp` + `function scheduleNextUpdate`
