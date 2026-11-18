@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JVChat_GreasyMonkey_iOS_429
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.050)
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.110)
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
-// @version        0.2.9.050
+// @version        0.2.9.110
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1796,18 +1796,20 @@ function parseMessage(elem) {
 }
 
 function parseUserInfo(elem, payload) {
-    //let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") || elem.querySelector(".headerAccount__pm");
-    //if (!accountMp) { // Pas d'icone MP === User Deconnecté = on return undefined et on skip.
-    //    return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
-    //}
-    //let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif") || elem.querySelector(".headerAccount__notif");
-    //
-    //let mp = parseInt(accountMp.getAttribute("data-val"));
-    //let notif = parseInt(accountNotif.getAttribute("data-val"));
+    let accountUserConnect = elem.querySelector(".headerAccount--user");
+    if (!accountUserConnect) { // No .headerAccount--user === User Deconnecté = on return undefined et on skip.
+        return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
+    }
+
+    let accountMp = elem.querySelector("#header-account-tab-pm");
+    let accountNotif = elem.querySelector("#header-account-tab-notif");
+
+    let mp = parseInt(accountMp.getAttribute("data-val"));
+    let notif = parseInt(accountNotif.getAttribute("data-val"));
 
     let avatar = elem.getElementsByClassName("headerAccount__avatar")[0].style.backgroundImage.slice(5, -2).replace("/avatar-md/", "/avatar/");
     let author = elem.getElementsByClassName("headerAccount__pseudo")[0].textContent.trim();
-    return { author: author, avatar: avatar, mp: 0, notif: 0 };
+    return { author: author, avatar: avatar, mp: mp, notif: notif };
 }
 
 function getPage(elem) {
