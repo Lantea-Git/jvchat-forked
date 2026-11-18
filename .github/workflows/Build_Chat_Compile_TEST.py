@@ -17,7 +17,7 @@ version = re.search(r'// @version\s+(\S+)', content).group(1)
 # Définir le nouveau header
 new_header = f"""// ==UserScript==
 // @name           JVChat_GreasyMonkey_iOS_429
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Roquete {version})
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête {version})
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
