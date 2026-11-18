@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.9.110
+// @version        0.2.9.120
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1797,7 +1797,7 @@ function parseMessage(elem) {
     */
 }
 
-function parseUserInfo(elem, payload) {
+function parseUserInfo(elem) {
     let accountUserConnect = elem.querySelector(".headerAccount--user");
     if (!accountUserConnect) { // No .headerAccount--user === User Deconnecté = on return undefined et on skip.
         return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
@@ -3307,7 +3307,7 @@ function triggerJVChat() {
 
     let topicUrl = document.URL;
     let topic = parseTopicInfo(document, freshPayload);
-    let user = parseUserInfo(document, freshPayload);
+    let user = parseUserInfo(document);
     let sondage = parseSondage(document, freshPayload?.survey);
 
     urlToFetch = parseURL(topicUrl);
@@ -3603,7 +3603,7 @@ function parsePage(res, requestTimestamp) {
     let messages = getMessages(res);
     addMessages(messages, false, requestTimestamp, false);
 
-    let user = parseUserInfo(res, freshPayload);
+    let user = parseUserInfo(res);
     setUser(document, user);
 
     let topic = parseTopicInfo(res, freshPayload);
