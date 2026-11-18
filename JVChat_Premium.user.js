@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.8.988
+// @version        0.2.9.000
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -120,7 +120,10 @@ header.jv-header-menu,
 .sideCardForum,
 .js-side-module-forum-info,
 .js-side-module-forum-favorite,
-.container__postTitle {
+.container__postTitle,
+/* NEW RESPAWN 2.5 HIDE */
+.layout__linkBar,
+#header-main {
     display: none !important;
 }
 
