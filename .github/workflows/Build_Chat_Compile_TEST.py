@@ -83,10 +83,11 @@ result_text = result_text.replace(
 )
 
 # 2) Titre info-fofo
-result_text = result_text.replace(
-    "                    <h4 class='titre-info-fofo'>Profil</h4>",
-    "                    <h4 class='titre-info-fofo'>Low Requetes</h4>",
-)
+#result_text = result_text.replace(
+#    "                    <h4 class='titre-info-fofo'>Profil</h4>",
+#    "                    <h4 class='titre-info-fofo'>Low Requetes</h4>",
+#)
+
 
 # 3) Insertion du bloc skip-hidden — ancré sur `let timestamp` + `function scheduleNextUpdate`
 result_text = result_text.replace(
@@ -109,9 +110,13 @@ result_text = result_text.replace(
 
 
 # 4) Re-planifier au lieu d'appeler updateMessages directement
+#result_text = result_text.replace(
+#    "            updateMessages(page + 1, true);",
+#    "            scheduleNextUpdate(2000, page + 1, true);",
+#)
 result_text = result_text.replace(
     "            updateMessages(page + 1, true);",
-    "            scheduleNextUpdate(2000, page + 1, true);",
+    "            updateMessages(page + 1, true);",
 )
 
 output = new_header + "\n\n" + result_text
