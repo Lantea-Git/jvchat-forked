@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JVChat_GreasyMonkey_iOS_429
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.000)
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.050)
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
-// @version        0.2.9.000
+// @version        0.2.9.050
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1796,22 +1796,18 @@ function parseMessage(elem) {
 }
 
 function parseUserInfo(elem, payload) {
-    let headerUser = elem.querySelector(".header__globalUser");
-    if (!headerUser) { // Pas de Header FallBack Update Site
-        return { author: "JVChat", avatar: "https://image.jeuxvideo.com/avatar-md/default.jpg", mp: 0, notif: 0 };
-    }
-    let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") || elem.querySelector(".headerAccount__pm");
-    if (!accountMp) { // Pas d'icone MP === User Deconnecté = on return undefined et on skip.
-        return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
-    }
-    let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif") || elem.querySelector(".headerAccount__notif");
-
-    let mp = parseInt(accountMp.getAttribute("data-val"));
-    let notif = parseInt(accountNotif.getAttribute("data-val"));
+    //let accountMp = elem.querySelector(".headerAccount--pm .headerAccount__pm") || elem.querySelector(".headerAccount__pm");
+    //if (!accountMp) { // Pas d'icone MP === User Deconnecté = on return undefined et on skip.
+    //    return { author: undefined, avatar: undefined, mp: undefined, notif: undefined };
+    //}
+    //let accountNotif = elem.querySelector(".headerAccount--notif .headerAccount__notif") || elem.querySelector(".headerAccount__notif");
+    //
+    //let mp = parseInt(accountMp.getAttribute("data-val"));
+    //let notif = parseInt(accountNotif.getAttribute("data-val"));
 
     let avatar = elem.getElementsByClassName("headerAccount__avatar")[0].style.backgroundImage.slice(5, -2).replace("/avatar-md/", "/avatar/");
     let author = elem.getElementsByClassName("headerAccount__pseudo")[0].textContent.trim();
-    return { author: author, avatar: avatar, mp: mp, notif: notif };
+    return { author: author, avatar: avatar, mp: 0, notif: 0 };
 }
 
 function getPage(elem) {
