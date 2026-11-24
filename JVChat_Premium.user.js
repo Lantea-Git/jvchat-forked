@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JVChat_GreasyMonkey_iOS_429
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.185)
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.190)
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
-// @version        0.2.9.185
+// @version        0.2.9.190
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1818,8 +1818,8 @@ function parseUserInfo(elem) {
     let mp = parseInt(accountMp.getAttribute("data-val"));
     let notif = parseInt(accountNotif.getAttribute("data-val"));
 
-    let avatar = elem.getElementsByClassName("headerAccount__avatar")[0].style.backgroundImage.slice(5, -2).replace("/avatar-md/", "/avatar/");
-    let author = elem.getElementsByClassName("headerAccount__pseudo")[0].textContent.trim();
+    let avatar = elem.querySelector(".headerAccount__avatar").style.backgroundImage.slice(5, -2).replace("/avatar-md/", "/avatar/");
+    let author = elem.querySelector(".headerAccount__pseudo").textContent.trim();
     return { author: author, avatar: avatar, mp: mp, notif: notif };
 }
 
