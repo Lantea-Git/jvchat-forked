@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JVChat_GreasyMonkey_iOS_429
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.160)
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.180)
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
-// @version        0.2.9.160
+// @version        0.2.9.180
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1420,8 +1420,12 @@ hr.jvchat-ruler:first-of-type {
 .bloc-sondage .tab-choix .reponse {
     vertical-align: top;
     padding: 0.3125rem 0 0.3125rem 0.4375rem;
+    font-size: 0.82rem;
+    line-height: 1.1rem;
+    /*
     font-size: 0.75rem;
     line-height: 1rem;
+    */
 }
 /* [END CSS LEGACY JVC ALERTE SONDAGE] */
 
