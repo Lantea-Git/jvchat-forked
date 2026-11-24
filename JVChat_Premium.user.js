@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.9.180
+// @version        0.2.9.185
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -1422,7 +1422,7 @@ hr.jvchat-ruler:first-of-type {
 .bloc-sondage .tab-choix .reponse {
     vertical-align: top;
     padding: 0.3125rem 0 0.3125rem 0.4375rem;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     line-height: 1.1rem;
     /*
     font-size: 0.75rem;
