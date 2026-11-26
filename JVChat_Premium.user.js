@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name           JVChat_GreasyMonkey_iOS_429
-// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.270)
+// @description    Outil de discussion instantanée (Fork et debug pour iOS et GreasyMonkey) (Low Requête 0.2.9.280)
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JVChat_GreasyMonkey_iOS_429
 // @license        MIT
-// @version        0.2.9.270
+// @version        0.2.9.280
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/1f7e6.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
