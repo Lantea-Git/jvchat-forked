@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.9.270
+// @version        0.2.9.280
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3808,10 +3808,15 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
 
     const headers = {};
 
+    let resType;
     if (json) {
+        resType = "json";
+
         headers["Accept"] = "application/json";
         headers["x-requested-with"] = "XMLHttpRequest";
     } else {
+        resType = "html";
+
         headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/jxl,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7";
         headers["Sec-Fetch-Dest"] = "document";
         headers["Sec-Fetch-Mode"] = "navigate";
@@ -3829,8 +3834,6 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         data = null;
     }
 
-    const type = json ? "json" : "html";
-
     GM.xmlHttpRequest({
         method: mode,
         url: url,
@@ -3838,12 +3841,10 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         data: data,
         timeout: timeout,
 
-        cookiePartition: {
-            topLevelSite: location.origin
-        },
+        cookiePartition: { topLevelSite: location.origin }, /* Cookies envoyés à Back JS dans TamperMonkey */
 
         onload: tryCatch(function xhrOnLoad(res) {
-            console.log(`JVChat request ${mode} ${res.status} ${type} ${url}`);
+            console.log(`JVChat request ${mode} ${res.status} ${resType} ${url}`);
             if (res.status !== 200) {
                 callbackError(`La requête a retourné une erreur (${res.status}) : ${res.statusText}`, res.status);
                 return;
@@ -3859,17 +3860,17 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         }),
 
         onerror: tryCatch(function xhrOnError(res) {
-            console.log(`JVChat request ${mode} ERROR ${res.status} ${type} ${url}`);
+            console.log(`JVChat request ${mode} ERROR ${res.status} ${resType} ${url}`);
             callbackError(`La requête a échoué (${res.status}): ${res.statusText}`, res.status);
         }),
 
         ontimeout: tryCatch(function xhrOnTimeout() {
-            console.log(`JVChat request ${mode} TIMEOUT ${type} ${url}`);
+            console.log(`JVChat request ${mode} TIMEOUT ${resType} ${url}`);
             callbackTimeout(`La délai d'attente de la requête a expiré`);
         }),
 
         onabort: tryCatch(function xhrOnAbort() {
-            console.log(`JVChat request ${mode} ABORT ${type} ${url}`);
+            console.log(`JVChat request ${mode} ABORT ${resType} ${url}`);
             if (!leavingTopic) {
                 callbackTimeout(`La requête a été interrompue pour une raison inconnue`);
             }
