@@ -4,7 +4,7 @@
 // @author         Blaff, Rand0max, Atlantis
 // @namespace      JV_Chat_Custsom_Fork
 // @license        MIT
-// @version        0.2.9.210
+// @version        0.2.9.270
 // @icon           https://images.emojiterra.com/google/noto-emoji/unicode-17.0/color/128px/2b1b.png
 // @match          http://*.jeuxvideo.com/forums/42-*
 // @match          https://*.jeuxvideo.com/forums/42-*
@@ -3813,23 +3813,12 @@ function request(mode, url, callbackSuccess, callbackError, callbackTimeout, dat
         headers["x-requested-with"] = "XMLHttpRequest";
     } else {
         headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/jxl,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7";
-        headers["Accept-Language"] = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7";
-        headers["Cache-Control"] = "max-age=0";
-        headers["Priority"] = "u=0, i";
         headers["Sec-Fetch-Dest"] = "document";
         headers["Sec-Fetch-Mode"] = "navigate";
         headers["Sec-Fetch-Site"] = "same-origin";
         headers["Sec-Fetch-User"] = "?1";
-        headers["Sec-CH-UA"] = '"Chromium";v="158", "Not.A/Brand";v="24", "Google Chrome";v="158"';
-        headers["Sec-CH-UA-Arch"] = '"x86"';
-        headers["Sec-CH-UA-Bitness"] = '"64"';
-        headers["Sec-CH-UA-Full-Version"] = '"158.0.8127.89"';
-        headers["Sec-CH-UA-Full-Version-List"] = '"Chromium";v="158.0.8127.89", "Not.A/Brand";v="24.0.0.0", "Google Chrome";v="158.0.8127.89"';
-        headers["Sec-CH-UA-Mobile"] = "?0";
-        headers["Sec-CH-UA-Model"] = '""';
-        headers["Sec-CH-UA-Platform"] = '"Windows"';
-        headers["Sec-CH-UA-Platform-Version"] = '"15.0.0"';
         headers["Upgrade-Insecure-Requests"] = "1";
+        headers["Priority"] = "u=0, i";
     }
 
     if (nocache) {
